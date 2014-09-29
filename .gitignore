@@ -1,12 +1,15 @@
 *.class
 
 # Idea files #
-
 .idea/*
 Project.iml
 
+# Eclipse files #
+.project
+.classpath
 
 # Package Files #
 *.jar
 *.war
 *.ear
+/bin/
