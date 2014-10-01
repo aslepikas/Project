@@ -1,6 +1,6 @@
 import javax.swing.*;
 
-import java.awt.*;
+//import java.awt.*;
 
 public class Project {
 	
@@ -13,15 +13,14 @@ public class Project {
 		frame.add(pane);
 		
 		frame.setVisible(true);
-		
-		
+
 	}
 	
 	private static class MyPanel extends JPanel {
 		
 		public void paintComponent (Graphics g){
-			g.fillOval(25, 25, 50, 50);
-		}
+            g.fillOval(25, 25, 50, 50);
+        }
 		
 	}
 	
