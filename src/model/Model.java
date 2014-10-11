@@ -34,14 +34,16 @@ public class Model {
 
 		return null;
 	}
-
+	//using retnum instead of returning from inside loop, because if nodes are
+	//on top of each other, then we want the topmost one highlighted.
 	public int findNode(int x, int y) {
+		int retnum = -1;
 		for (Node i : nodeList) {
 			if (i.pointInNode(x, y)) {
-				return i.getNumber();
+				retnum = i.getNumber();
 			}
 		}
-		return -1;
+		return retnum;
 	}
 
 	public ArrayList<Connection> getConnectionList() {
