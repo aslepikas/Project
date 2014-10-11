@@ -26,6 +26,10 @@ public class Connection {
 		symbol = '\0';
 	}
 
+	public char getSymbol() {
+		return symbol;
+	}
+
 	public int getStartN() {
 		return startN;
 	}
