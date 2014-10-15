@@ -2,6 +2,7 @@ import java.awt.*;
 
 import javax.swing.*;
 
+import Menu.MyMenuBar;
 import model.Model;
 import canvas.MyCanvas;
 
@@ -14,8 +15,7 @@ public class MyContainer {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		frame.add(new MyCanvas(model));
-
+		frame.setJMenuBar(MyMenuBar.create());
 		return frame;
-	};
-
+	}
 }

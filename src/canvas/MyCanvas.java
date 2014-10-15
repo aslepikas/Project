@@ -21,15 +21,24 @@ public class MyCanvas extends JPanel {
 	private int nodeWidth = Node.NODE_WIDTH;
 	private int selectedNode = -1;
 
+	private enum modeList {
+		NODE, ARROW
+	};
+
+	private int mode;
+
 	public MyCanvas(Model m) {
 		model = m;
 		addMouseListener(new MouseListener());
+		mode = 0;
 	}
 
 	// TODO remove print statement
 	private class MouseListener extends MouseInputAdapter {
 
 		public void mouseReleased(MouseEvent me) {
+
+			// if (mode == modeList.NODE) {
 			x = me.getX();
 			y = me.getY();
 			if (me.getButton() == MouseEvent.BUTTON1) {
@@ -38,6 +47,7 @@ public class MyCanvas extends JPanel {
 					model.addNewNode(x, y);
 				}
 			}
+			// }
 			System.out.printf("x = %d; y = %d \n", x, y);
 			update();
 		}

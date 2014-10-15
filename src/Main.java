@@ -1,5 +1,6 @@
 import javax.swing.JFrame;
 
+import Menu.MyMenuBar;
 import model.Model;
 
 public class Main {
