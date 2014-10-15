@@ -7,7 +7,7 @@ public class Main {
 	public static void main(String args[]) {
 
 		Model model = new Model();
-		JFrame stuff = Container.initialise(model);
+		JFrame stuff = MyContainer.initialise(model);
 		stuff.setVisible(true);
 	}
 }

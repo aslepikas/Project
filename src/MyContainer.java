@@ -5,7 +5,7 @@ import javax.swing.*;
 import model.Model;
 import canvas.MyCanvas;
 
-public class Container {
+public class MyContainer {
 
 	public static JFrame initialise(Model model) {
 
