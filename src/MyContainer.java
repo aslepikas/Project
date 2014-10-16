@@ -13,9 +13,6 @@ public class MyContainer {
 		JFrame frame = new JFrame("stuff");
 		frame.setSize(new Dimension(700, 500));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-		frame.add(new MyCanvas(model));
-		frame.setJMenuBar(MyMenuBar.create());
 		return frame;
 	}
 }
