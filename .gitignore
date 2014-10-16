@@ -9,7 +9,6 @@ Project.iml
 .classpath
 
 # Package Files #
-*.jar
 *.war
 *.ear
 /bin/
