@@ -2,17 +2,17 @@ package model;
 
 public class Edge {
 
-	private int startN;
-	private int targetN;
+	private Node startN;
+	private Node targetN;
 	private char symbol;
 
-	public Edge(int start, int target) {
+	public Edge(Node start, Node target) {
 		startN = start;
 		targetN = target;
 		symbol = '\0';
 	}
 
-	public Edge(int start, int target, char c) {
+	public Edge(Node start, Node target, char c) {
 		startN = start;
 		targetN = target;
 		symbol = c;
@@ -30,12 +30,21 @@ public class Edge {
 		return symbol;
 	}
 
-	public int getStartN() {
+	public Node getStartN() {
 		return startN;
 	}
 
-	public int getTargetN() {
+	public Node getTargetN() {
 		return targetN;
+	}
+	
+	public void clear() {
+		startN = null;
+		targetN = null;
+	}
+	
+	public boolean equals(Edge e){
+		return (e.getStartN() == startN) && (e.getTargetN() == targetN) && (e.getSymbol() == symbol);
 	}
 
 }

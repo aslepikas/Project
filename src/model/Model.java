@@ -12,13 +12,11 @@ public class Model implements DirectedGraph<Node, Edge> {
 	private ArrayList<Node> nodeList;
 	// private ArrayList<Edge> edgeList;
 	private int startNode;
-	private int count;
 
 	public Model() {
 		nodeList = new ArrayList<Node>();
 		// edgeList = new ArrayList<Edge>();
 		startNode = -1;
-		count = 0;
 	}
 
 	/*
@@ -66,109 +64,143 @@ public class Model implements DirectedGraph<Node, Edge> {
 
 	@Override
 	public Node getDest(Edge e) {
-		for (Node i: nodeList){
-			if (i.getNumber() == e.getTargetN())
-				return i;
+		return e.getTargetN();
+	}
+
+	@Override
+	public Pair<Node> getEndpoints(Edge e) {
+		return new Pair<Node>(e.getStartN(), e.getTargetN());
+	}
+
+	@Override
+	public Collection<Edge> getInEdges(Node n) {
+		return n.getEdgesIn();
+	}
+
+	/**
+	 * Not expected to be used, but implemented just in case
+	 * 
+	 * @param n
+	 *            Node variable
+	 * @param e
+	 *            edge, either starting or ending with n
+	 * @return node on the other end of the edge
+	 */
+	@Override
+	public Node getOpposite(Node n, Edge e) {
+		if (e.getStartN() == n) {
+			return e.getTargetN();
 		}
+		;
+		if (e.getTargetN() == n) {
+			return e.getStartN();
+		}
+		;
 		return null;
 	}
 
 	@Override
-	public Pair<Node> getEndpoints(Edge arg0) {
-		// TODO Auto-generated method stub
-		return null;
+	public Collection<Edge> getOutEdges(Node n) {
+		return n.getEdgesOut();
 	}
 
 	@Override
-	public Collection<Edge> getInEdges(Node arg0) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Node getOpposite(Node arg0, Edge arg1) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Collection<Edge> getOutEdges(Node arg0) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public int getPredecessorCount(Node arg0) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int getPredecessorCount(Node n) {
+		return n.getEdgesIn().size();
 	}
 
 	@Override
 	public Collection<Node> getPredecessors(Node arg0) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Node getSource(Edge arg0) {
-		// TODO Auto-generated method stub
-		return null;
+	public Node getSource(Edge e) {
+		return e.getStartN();
 	}
 
+	/**
+	 * not implemented
+	 */
 	@Override
 	public int getSuccessorCount(Node arg0) {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
+	/**
+	 * not implemented
+	 */
 	@Override
 	public Collection<Node> getSuccessors(Node arg0) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
+	/**
+	 * not implemented
+	 */
 	@Override
 	public int inDegree(Node arg0) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
+	/**
+	 * not implemented
+	 */
 	@Override
 	public boolean isDest(Node arg0, Edge arg1) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
+	/**
+	 * not implemented
+	 */
 	@Override
 	public boolean isPredecessor(Node arg0, Node arg1) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
+	/**
+	 * not implemented
+	 */
 	@Override
 	public boolean isSource(Node arg0, Edge arg1) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
+	/**
+	 * not implemented
+	 */
 	@Override
 	public boolean isSuccessor(Node arg0, Node arg1) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
+	/**
+	 * not implemented
+	 */
 	@Override
 	public int outDegree(Node arg0) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
+	/**
+	 * not implemented
+	 */
 	@Override
 	public boolean addEdge(Edge arg0, Collection<? extends Node> arg1) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
+	/**
+	 * not implemented
+	 */
 	@Override
 	public boolean addEdge(Edge arg0, Collection<? extends Node> arg1,
 			EdgeType arg2) {
@@ -177,101 +209,149 @@ public class Model implements DirectedGraph<Node, Edge> {
 	}
 
 	@Override
-	public boolean addVertex(Node arg0) {
-		// TODO Auto-generated method stub
+	public boolean addVertex(Node e) {
+		nodeList.add(e);
 		return false;
 	}
 
+	/**
+	 * not implemented
+	 */
 	@Override
 	public boolean containsEdge(Edge arg0) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
+	/**
+	 * not implemented
+	 */
 	@Override
 	public boolean containsVertex(Node arg0) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
+	/**
+	 * not implemented
+	 */
 	@Override
 	public int degree(Node arg0) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
+	/**
+	 * not implemented
+	 */
 	@Override
 	public Edge findEdge(Node arg0, Node arg1) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	/**
+	 * not implemented
+	 */
 	@Override
 	public Collection<Edge> findEdgeSet(Node arg0, Node arg1) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	/**
+	 * not implemented
+	 */
 	@Override
 	public EdgeType getDefaultEdgeType() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	/**
+	 * not implemented
+	 */
 	@Override
 	public int getEdgeCount() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
+	/**
+	 * not implemented
+	 */
 	@Override
 	public int getEdgeCount(EdgeType arg0) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
+	/**
+	 * not implemented
+	 */
 	@Override
 	public EdgeType getEdgeType(Edge arg0) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	/**
+	 * not implemented
+	 */
 	@Override
 	public Collection<Edge> getEdges() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	/**
+	 * not implemented
+	 */
 	@Override
 	public Collection<Edge> getEdges(EdgeType arg0) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	/**
+	 * not implemented
+	 */
 	@Override
 	public int getIncidentCount(Edge arg0) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
+	/**
+	 * not implemented
+	 */
 	@Override
 	public Collection<Edge> getIncidentEdges(Node arg0) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	/**
+	 * not implemented
+	 */
 	@Override
 	public Collection<Node> getIncidentVertices(Edge arg0) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	/**
+	 * not implemented
+	 */
 	@Override
 	public int getNeighborCount(Node arg0) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
+	/**
+	 * not implemented
+	 */
 	@Override
 	public Collection<Node> getNeighbors(Node arg0) {
 		// TODO Auto-generated method stub
@@ -280,22 +360,26 @@ public class Model implements DirectedGraph<Node, Edge> {
 
 	@Override
 	public int getVertexCount() {
-		// TODO Auto-generated method stub
-		return 0;
+		return nodeList.size();
 	}
 
 	@Override
 	public Collection<Node> getVertices() {
-		// TODO Auto-generated method stub
-		return null;
+		return nodeList;
 	}
 
+	/**
+	 * not implemented
+	 */
 	@Override
 	public boolean isIncident(Node arg0, Edge arg1) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
+	/**
+	 * not implemented
+	 */
 	@Override
 	public boolean isNeighbor(Node arg0, Node arg1) {
 		// TODO Auto-generated method stub
@@ -303,14 +387,24 @@ public class Model implements DirectedGraph<Node, Edge> {
 	}
 
 	@Override
-	public boolean removeEdge(Edge arg0) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean removeEdge(Edge e) {
+		e.getStartN().removeEdgeOut(e);
+		e.getTargetN().removeEdgeIn(e);
+		e.clear();
+		return true;
+	}
+
+	public boolean removeAllEdges(Node n) {
+		for (Edge e : n.getEdgesIn()) {
+			removeEdge(e);
+		}
+		return true;
 	}
 
 	@Override
-	public boolean removeVertex(Node arg0) {
-		// TODO Auto-generated method stub
+	public boolean removeVertex(Node n) {
+		nodeList.remove(n);
+
 		return false;
 	}
 

@@ -19,7 +19,7 @@ public class Node {
 		edgesOut = new ArrayList<Edge>();
 		this.x = x;
 		this.y = y;
-
+		endState = false;
 	}
 
 	/**
@@ -35,7 +35,7 @@ public class Node {
 	public void setFinal() {
 		endState = true;
 	}
-	
+
 	/**
 	 * Sets node to not be final
 	 */
@@ -70,11 +70,31 @@ public class Node {
 	public int getY() {
 		return y;
 	}
+	
+	public boolean isFinal (){
+		return endState;
+	}
+
+	/**
+	 * @return ArrayList of edges that lead to this node
+	 */
+	public ArrayList<Edge> getEdgesIn() {
+		return edgesIn;
+	}
+
+	/**
+	 * @return ArrayList of edges that lead out of this node
+	 */
+	public ArrayList<Edge> getEdgesOut() {
+		return edgesOut;
+	}
 
 	/**
 	 * 
-	 * @param x : x coordinate
-	 * @param y : y coordinate
+	 * @param x
+	 *            : x coordinate
+	 * @param y
+	 *            : y coordinate
 	 * @return returns whether the point is in the node
 	 */
 	public boolean pointInNode(int x, int y) {
@@ -85,7 +105,6 @@ public class Node {
 	}
 
 	/**
-	 * 
 	 * @param e
 	 * @return success of operation
 	 */
@@ -95,5 +114,17 @@ public class Node {
 
 	public boolean addEdgeOut(Edge e) {
 		return edgesOut.add(e);
+	}
+
+	public void removeEdgeIn(Edge e) {
+		edgesIn.remove(e);
+	}
+
+	public void removeEdgeOut(Edge e) {
+		edgesOut.remove(e);
+	}
+
+	public boolean equals(Node n) {
+		return n.getNumber() == number;
 	}
 }
