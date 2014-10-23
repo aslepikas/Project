@@ -12,6 +12,7 @@ public class Model implements DirectedGraph<Node, Edge> {
 	private ArrayList<Node> nodeList;
 	// private ArrayList<Edge> edgeList;
 	private int startNode;
+	private int count = 0;
 
 	public Model() {
 		nodeList = new ArrayList<Node>();
@@ -19,21 +20,34 @@ public class Model implements DirectedGraph<Node, Edge> {
 		startNode = -1;
 	}
 
-	/*
-	 * public ArrayList<Node> getNodeList() { return nodeList; }
-	 * 
-	 * public void addNewNode(int x, int y) { count++; nodeList.add(new
-	 * Node(count, x, y)); }
-	 * 
-	 * public Node getNode(int number) { for (Node i : nodeList) { if
-	 * (i.getNumber() == number) { return i; } }
-	 * 
-	 * return null; } //using retnum instead of returning from inside loop,
-	 * because if nodes are //on top of each other, then we want the topmost one
-	 * highlighted. public int findNode(int x, int y) { int retnum = -1; for
-	 * (Node i : nodeList) { if (i.pointInNode(x, y)) { retnum = i.getNumber();
-	 * } } return retnum; }
-	 */
+	public ArrayList<Node> getNodeList() {
+		return nodeList;
+	}
+
+	public Node getNode(int number) {
+		for (Node i : nodeList) {
+			if (i.getNumber() == number) {
+				return i;
+			}
+		}
+
+		return null;
+	}
+
+	public void addNewNode(int x, int y) {
+		count++;
+		nodeList.add(new Node(count, x, y));
+	}
+
+	public int findNode(int x, int y) {
+		int retnum = -1;
+		for (Node i : nodeList) {
+			if (i.pointInNode(x, y)) {
+				retnum = i.getNumber();
+			}
+		}
+		return retnum;
+	}
 
 	public void setStartNode(int x) {
 		startNode = x;
@@ -119,74 +133,50 @@ public class Model implements DirectedGraph<Node, Edge> {
 		return e.getStartN();
 	}
 
-	/**
-	 * not implemented
-	 */
 	@Override
-	public int getSuccessorCount(Node arg0) {
-		return 0;
+	public int getSuccessorCount(Node n) {
+		return n.getEdgesOut().size();
 	}
 
-	/**
-	 * not implemented
-	 */
 	@Override
-	public Collection<Node> getSuccessors(Node arg0) {
-		return null;
+	public Collection<Node> getSuccessors(Node n) {
+		ArrayList<Node> retList = new ArrayList<Node>();
+		for (Edge e : n.getEdgesOut()) {
+			if (!retList.contains(e.getTargetN())) {
+				retList.add(e.getTargetN());
+			}
+		}
+		return retList;
 	}
 
-	/**
-	 * not implemented
-	 */
 	@Override
-	public int inDegree(Node arg0) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int inDegree(Node n) {
+		return n.getEdgesIn().size();
 	}
 
-	/**
-	 * not implemented
-	 */
 	@Override
-	public boolean isDest(Node arg0, Edge arg1) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean isDest(Node n, Edge e) {
+		return n.equals(e.getTargetN());
 	}
 
-	/**
-	 * not implemented
-	 */
 	@Override
-	public boolean isPredecessor(Node arg0, Node arg1) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean isPredecessor(Node n1, Node n2) {
+		return this.getPredecessors(n1).contains(n2);
 	}
 
-	/**
-	 * not implemented
-	 */
 	@Override
-	public boolean isSource(Node arg0, Edge arg1) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean isSource(Node n, Edge e) {
+		return e.getStartN().equals(n);
 	}
 
-	/**
-	 * not implemented
-	 */
 	@Override
-	public boolean isSuccessor(Node arg0, Node arg1) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean isSuccessor(Node n1, Node n2) {
+		return this.getSuccessors(n2).contains(n1);
 	}
 
-	/**
-	 * not implemented
-	 */
 	@Override
-	public int outDegree(Node arg0) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int outDegree(Node n) {
+		return n.getEdgesOut().size();
 	}
 
 	/**
@@ -223,84 +213,78 @@ public class Model implements DirectedGraph<Node, Edge> {
 		return false;
 	}
 
-	/**
-	 * not implemented
-	 */
 	@Override
-	public boolean containsVertex(Node arg0) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean containsVertex(Node n) {
+		return nodeList.contains(n);
 	}
 
-	/**
-	 * not implemented
-	 */
 	@Override
-	public int degree(Node arg0) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int degree(Node n) {
+		int retnum = 0;
+		retnum = n.getEdgesIn().size();
+		retnum = retnum + n.getEdgesOut().size();
+		for (Edge e : n.getEdgesIn()) {
+			if (e.getStartN().equals(n)) {
+				retnum--;
+			}
+		}
+		return retnum;
 	}
 
-	/**
-	 * not implemented
-	 */
 	@Override
-	public Edge findEdge(Node arg0, Node arg1) {
-		// TODO Auto-generated method stub
+	public Edge findEdge(Node n1, Node n2) {
+		for (Edge e : n1.getEdgesIn()) {
+			if (e.getStartN().equals(n2)) {
+				return e;
+			}
+		}
 		return null;
 	}
 
-	/**
-	 * not implemented
-	 */
 	@Override
-	public Collection<Edge> findEdgeSet(Node arg0, Node arg1) {
-		// TODO Auto-generated method stub
-		return null;
+	public Collection<Edge> findEdgeSet(Node n1, Node n2) {
+		ArrayList<Edge> retSet = new ArrayList<Edge>();
+		for (Edge e : n1.getEdgesIn()) {
+			if (e.getStartN().equals(n2)) {
+				retSet.add(e);
+			}
+		}
+		return retSet;
 	}
 
-	/**
-	 * not implemented
-	 */
 	@Override
 	public EdgeType getDefaultEdgeType() {
-		// TODO Auto-generated method stub
-		return null;
+		return EdgeType.DIRECTED;
 	}
 
-	/**
-	 * not implemented
-	 */
 	@Override
 	public int getEdgeCount() {
-		// TODO Auto-generated method stub
-		return 0;
+		int retNum = 0;
+		for (Node n : nodeList) {
+			retNum = retNum + n.getEdgesOut().size();
+		}
+		return retNum;
 	}
-
-	/**
-	 * not implemented
-	 */
+	
 	@Override
-	public int getEdgeCount(EdgeType arg0) {
-		// TODO Auto-generated method stub
+	public int getEdgeCount(EdgeType et) {
+		if (et == EdgeType.UNDIRECTED){
+			return getEdgeCount();
+		}
 		return 0;
 	}
 
-	/**
-	 * not implemented
-	 */
 	@Override
 	public EdgeType getEdgeType(Edge arg0) {
-		// TODO Auto-generated method stub
-		return null;
+		return EdgeType.DIRECTED;
 	}
 
-	/**
-	 * not implemented
-	 */
 	@Override
 	public Collection<Edge> getEdges() {
-		// TODO Auto-generated method stub
+		ArrayList<Edge> retList = new ArrayList<Edge>();
+		for (Node n : nodeList) {
+			retList.addAll(n.getEdgesIn());
+		}
 		return null;
 	}
 
