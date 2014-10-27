@@ -4,10 +4,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import edu.uci.ics.jung.graph.DirectedGraph;
+import edu.uci.ics.jung.graph.MultiGraph;
 import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.graph.util.Pair;
 
-public class Model implements DirectedGraph<Node, Edge> {
+public class Model implements DirectedGraph<Node, Edge>, MultiGraph<Node, Edge> {
 
 	private ArrayList<Node> nodeList;
 	// private ArrayList<Edge> edgeList;
@@ -265,10 +266,10 @@ public class Model implements DirectedGraph<Node, Edge> {
 		}
 		return retNum;
 	}
-	
+
 	@Override
 	public int getEdgeCount(EdgeType et) {
-		if (et == EdgeType.UNDIRECTED){
+		if (et == EdgeType.UNDIRECTED) {
 			return getEdgeCount();
 		}
 		return 0;
@@ -288,31 +289,28 @@ public class Model implements DirectedGraph<Node, Edge> {
 		return null;
 	}
 
-	/**
-	 * not implemented
-	 */
 	@Override
-	public Collection<Edge> getEdges(EdgeType arg0) {
-		// TODO Auto-generated method stub
+	public Collection<Edge> getEdges(EdgeType et) {
+		if (et == EdgeType.DIRECTED)
+			return getEdges();
 		return null;
 	}
 
-	/**
-	 * not implemented
-	 */
 	@Override
-	public int getIncidentCount(Edge arg0) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int getIncidentCount(Edge e) {
+		return getIncidentVertices(e).size();
 	}
 
-	/**
-	 * not implemented
-	 */
 	@Override
-	public Collection<Edge> getIncidentEdges(Node arg0) {
-		// TODO Auto-generated method stub
-		return null;
+	public Collection<Edge> getIncidentEdges(Node n) {
+		if (n == null)
+			return null;
+		ArrayList<Edge> retList = new ArrayList<Edge>();
+		retList.addAll(n.getEdgesIn());
+		for (Edge i : n.getEdgesOut())
+			if (!retList.contains(i))
+				retList.add(i);
+		return retList;
 	}
 
 	/**
