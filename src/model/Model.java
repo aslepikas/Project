@@ -313,31 +313,30 @@ public class Model implements DirectedGraph<Node, Edge>, MultiGraph<Node, Edge> 
 		return retList;
 	}
 
-	/**
-	 * not implemented
-	 */
 	@Override
-	public Collection<Node> getIncidentVertices(Edge arg0) {
-		// TODO Auto-generated method stub
-		return null;
+	public Collection<Node> getIncidentVertices(Edge e) {
+		ArrayList<Node> retList = new ArrayList<Node>();
+		retList.add(e.getStartN());
+		if (!e.getStartN().equals(e.getTargetN()))
+			retList.add(e.getTargetN());
+		return retList;
 	}
 
-	/**
-	 * not implemented
-	 */
 	@Override
-	public int getNeighborCount(Node arg0) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int getNeighborCount(Node n) {
+		return getNeighbors(n).size();
 	}
 
-	/**
-	 * not implemented
-	 */
 	@Override
-	public Collection<Node> getNeighbors(Node arg0) {
-		// TODO Auto-generated method stub
-		return null;
+	public Collection<Node> getNeighbors(Node n) {
+		ArrayList<Node> retList = new ArrayList<Node>();
+		for (Edge e : n.getEdgesIn())
+			if (!retList.contains(e.getStartN()) && !e.getStartN().equals(n))
+				retList.add(e.getStartN());
+		for (Edge e : n.getEdgesOut())
+			if (!retList.contains(e.getTargetN()) && !e.getTargetN().equals(n))
+				retList.add(e.getTargetN());
+		return retList;
 	}
 
 	@Override
@@ -350,21 +349,19 @@ public class Model implements DirectedGraph<Node, Edge>, MultiGraph<Node, Edge> 
 		return nodeList;
 	}
 
-	/**
-	 * not implemented
-	 */
 	@Override
-	public boolean isIncident(Node arg0, Edge arg1) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean isIncident(Node n, Edge e) {
+		return (e.getTargetN().equals(n) || e.getStartN().equals(n));
 	}
 
-	/**
-	 * not implemented
-	 */
 	@Override
-	public boolean isNeighbor(Node arg0, Node arg1) {
-		// TODO Auto-generated method stub
+	public boolean isNeighbor(Node n1, Node n2) {
+		for (Edge e: n1.getEdgesIn())
+			if (isIncident(n2, e))
+				return true;
+		for (Edge e: n2.getEdgesOut())
+			if (isIncident(n2, e))
+				return true;
 		return false;
 	}
 
