@@ -40,6 +40,12 @@ public class Model implements DirectedGraph<Node, Edge>, MultiGraph<Node, Edge> 
 		nodeList.add(new Node(count, x, y));
 	}
 
+	public void addNewEdge(Node n1, Node n2) {
+		Edge e = new Edge(n1, n2);
+		n1.addEdgeOut(e);
+		n2.addEdgeIn(e);
+	}
+
 	public int findNode(int x, int y) {
 		int retnum = -1;
 		for (Node i : nodeList) {
@@ -103,44 +109,47 @@ public class Model implements DirectedGraph<Node, Edge>, MultiGraph<Node, Edge> 
 	 */
 	@Override
 	public Node getOpposite(Node n, Edge e) {
-		if (e.getStartN() == n) {
+		System.out.println(1);
+		if (e.getStartN().equals(n))
 			return e.getTargetN();
-		}
-		;
-		if (e.getTargetN() == n) {
+		else
 			return e.getStartN();
-		}
-		;
-		return null;
+
 	}
 
 	@Override
 	public Collection<Edge> getOutEdges(Node n) {
+		System.out.println(2);
 		return n.getEdgesOut();
 	}
 
 	@Override
 	public int getPredecessorCount(Node n) {
+		System.out.println(3);
 		return n.getEdgesIn().size();
 	}
 
 	@Override
 	public Collection<Node> getPredecessors(Node arg0) {
+		System.out.println(4);
 		return null;
 	}
 
 	@Override
 	public Node getSource(Edge e) {
+		System.out.println(5);
 		return e.getStartN();
 	}
 
 	@Override
 	public int getSuccessorCount(Node n) {
+		System.out.println(6);
 		return n.getEdgesOut().size();
 	}
 
 	@Override
 	public Collection<Node> getSuccessors(Node n) {
+		System.out.println(7);
 		ArrayList<Node> retList = new ArrayList<Node>();
 		for (Edge e : n.getEdgesOut()) {
 			if (!retList.contains(e.getTargetN())) {
@@ -152,31 +161,37 @@ public class Model implements DirectedGraph<Node, Edge>, MultiGraph<Node, Edge> 
 
 	@Override
 	public int inDegree(Node n) {
+		System.out.println(8);
 		return n.getEdgesIn().size();
 	}
 
 	@Override
 	public boolean isDest(Node n, Edge e) {
+		System.out.println(9);
 		return n.equals(e.getTargetN());
 	}
 
 	@Override
 	public boolean isPredecessor(Node n1, Node n2) {
+		System.out.println(10);
 		return this.getPredecessors(n1).contains(n2);
 	}
 
 	@Override
 	public boolean isSource(Node n, Edge e) {
+		System.out.println(11);
 		return e.getStartN().equals(n);
 	}
 
 	@Override
 	public boolean isSuccessor(Node n1, Node n2) {
+		System.out.println(12);
 		return this.getSuccessors(n2).contains(n1);
 	}
 
 	@Override
 	public int outDegree(Node n) {
+		System.out.println(13);
 		return n.getEdgesOut().size();
 	}
 
@@ -185,6 +200,7 @@ public class Model implements DirectedGraph<Node, Edge>, MultiGraph<Node, Edge> 
 	 */
 	@Override
 	public boolean addEdge(Edge arg0, Collection<? extends Node> arg1) {
+		System.out.println(14);
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -195,14 +211,16 @@ public class Model implements DirectedGraph<Node, Edge>, MultiGraph<Node, Edge> 
 	@Override
 	public boolean addEdge(Edge arg0, Collection<? extends Node> arg1,
 			EdgeType arg2) {
+		System.out.println(15);
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean addVertex(Node e) {
+		System.out.println(16);
 		nodeList.add(e);
-		return false;
+		return true;
 	}
 
 	/**
@@ -210,17 +228,20 @@ public class Model implements DirectedGraph<Node, Edge>, MultiGraph<Node, Edge> 
 	 */
 	@Override
 	public boolean containsEdge(Edge arg0) {
+		System.out.println(17);
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean containsVertex(Node n) {
+		System.out.println(18);
 		return nodeList.contains(n);
 	}
 
 	@Override
 	public int degree(Node n) {
+		System.out.println(19);
 		int retnum = 0;
 		retnum = n.getEdgesIn().size();
 		retnum = retnum + n.getEdgesOut().size();
@@ -234,6 +255,7 @@ public class Model implements DirectedGraph<Node, Edge>, MultiGraph<Node, Edge> 
 
 	@Override
 	public Edge findEdge(Node n1, Node n2) {
+		System.out.println(20);
 		for (Edge e : n1.getEdgesIn()) {
 			if (e.getStartN().equals(n2)) {
 				return e;
@@ -244,6 +266,7 @@ public class Model implements DirectedGraph<Node, Edge>, MultiGraph<Node, Edge> 
 
 	@Override
 	public Collection<Edge> findEdgeSet(Node n1, Node n2) {
+		System.out.println(21);
 		ArrayList<Edge> retSet = new ArrayList<Edge>();
 		for (Edge e : n1.getEdgesIn()) {
 			if (e.getStartN().equals(n2)) {
@@ -255,11 +278,13 @@ public class Model implements DirectedGraph<Node, Edge>, MultiGraph<Node, Edge> 
 
 	@Override
 	public EdgeType getDefaultEdgeType() {
+		System.out.println(22);
 		return EdgeType.DIRECTED;
 	}
 
 	@Override
 	public int getEdgeCount() {
+		System.out.println(23);
 		int retNum = 0;
 		for (Node n : nodeList) {
 			retNum = retNum + n.getEdgesOut().size();
@@ -269,6 +294,7 @@ public class Model implements DirectedGraph<Node, Edge>, MultiGraph<Node, Edge> 
 
 	@Override
 	public int getEdgeCount(EdgeType et) {
+		System.out.println(24);
 		if (et == EdgeType.UNDIRECTED) {
 			return getEdgeCount();
 		}
@@ -277,20 +303,23 @@ public class Model implements DirectedGraph<Node, Edge>, MultiGraph<Node, Edge> 
 
 	@Override
 	public EdgeType getEdgeType(Edge arg0) {
+		System.out.println(25);
 		return EdgeType.DIRECTED;
 	}
 
 	@Override
 	public Collection<Edge> getEdges() {
+		System.out.println(26);
 		ArrayList<Edge> retList = new ArrayList<Edge>();
 		for (Node n : nodeList) {
 			retList.addAll(n.getEdgesIn());
 		}
-		return null;
+		return retList;
 	}
 
 	@Override
 	public Collection<Edge> getEdges(EdgeType et) {
+		System.out.println(27);
 		if (et == EdgeType.DIRECTED)
 			return getEdges();
 		return null;
@@ -298,11 +327,13 @@ public class Model implements DirectedGraph<Node, Edge>, MultiGraph<Node, Edge> 
 
 	@Override
 	public int getIncidentCount(Edge e) {
+		System.out.println(28);
 		return getIncidentVertices(e).size();
 	}
 
 	@Override
 	public Collection<Edge> getIncidentEdges(Node n) {
+		System.out.println(29);
 		if (n == null)
 			return null;
 		ArrayList<Edge> retList = new ArrayList<Edge>();
@@ -315,6 +346,7 @@ public class Model implements DirectedGraph<Node, Edge>, MultiGraph<Node, Edge> 
 
 	@Override
 	public Collection<Node> getIncidentVertices(Edge e) {
+		System.out.println(30);
 		ArrayList<Node> retList = new ArrayList<Node>();
 		retList.add(e.getStartN());
 		if (!e.getStartN().equals(e.getTargetN()))
@@ -324,11 +356,13 @@ public class Model implements DirectedGraph<Node, Edge>, MultiGraph<Node, Edge> 
 
 	@Override
 	public int getNeighborCount(Node n) {
+		System.out.println(31);
 		return getNeighbors(n).size();
 	}
 
 	@Override
 	public Collection<Node> getNeighbors(Node n) {
+		System.out.println(32);
 		ArrayList<Node> retList = new ArrayList<Node>();
 		for (Edge e : n.getEdgesIn())
 			if (!retList.contains(e.getStartN()) && !e.getStartN().equals(n))
@@ -341,25 +375,29 @@ public class Model implements DirectedGraph<Node, Edge>, MultiGraph<Node, Edge> 
 
 	@Override
 	public int getVertexCount() {
+		System.out.println(33);
 		return nodeList.size();
 	}
 
 	@Override
 	public Collection<Node> getVertices() {
+		System.out.println(34);
 		return nodeList;
 	}
 
 	@Override
 	public boolean isIncident(Node n, Edge e) {
+		System.out.println(35);
 		return (e.getTargetN().equals(n) || e.getStartN().equals(n));
 	}
 
 	@Override
 	public boolean isNeighbor(Node n1, Node n2) {
-		for (Edge e: n1.getEdgesIn())
+		System.out.println(36);
+		for (Edge e : n1.getEdgesIn())
 			if (isIncident(n2, e))
 				return true;
-		for (Edge e: n2.getEdgesOut())
+		for (Edge e : n2.getEdgesOut())
 			if (isIncident(n2, e))
 				return true;
 		return false;
@@ -367,6 +405,7 @@ public class Model implements DirectedGraph<Node, Edge>, MultiGraph<Node, Edge> 
 
 	@Override
 	public boolean removeEdge(Edge e) {
+		System.out.println(37);
 		e.getStartN().removeEdgeOut(e);
 		e.getTargetN().removeEdgeIn(e);
 		e.clear();
@@ -374,6 +413,7 @@ public class Model implements DirectedGraph<Node, Edge>, MultiGraph<Node, Edge> 
 	}
 
 	public boolean removeAllEdges(Node n) {
+		System.out.println(38);
 		for (Edge e : n.getEdgesIn()) {
 			removeEdge(e);
 		}
@@ -382,9 +422,8 @@ public class Model implements DirectedGraph<Node, Edge>, MultiGraph<Node, Edge> 
 
 	@Override
 	public boolean removeVertex(Node n) {
-		nodeList.remove(n);
-
-		return false;
+		System.out.println(39);
+		return nodeList.remove(n);
 	}
 
 }
