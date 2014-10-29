@@ -29,7 +29,15 @@ public class Edge {
 	public char getSymbol() {
 		return symbol;
 	}
+	
+	public void setStartN(Node n) {
+		startN = n;
+	}
 
+	public void setTargetN(Node n) {
+		targetN = n;
+	}
+	
 	public Node getStartN() {
 		return startN;
 	}
@@ -37,14 +45,19 @@ public class Edge {
 	public Node getTargetN() {
 		return targetN;
 	}
-	
+
 	public void clear() {
 		startN = null;
 		targetN = null;
 	}
+
+	public boolean equals(Edge e) {
+		return (e.getStartN() == startN) && (e.getTargetN() == targetN)
+				&& (e.getSymbol() == symbol);
+	}
 	
-	public boolean equals(Edge e){
-		return (e.getStartN() == startN) && (e.getTargetN() == targetN) && (e.getSymbol() == symbol);
+	public String toString(){
+		return new String();
 	}
 
 }

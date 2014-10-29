@@ -70,8 +70,8 @@ public class Node {
 	public int getY() {
 		return y;
 	}
-	
-	public boolean isFinal (){
+
+	public boolean isFinal() {
 		return endState;
 	}
 
@@ -126,5 +126,9 @@ public class Node {
 
 	public boolean equals(Node n) {
 		return n.getNumber() == number;
+	}
+	
+	public String toString(){
+		return String.format("q%d", number);
 	}
 }
