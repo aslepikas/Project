@@ -2,7 +2,7 @@ package model;
 
 import java.util.ArrayList;
 
-public class Node {
+public class Vertex {
 
 	private int number;
 	private int x;
@@ -10,9 +10,8 @@ public class Node {
 	private boolean endState;
 	private ArrayList<Edge> edgesIn;
 	private ArrayList<Edge> edgesOut;
-	public static final int NODE_WIDTH = 40;
 
-	public Node(int n, int x, int y) {
+	public Vertex(int n, int x, int y) {
 		number = n;
 		endState = false;
 		edgesIn = new ArrayList<Edge>();
@@ -89,21 +88,19 @@ public class Node {
 		return edgesOut;
 	}
 
-	/**
+	/*
+	 * /**
 	 * 
-	 * @param x
-	 *            : x coordinate
-	 * @param y
-	 *            : y coordinate
+	 * @param x : x coordinate
+	 * 
+	 * @param y : y coordinate
+	 * 
 	 * @return returns whether the point is in the node
+	 * 
+	 * public boolean pointInNode(int x, int y) { int diffX = this.x - x; int
+	 * diffY = this.y - y; int r = Vertex.NODE_WIDTH / 2; return ((diffX *
+	 * diffX) + (diffY * diffY)) < (r * r); }
 	 */
-	public boolean pointInNode(int x, int y) {
-		int diffX = this.x - x;
-		int diffY = this.y - y;
-		int r = Node.NODE_WIDTH / 2;
-		return ((diffX * diffX) + (diffY * diffY)) < (r * r);
-	}
-
 	public boolean addEdgeIn(Edge e) {
 		return edgesIn.add(e);
 	}
@@ -120,15 +117,15 @@ public class Node {
 		edgesOut.remove(e);
 	}
 
-	public boolean equals(Node n) {
+	public boolean equals(Vertex n) {
 		return n.getNumber() == number;
 	}
-	
-	public String toString(){
+
+	public String toString() {
 		return String.format("q%d", number);
 	}
-	
-	public void clear(){
+
+	public void clear() {
 		edgesIn = new ArrayList<Edge>();
 		edgesOut = new ArrayList<Edge>();
 	}

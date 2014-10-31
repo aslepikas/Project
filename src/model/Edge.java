@@ -2,19 +2,19 @@ package model;
 
 public class Edge {
 
-	private Node startN;
-	private Node targetN;
+	private Vertex startV;
+	private Vertex targetV;
 	private char symbol;
 
-	public Edge(Node start, Node target) {
-		startN = start;
-		targetN = target;
+	public Edge(Vertex start, Vertex target) {
+		startV = start;
+		targetV = target;
 		symbol = '\0';
 	}
 
-	public Edge(Node start, Node target, char c) {
-		startN = start;
-		targetN = target;
+	public Edge(Vertex start, Vertex target, char c) {
+		startV = start;
+		targetV = target;
 		symbol = c;
 	}
 
@@ -30,29 +30,29 @@ public class Edge {
 		return symbol;
 	}
 	
-	public void setStartN(Node n) {
-		startN = n;
+	public void setStartV(Vertex n) {
+		startV = n;
 	}
 
-	public void setTargetN(Node n) {
-		targetN = n;
+	public void setTargetV(Vertex n) {
+		targetV = n;
 	}
 	
-	public Node getStartN() {
-		return startN;
+	public Vertex getStartV() {
+		return startV;
 	}
 
-	public Node getTargetN() {
-		return targetN;
+	public Vertex getTargetV() {
+		return targetV;
 	}
 
 	public void clear() {
-		startN = null;
-		targetN = null;
+		startV = null;
+		targetV = null;
 	}
 
 	public boolean equals(Edge e) {
-		return (e.getStartN() == startN) && (e.getTargetN() == targetN)
+		return (e.getStartV() == startV) && (e.getTargetV() == targetV)
 				&& (e.getSymbol() == symbol);
 	}
 	

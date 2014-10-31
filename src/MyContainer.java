@@ -2,9 +2,8 @@ import java.awt.*;
 
 import javax.swing.*;
 
-import Menu.MyMenuBar;
+import menu.MyMenuBar;
 import model.Model;
-import canvas.MyCanvas;
 
 public class MyContainer {
 

@@ -38,9 +38,9 @@ public class Main {
 		//myGraph.addNewEdge(vertices.get(0), vertices.get(2));
 
 		// Layout<V, E>, VisualizationViewer<V,E>
-		Layout<Integer, String> layout = new StaticLayout(myGraph);
+		Layout<Vertex, Edge> layout = new StaticLayout(myGraph);
 		layout.setSize(new Dimension(300, 300));
-		VisualizationViewer<Integer, String> vv = new VisualizationViewer<Integer, String>(
+		VisualizationViewer<Vertex, Edge> vv = new VisualizationViewer<Vertex, Edge>(
 				layout);
 		vv.setPreferredSize(new Dimension(350, 350));
 		// Show vertex and edge labels
@@ -48,7 +48,7 @@ public class Main {
 		vv.getRenderContext().setEdgeLabelTransformer(new ToStringLabeller());
 		// Create a graph mouse and add it to the visualization viewer
 		//
-		EditingModalGraphMouse gm = new EditingModalGraphMouse(
+		EditingModalGraphMouse<Vertex, Edge> gm = new EditingModalGraphMouse<Vertex, Edge>(
 				vv.getRenderContext(), myGraph.vertexFactory, myGraph.edgeFactory);
 		vv.setGraphMouse(gm);
 		JFrame frame = new JFrame("Editing Graph Viewer 1");
