@@ -454,14 +454,19 @@ public class Model implements DirectedGraph<Node, Edge>, MultiGraph<Node, Edge> 
 	public boolean removeAllEdges(Node n) {
 		System.out.println(53);
 		for (Edge e : n.getEdgesIn()) {
-			removeEdge(e);
+			e.getStartN().removeEdgeOut(e);
 		}
+		for (Edge e : n.getEdgesOut())  {
+			e.getTargetN().removeEdgeIn(e);
+		}
+		n.clear();
 		return true;
 	}
 
 	@Override
 	public boolean removeVertex(Node n) {
 		System.out.println(54);
+		removeAllEdges(n);
 		return nodeList.remove(n);
 	}
 

@@ -104,10 +104,6 @@ public class Node {
 		return ((diffX * diffX) + (diffY * diffY)) < (r * r);
 	}
 
-	/**
-	 * @param e
-	 * @return success of operation
-	 */
 	public boolean addEdgeIn(Edge e) {
 		return edgesIn.add(e);
 	}
@@ -130,5 +126,10 @@ public class Node {
 	
 	public String toString(){
 		return String.format("q%d", number);
+	}
+	
+	public void clear(){
+		edgesIn = new ArrayList<Edge>();
+		edgesOut = new ArrayList<Edge>();
 	}
 }
