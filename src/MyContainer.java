@@ -2,7 +2,6 @@ import java.awt.*;
 
 import javax.swing.*;
 
-import menu.MyMenuBar;
 import model.Model;
 
 public class MyContainer {

@@ -1,14 +1,4 @@
-import edu.uci.ics.jung.algorithms.layout.CircleLayout;
-import edu.uci.ics.jung.algorithms.layout.Layout;
-import edu.uci.ics.jung.algorithms.layout.StaticLayout;
-import edu.uci.ics.jung.graph.Graph;
-import edu.uci.ics.jung.graph.SparseMultigraph;
-import edu.uci.ics.jung.visualization.BasicVisualizationServer;
-import edu.uci.ics.jung.visualization.VisualizationViewer;
-import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
-import edu.uci.ics.jung.visualization.control.EditingModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
-import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 
 import java.awt.Dimension;
 
@@ -18,8 +8,6 @@ import javax.swing.JMenuBar;
 
 import canvas.MyJUNGCanvas;
 import model.*;
-
-import java.util.ArrayList;
 
 public class Main {
 
@@ -40,7 +28,7 @@ public class Main {
 		//myGraph.addNewEdge(vertices.get(0), vertices.get(2));
 
 		// Layout<V, E>, VisualizationViewer<V,E>
-		MyJUNGCanvas canvasModel = new MyJUNGCanvas(new Model());
+		MyJUNGCanvas canvasModel = new MyJUNGCanvas(myGraph);
 		
 		canvasModel.initialise();
 		/*
@@ -67,7 +55,7 @@ public class Main {
 		modeMenu.setIcon(null); // I'm using this in a main menu
 		modeMenu.setPreferredSize(new Dimension(80, 20)); // Change the size
 		menuBar.add(modeMenu);
-
+		
 		canvasModel.getGraphMouse().setMode(ModalGraphMouse.Mode.EDITING);
 		
 		frame.setJMenuBar(menuBar);
