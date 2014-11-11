@@ -30,10 +30,13 @@ public class MyJUNGCanvas {
 		vv = new VisualizationViewer<Vertex, Edge>(layout);
 		vv.setPreferredSize(new Dimension(350, 350));
 
-		vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller<Vertex>());
-		vv.getRenderContext().setEdgeLabelTransformer(new ToStringLabeller<Edge>());
+		vv.getRenderContext().setVertexLabelTransformer(
+				new ToStringLabeller<Vertex>());
+		vv.getRenderContext().setEdgeLabelTransformer(
+				new ToStringLabeller<Edge>());
 
-		gm = new MyGraphMouse(vv.getRenderContext(), model.vertexFactory, model.edgeFactory);
+		gm = new MyGraphMouse(vv.getRenderContext(), model.vertexFactory,
+				model.edgeFactory);
 		vv.setGraphMouse(gm);
 		return vv;
 	}

@@ -45,7 +45,7 @@ public class Main {
 		EditingModalGraphMouse<Vertex, Edge> gm = new EditingModalGraphMouse<Vertex, Edge>(
 				vv.getRenderContext(), myGraph.vertexFactory, myGraph.edgeFactory);
 		vv.setGraphMouse(gm);*/
-		JFrame frame = new JFrame("Editing Graph Viewer 1");
+		JFrame frame = new JFrame("Editing Graph Viewer");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().add(canvasModel.getVisualizationViewer());
 		// Let's add a menu for changing mouse modes
