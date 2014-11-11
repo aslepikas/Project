@@ -56,8 +56,8 @@ public class MyGraphMouse extends EditingModalGraphMouse<Vertex, Edge> {
 																				// working
 																				// atm
 		annotatingPlugin = new AnnotatingGraphMousePlugin<Vertex, Edge>(rc);
-		popupEditingPlugin = new EditingPopupGraphMousePlugin<Vertex, Edge>(
-				vertexFactory, edgeFactory);
+		popupEditingPlugin = new MyPopup<Vertex, Edge>(vertexFactory,
+				edgeFactory);
 		add(scalingPlugin);
 		setMode(Mode.EDITING);
 	}
@@ -90,7 +90,8 @@ public class MyGraphMouse extends EditingModalGraphMouse<Vertex, Edge> {
 	 * add(popupEditingPlugin); }
 	 */
 
-	// Annotating mode not being used atm. And i didn't even manage to invoke it.
+	// Annotating mode not being used atm. And i didn't even manage to invoke
+	// it.
 
 	/*
 	 * protected void setAnnotatingMode() { remove(pickingPlugin);
