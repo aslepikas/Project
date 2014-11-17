@@ -12,3 +12,8 @@ Project.iml
 *.war
 *.ear
 /bin/
+
+# Apache files #
+
+/commons-lang3-3.3.2/apidocs/
+

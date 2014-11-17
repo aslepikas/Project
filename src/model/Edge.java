@@ -1,35 +1,37 @@
 package model;
 
+import java.util.ArrayList;
+
 public class Edge {
 
 	private Vertex startV;
 	private Vertex targetV;
-	private char symbol;
+	private ArrayList<String> labels;
 
 	public Edge(Vertex start, Vertex target) {
 		startV = start;
 		targetV = target;
-		symbol = '\0';
+		labels = new ArrayList<String>();
 	}
 
-	public Edge(Vertex start, Vertex target, char c) {
+	public Edge(Vertex start, Vertex target, ArrayList<String> labels) {
 		startV = start;
 		targetV = target;
-		symbol = c;
+		this.labels = labels;
 	}
 
-	public void setsymbol(char c) {
-		symbol = c;
+	public void setLabels(ArrayList<String> labels) {
+		this.labels = labels;
 	}
 
-	public void setSymbol() {
-		symbol = '\0';
+	public void setLabels() {
+		labels = new ArrayList<String>();
 	}
 
-	public char getSymbol() {
-		return symbol;
+	public ArrayList<String> getLabels() {
+		return labels;
 	}
-	
+
 	public void setStartV(Vertex n) {
 		startV = n;
 	}
@@ -37,7 +39,7 @@ public class Edge {
 	public void setTargetV(Vertex n) {
 		targetV = n;
 	}
-	
+
 	public Vertex getStartV() {
 		return startV;
 	}
@@ -52,12 +54,36 @@ public class Edge {
 	}
 
 	public boolean equals(Edge e) {
+		boolean equal = true;
+		boolean intermediate = false;
+
+		for (String i : e.getLabels()) {
+			for (String j : labels) {
+				intermediate = intermediate || (j.compareToIgnoreCase(i) == 0);
+			}
+			equal = equal && intermediate;
+		}
+
+		for (String j : e.getLabels()) {
+			for (String i : labels) {
+				intermediate = intermediate || (j.compareToIgnoreCase(i) == 0);
+			}
+			equal = equal && intermediate;
+		}
+
 		return (e.getStartV() == startV) && (e.getTargetV() == targetV)
-				&& (e.getSymbol() == symbol);
+				&& equal;
 	}
-	
-	public String toString(){
-		return new String();
+
+	public String toString() {
+		String str = "";
+		for (int i = 0; i < labels.size(); i++) {
+			if (i == 0)
+				str = labels.get(i);
+			else
+				str = String.format("%s, %s", str, labels.get(i));
+		}
+		return str;
 	}
 
 }

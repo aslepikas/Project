@@ -35,7 +35,7 @@ public class MyJUNGCanvas {
 		vv.getRenderContext().setEdgeLabelTransformer(
 				new ToStringLabeller<Edge>());
 		
-		vv.getRenderContext().setVertexFillPaintTransformer(new ColourTransformer(vv.getRenderContext()));
+		vv.getRenderContext().setVertexFillPaintTransformer(new ColourTransformer());
 		vv.getRenderContext().setVertexDrawPaintTransformer(new OutlineColourTransformer(vv.getRenderContext()));
 		vv.getRenderContext().setVertexStrokeTransformer(new VertexStrokeWidthTransformer(vv.getRenderContext()));
 		gm = new MyGraphMouse(vv.getRenderContext(), model.vertexFactory,

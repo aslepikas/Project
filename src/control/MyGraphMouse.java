@@ -56,7 +56,7 @@ public class MyGraphMouse extends EditingModalGraphMouse<Vertex, Edge> {
 																				// working
 																				// atm
 		annotatingPlugin = new AnnotatingGraphMousePlugin<Vertex, Edge>(rc);
-		popupEditingPlugin = new MyPopup<Vertex, Edge>(vertexFactory,
+		popupEditingPlugin = new MyPopupPlugin(vertexFactory,
 				edgeFactory);
 		add(scalingPlugin);
 		setMode(Mode.EDITING);
@@ -79,7 +79,7 @@ public class MyGraphMouse extends EditingModalGraphMouse<Vertex, Edge> {
 	protected void setTransformingMode() {
 		super.setTransformingMode();
 		remove(shearingPlugin);
-		remove(labelEditingPlugin);
+		//remove(labelEditingPlugin);
 	}
 
 	/*
