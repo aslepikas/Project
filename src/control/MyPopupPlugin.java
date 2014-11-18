@@ -56,7 +56,10 @@ public class MyPopupPlugin extends EditingPopupGraphMousePlugin<Vertex, Edge> {
 		if (pickSupport != null) {
 			final Edge edge = pickSupport.getEdge(layout, p.getX(), p.getY());
 			Vertex vertex = pickSupport.getVertex(layout, p.getX(), p.getY());
-			if (vertex == null && edge != null) {
+			if (vertex != null){
+				
+			}
+			else if (edge != null) {
 				popup.add(new AbstractAction("Edit label") {
 
 					@Override
@@ -66,6 +69,7 @@ public class MyPopupPlugin extends EditingPopupGraphMousePlugin<Vertex, Edge> {
 						EdgeEditMenu labelchange = new EdgeEditMenu(topFrame,
 								edge);
 						labelchange.setVisible(true);
+						vv.repaint();
 					}
 
 				});
