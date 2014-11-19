@@ -23,6 +23,8 @@ public class VertexStrokeWidthTransformer implements
 	public Stroke transform(Vertex v) {
 		if (rc.getPickedVertexState().isPicked(v))
 			return new BasicStroke(4);
+		if (v.isStarting())
+			return new BasicStroke(2);
 		return new BasicStroke(1);
 	}
 

@@ -18,9 +18,11 @@ public class OutlineColourTransformer implements Transformer<Vertex, Paint>{
 		this.rc = rc;
 	}
 	
-	public Paint transform(Vertex e) {
-		if (rc.getPickedVertexState().isPicked(e))
+	public Paint transform(Vertex v) {
+		if (v.isStarting())
 			return Color.BLUE;
+		if (rc.getPickedVertexState().isPicked(v))
+			return Color.BLACK;
 		return Color.BLACK;
 	}
 

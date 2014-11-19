@@ -32,13 +32,13 @@ public class Model implements DirectedGraph<Vertex, Edge>,
 	};
 
 	private ArrayList<Vertex> vertexList;
-	private int startVertex;
+	private Vertex startVertex;
 	private int count = 0;
 
 	public Model() {
 		System.out.println(2);
 		vertexList = new ArrayList<Vertex>();
-		startVertex = -1;
+		startVertex = null;
 	}
 
 	public ArrayList<Vertex> getNodeList() {
@@ -75,19 +75,33 @@ public class Model implements DirectedGraph<Vertex, Edge>,
 	 * -1; for (Vertex i : nodeList) { if (i.pointInNode(x, y)) { retnum =
 	 * i.getNumber(); } } return retnum; }
 	 */
-	public void setStartVertex(int v) {
+	public void setStartVertex(Vertex v) {
 		System.out.println(8);
+		if (startVertex != null)
+			startVertex.unSetStart();
 		startVertex = v;
+		startVertex.setStart();
+	}
+
+	public Vertex getStartVertex() {
+		return startVertex;
+	}
+
+	public boolean isStartVertex(Vertex v) {
+		System.out.println(8.5);
+		if (hasStart())
+			return startVertex.equals(v);
+		return false;
 	}
 
 	public boolean hasStart() {
 		System.out.println(9);
-		return startVertex == -1;
+		return startVertex != null;
 	}
 
 	public void removeStartVertex() {
 		System.out.println(10);
-		startVertex = -1;
+		startVertex = null;
 	}
 
 	@Override
@@ -243,7 +257,7 @@ public class Model implements DirectedGraph<Vertex, Edge>,
 	public boolean addEdge(Edge e, Collection<? extends Vertex> vL, EdgeType eT) {
 		System.out.println(30);
 		if (eT == EdgeType.DIRECTED)
-		return addEdge(e, vL);
+			return addEdge(e, vL);
 		return false;
 	}
 

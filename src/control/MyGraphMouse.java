@@ -50,7 +50,7 @@ public class MyGraphMouse extends EditingModalGraphMouse<Vertex, Edge> {
 				new CrossoverScalingControl(), 0, in, out);
 		rotatingPlugin = new RotatingGraphMousePlugin(); // needed
 		shearingPlugin = new ShearingGraphMousePlugin(); // removed
-		editingPlugin = new EditingGraphMousePlugin<Vertex, Edge>(
+		editingPlugin = new MyEditingGraphMousePlugin<Vertex, Edge>(
 				vertexFactory, edgeFactory); // needed
 		labelEditingPlugin = new LabelEditingGraphMousePlugin<Vertex, Edge>();// not
 																				// working

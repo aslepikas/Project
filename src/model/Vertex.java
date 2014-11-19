@@ -8,6 +8,7 @@ public class Vertex {
 	private int x;
 	private int y;
 	private boolean endState;
+	private boolean startState;
 	private ArrayList<Edge> edgesIn;
 	private ArrayList<Edge> edgesOut;
 
@@ -19,6 +20,7 @@ public class Vertex {
 		this.x = x;
 		this.y = y;
 		endState = false;
+		startState = false;
 	}
 
 	/**
@@ -40,6 +42,24 @@ public class Vertex {
 	 */
 	public void unSetFinal() {
 		endState = false;
+	}
+	
+	/**
+	 * To be only used from the model.
+	 */
+	public void setStart() {
+		startState = true;
+	}
+
+	/**
+	 * To be only used from the model.
+	 */
+	public void unSetStart() {
+		startState = false;
+	}
+	
+	public boolean isStarting() {
+		return startState;
 	}
 
 	/**
