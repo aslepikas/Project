@@ -2,13 +2,14 @@ package canvas;
 
 import java.awt.Dimension;
 
+import canvas.transform.ColourTransformer;
+import canvas.transform.OutlineColourTransformer;
+import canvas.transform.VertexStrokeWidthTransformer;
 import control.MyGraphMouse;
-
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.algorithms.layout.StaticLayout;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
-
 import model.Edge;
 import model.Model;
 import model.Vertex;

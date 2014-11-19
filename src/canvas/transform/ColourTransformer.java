@@ -1,4 +1,4 @@
-package canvas;
+package canvas.transform;
 
 import java.awt.Color;
 import java.awt.Paint;

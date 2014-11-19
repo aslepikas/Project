@@ -17,7 +17,6 @@ public class Model implements DirectedGraph<Vertex, Edge>,
 		int count;
 
 		public Vertex create() {
-			System.out.println(0);
 			count++;
 			return new Vertex(count, 0, 0);
 		}
@@ -25,8 +24,6 @@ public class Model implements DirectedGraph<Vertex, Edge>,
 
 	public Factory<Edge> edgeFactory = new Factory<Edge>() {
 		public Edge create() {
-
-			System.out.println(1);
 			return new Edge(null, null);
 		}
 	};
@@ -36,18 +33,15 @@ public class Model implements DirectedGraph<Vertex, Edge>,
 	private int count = 0;
 
 	public Model() {
-		System.out.println(2);
 		vertexList = new ArrayList<Vertex>();
 		startVertex = null;
 	}
 
 	public ArrayList<Vertex> getNodeList() {
-		System.out.println(3);
 		return vertexList;
 	}
 
 	public Vertex getNumber(int number) {
-		System.out.println(4);
 		for (Vertex i : vertexList) {
 			if (i.getNumber() == number) {
 				return i;
@@ -58,25 +52,17 @@ public class Model implements DirectedGraph<Vertex, Edge>,
 	}
 
 	public void addNewVertex(int x, int y) {
-		System.out.println(5);
 		count++;
 		vertexList.add(new Vertex(count, x, y));
 	}
 
 	public void addNewEdge(Vertex v1, Vertex v2) {
-		System.out.println(6);
 		Edge e = new Edge(v1, v2);
 		v1.addEdgeOut(e);
 		v2.addEdgeIn(e);
 	}
 
-	/*
-	 * public int findVertex(int x, int y) { System.out.println(7); int retnum =
-	 * -1; for (Vertex i : nodeList) { if (i.pointInNode(x, y)) { retnum =
-	 * i.getNumber(); } } return retnum; }
-	 */
 	public void setStartVertex(Vertex v) {
-		System.out.println(8);
 		if (startVertex != null)
 			startVertex.unSetStart();
 		startVertex = v;
@@ -88,25 +74,21 @@ public class Model implements DirectedGraph<Vertex, Edge>,
 	}
 
 	public boolean isStartVertex(Vertex v) {
-		System.out.println(8.5);
 		if (hasStart())
 			return startVertex.equals(v);
 		return false;
 	}
 
 	public boolean hasStart() {
-		System.out.println(9);
 		return startVertex != null;
 	}
 
 	public void removeStartVertex() {
-		System.out.println(10);
 		startVertex = null;
 	}
 
 	@Override
 	public boolean addEdge(Edge e, Vertex v1, Vertex v2) {
-		System.out.println(11);
 		v1.addEdgeOut(e);
 		v2.addEdgeIn(e);
 		e.setStartV(v1);
@@ -123,74 +105,54 @@ public class Model implements DirectedGraph<Vertex, Edge>,
 
 	@Override
 	public Vertex getDest(Edge e) {
-		System.out.println(13);
 		return e.getTargetV();
 	}
 
 	@Override
 	public Pair<Vertex> getEndpoints(Edge e) {
-		System.out.println(14);
 		return new Pair<Vertex>(e.getStartV(), e.getTargetV());
 	}
 
 	@Override
 	public Collection<Edge> getInEdges(Vertex v) {
-		System.out.println(15);
 		return v.getEdgesIn();
 	}
 
-	/**
-	 * Not expected to be used, but implemented just in case
-	 * 
-	 * @param v
-	 *            Node variable
-	 * @param e
-	 *            edge, either starting or ending with n
-	 * @return node on the other end of the edge
-	 */
 	@Override
 	public Vertex getOpposite(Vertex v, Edge e) {
-		System.out.println(16);
 		if (e.getStartV().equals(v))
 			return e.getTargetV();
 		else
 			return e.getStartV();
-
 	}
 
 	@Override
 	public Collection<Edge> getOutEdges(Vertex v) {
-		System.out.println(17);
 		return v.getEdgesOut();
 	}
 
 	@Override
 	public int getPredecessorCount(Vertex v) {
-		System.out.println(18);
 		return v.getEdgesIn().size();
 	}
 
 	@Override
 	public Collection<Vertex> getPredecessors(Vertex arg0) {
-		System.out.println(19);
 		return null;
 	}
 
 	@Override
 	public Vertex getSource(Edge e) {
-		System.out.println(20);
 		return e.getStartV();
 	}
 
 	@Override
 	public int getSuccessorCount(Vertex v) {
-		System.out.println(21);
 		return v.getEdgesOut().size();
 	}
 
 	@Override
 	public Collection<Vertex> getSuccessors(Vertex v) {
-		System.out.println(22);
 		ArrayList<Vertex> retList = new ArrayList<Vertex>();
 		for (Edge e : v.getEdgesOut()) {
 			if (!retList.contains(e.getTargetV())) {
@@ -202,43 +164,36 @@ public class Model implements DirectedGraph<Vertex, Edge>,
 
 	@Override
 	public int inDegree(Vertex v) {
-		System.out.println(23);
 		return v.getEdgesIn().size();
 	}
 
 	@Override
 	public boolean isDest(Vertex v, Edge e) {
-		System.out.println(24);
 		return v.equals(e.getTargetV());
 	}
 
 	@Override
 	public boolean isPredecessor(Vertex v1, Vertex v2) {
-		System.out.println(25);
 		return this.getPredecessors(v1).contains(v2);
 	}
 
 	@Override
 	public boolean isSource(Vertex v, Edge e) {
-		System.out.println(26);
 		return e.getStartV().equals(v);
 	}
 
 	@Override
 	public boolean isSuccessor(Vertex v1, Vertex v2) {
-		System.out.println(27);
 		return this.getSuccessors(v2).contains(v1);
 	}
 
 	@Override
 	public int outDegree(Vertex v) {
-		System.out.println(28);
 		return v.getEdgesOut().size();
 	}
 
 	@Override
 	public boolean addEdge(Edge e, Collection<? extends Vertex> vertices) {
-		System.out.println(29);
 		if (vertices.size() == 0)
 			return false;
 		Vertex[] nodeArray = vertices.toArray(new Vertex[0]);
@@ -255,7 +210,6 @@ public class Model implements DirectedGraph<Vertex, Edge>,
 
 	@Override
 	public boolean addEdge(Edge e, Collection<? extends Vertex> vL, EdgeType eT) {
-		System.out.println(30);
 		if (eT == EdgeType.DIRECTED)
 			return addEdge(e, vL);
 		return false;
@@ -263,17 +217,12 @@ public class Model implements DirectedGraph<Vertex, Edge>,
 
 	@Override
 	public boolean addVertex(Vertex v) {
-		System.out.println(31);
 		vertexList.add(v);
 		return true;
 	}
 
-	/**
-	 * not implemented
-	 */
 	@Override
 	public boolean containsEdge(Edge e) {
-		System.out.println(32);
 		for (Vertex n : vertexList)
 			if (n.getEdgesIn().contains(e))
 				return true;
@@ -282,13 +231,11 @@ public class Model implements DirectedGraph<Vertex, Edge>,
 
 	@Override
 	public boolean containsVertex(Vertex v) {
-		System.out.println(33);
 		return vertexList.contains(v);
 	}
 
 	@Override
 	public int degree(Vertex v) {
-		System.out.println(34);
 		int retnum = 0;
 		retnum = v.getEdgesIn().size();
 		retnum = retnum + v.getEdgesOut().size();
@@ -302,7 +249,6 @@ public class Model implements DirectedGraph<Vertex, Edge>,
 
 	@Override
 	public Edge findEdge(Vertex v1, Vertex v2) {
-		System.out.println(35);
 		for (Edge e : v1.getEdgesIn()) {
 			if (e.getStartV().equals(v2)) {
 				return e;
@@ -313,7 +259,6 @@ public class Model implements DirectedGraph<Vertex, Edge>,
 
 	@Override
 	public Collection<Edge> findEdgeSet(Vertex v1, Vertex v2) {
-		System.out.println(36);
 		ArrayList<Edge> retSet = new ArrayList<Edge>();
 		for (Edge e : v1.getEdgesIn()) {
 			if (e.getStartV().equals(v2)) {
@@ -325,13 +270,11 @@ public class Model implements DirectedGraph<Vertex, Edge>,
 
 	@Override
 	public EdgeType getDefaultEdgeType() {
-		System.out.println(37);
 		return EdgeType.DIRECTED;
 	}
 
 	@Override
 	public int getEdgeCount() {
-		System.out.println(38);
 		int retNum = 0;
 		for (Vertex n : vertexList) {
 			retNum = retNum + n.getEdgesOut().size();
@@ -341,7 +284,6 @@ public class Model implements DirectedGraph<Vertex, Edge>,
 
 	@Override
 	public int getEdgeCount(EdgeType et) {
-		System.out.println(39);
 		if (et == EdgeType.UNDIRECTED) {
 			return getEdgeCount();
 		}
@@ -350,13 +292,11 @@ public class Model implements DirectedGraph<Vertex, Edge>,
 
 	@Override
 	public EdgeType getEdgeType(Edge e) {
-		System.out.println(40);
 		return EdgeType.DIRECTED;
 	}
 
 	@Override
 	public Collection<Edge> getEdges() {
-		System.out.println(41);
 		ArrayList<Edge> retList = new ArrayList<Edge>();
 		for (Vertex n : vertexList) {
 			retList.addAll(n.getEdgesIn());
@@ -366,7 +306,6 @@ public class Model implements DirectedGraph<Vertex, Edge>,
 
 	@Override
 	public Collection<Edge> getEdges(EdgeType et) {
-		System.out.println(42);
 		if (et == EdgeType.DIRECTED)
 			return getEdges();
 		return null;
@@ -374,13 +313,11 @@ public class Model implements DirectedGraph<Vertex, Edge>,
 
 	@Override
 	public int getIncidentCount(Edge e) {
-		System.out.println(43);
 		return getIncidentVertices(e).size();
 	}
 
 	@Override
 	public Collection<Edge> getIncidentEdges(Vertex v) {
-		System.out.println(44);
 		if (v == null)
 			return null;
 		ArrayList<Edge> retList = new ArrayList<Edge>();
@@ -393,7 +330,6 @@ public class Model implements DirectedGraph<Vertex, Edge>,
 
 	@Override
 	public Collection<Vertex> getIncidentVertices(Edge e) {
-		System.out.println(45);
 		ArrayList<Vertex> retList = new ArrayList<Vertex>();
 		retList.add(e.getStartV());
 		if (!e.getStartV().equals(e.getTargetV()))
@@ -403,13 +339,11 @@ public class Model implements DirectedGraph<Vertex, Edge>,
 
 	@Override
 	public int getNeighborCount(Vertex v) {
-		System.out.println(46);
 		return getNeighbors(v).size();
 	}
 
 	@Override
 	public Collection<Vertex> getNeighbors(Vertex v) {
-		System.out.println(47);
 		ArrayList<Vertex> retList = new ArrayList<Vertex>();
 		for (Edge e : v.getEdgesIn())
 			if (!retList.contains(e.getStartV()) && !e.getStartV().equals(v))
@@ -422,25 +356,21 @@ public class Model implements DirectedGraph<Vertex, Edge>,
 
 	@Override
 	public int getVertexCount() {
-		System.out.println(48);
 		return vertexList.size();
 	}
 
 	@Override
 	public Collection<Vertex> getVertices() {
-		System.out.println(49);
 		return vertexList;
 	}
 
 	@Override
 	public boolean isIncident(Vertex v, Edge e) {
-		System.out.println(50);
 		return (e.getTargetV().equals(v) || e.getStartV().equals(v));
 	}
 
 	@Override
 	public boolean isNeighbor(Vertex v1, Vertex v2) {
-		System.out.println(51);
 		for (Edge e : v1.getEdgesIn())
 			if (isIncident(v2, e))
 				return true;
@@ -452,7 +382,6 @@ public class Model implements DirectedGraph<Vertex, Edge>,
 
 	@Override
 	public boolean removeEdge(Edge e) {
-		System.out.println(52);
 		e.getStartV().removeEdgeOut(e);
 		e.getTargetV().removeEdgeIn(e);
 		e.clear();
@@ -460,7 +389,6 @@ public class Model implements DirectedGraph<Vertex, Edge>,
 	}
 
 	public boolean removeAllEdges(Vertex v) {
-		System.out.println(53);
 		for (Edge e : v.getEdgesIn()) {
 			e.getStartV().removeEdgeOut(e);
 		}
@@ -473,7 +401,6 @@ public class Model implements DirectedGraph<Vertex, Edge>,
 
 	@Override
 	public boolean removeVertex(Vertex v) {
-		System.out.println(54);
 		removeAllEdges(v);
 		return vertexList.remove(v);
 	}

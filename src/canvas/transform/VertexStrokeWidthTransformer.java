@@ -1,4 +1,4 @@
-package canvas;
+package canvas.transform;
 
 import java.awt.BasicStroke;
 import java.awt.Stroke;

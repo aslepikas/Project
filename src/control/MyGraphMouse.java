@@ -1,15 +1,7 @@
 package control;
 
-import java.awt.Dimension;
-import java.awt.event.InputEvent;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 
-import javax.swing.ButtonGroup;
-import javax.swing.Icon;
-import javax.swing.JMenu;
-import javax.swing.JRadioButtonMenuItem;
-import javax.swing.plaf.basic.BasicIconFactory;
+import java.awt.event.InputEvent;
 
 import model.Edge;
 import model.Vertex;
@@ -20,9 +12,7 @@ import edu.uci.ics.jung.visualization.RenderContext;
 import edu.uci.ics.jung.visualization.annotations.AnnotatingGraphMousePlugin;
 import edu.uci.ics.jung.visualization.control.AnimatedPickingGraphMousePlugin;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
-import edu.uci.ics.jung.visualization.control.EditingGraphMousePlugin;
 import edu.uci.ics.jung.visualization.control.EditingModalGraphMouse;
-import edu.uci.ics.jung.visualization.control.EditingPopupGraphMousePlugin;
 import edu.uci.ics.jung.visualization.control.LabelEditingGraphMousePlugin;
 import edu.uci.ics.jung.visualization.control.PickingGraphMousePlugin;
 import edu.uci.ics.jung.visualization.control.RotatingGraphMousePlugin;
@@ -52,9 +42,9 @@ public class MyGraphMouse extends EditingModalGraphMouse<Vertex, Edge> {
 		shearingPlugin = new ShearingGraphMousePlugin(); // removed
 		editingPlugin = new MyEditingGraphMousePlugin<Vertex, Edge>(
 				vertexFactory, edgeFactory); // needed
-		labelEditingPlugin = new LabelEditingGraphMousePlugin<Vertex, Edge>();// not
-																				// working
-																				// atm
+		labelEditingPlugin = new LabelEditingGraphMousePlugin<Vertex, Edge>();
+		//labelEditingPlugin does not work, since i'm using toStringLabeler
+		
 		annotatingPlugin = new AnnotatingGraphMousePlugin<Vertex, Edge>(rc);
 		popupEditingPlugin = new MyPopupPlugin(vertexFactory,
 				edgeFactory);
@@ -62,43 +52,10 @@ public class MyGraphMouse extends EditingModalGraphMouse<Vertex, Edge> {
 		setMode(Mode.EDITING);
 	}
 
-	/*
-	 * protected void setPickingMode() { remove(translatingPlugin);
-	 * remove(rotatingPlugin); remove(shearingPlugin); remove(editingPlugin);
-	 * remove(annotatingPlugin); add(pickingPlugin); add(animatedPickingPlugin);
-	 * add(labelEditingPlugin); add(popupEditingPlugin); }
-	 */
-
-	/*
-	 * @Override protected void setTransformingMode() { remove(pickingPlugin);
-	 * remove(animatedPickingPlugin); remove(editingPlugin);
-	 * remove(annotatingPlugin); add(translatingPlugin); add(rotatingPlugin);
-	 * add(shearingPlugin); add(labelEditingPlugin); add(popupEditingPlugin); }
-	 */
 	@Override
 	protected void setTransformingMode() {
 		super.setTransformingMode();
 		remove(shearingPlugin);
-		//remove(labelEditingPlugin);
 	}
-
-	/*
-	 * protected void setEditingMode() { remove(pickingPlugin);
-	 * remove(animatedPickingPlugin); remove(translatingPlugin);
-	 * remove(rotatingPlugin); remove(shearingPlugin);
-	 * remove(labelEditingPlugin); remove(annotatingPlugin); add(editingPlugin);
-	 * add(popupEditingPlugin); }
-	 */
-
-	// Annotating mode not being used atm. And i didn't even manage to invoke
-	// it.
-
-	/*
-	 * protected void setAnnotatingMode() { remove(pickingPlugin);
-	 * remove(animatedPickingPlugin); remove(translatingPlugin);
-	 * remove(rotatingPlugin); remove(shearingPlugin);
-	 * remove(labelEditingPlugin); remove(editingPlugin);
-	 * remove(popupEditingPlugin); add(annotatingPlugin); }
-	 */
 
 }

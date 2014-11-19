@@ -47,8 +47,6 @@ public class EdgeEditMenu extends JDialog implements ActionListener,
 		}
 		textFields.add(new JTextField());
 
-		String msg = "Enter transition labels:";
-
 		changePanel = new JPanel();
 		labelPanel = new JPanel();
 
@@ -60,7 +58,7 @@ public class EdgeEditMenu extends JDialog implements ActionListener,
 		changePanel.setLayout(new BorderLayout());
 
 		moreButton = new JButton("more");
-		moreButton.addActionListener(new TextFieldAdder(this));
+		moreButton.addActionListener(this);
 
 		changePanel.add(moreButton, BorderLayout.SOUTH);
 		changePanel.add(labelPanel, BorderLayout.NORTH);
@@ -69,40 +67,14 @@ public class EdgeEditMenu extends JDialog implements ActionListener,
 		optionPane = new JOptionPane(changePanel, JOptionPane.PLAIN_MESSAGE,
 				JOptionPane.OK_CANCEL_OPTION, null, options, options[0]);
 		setContentPane(optionPane);
-		// setDefaultCloseOperation();
-		this.setMinimumSize(new Dimension(300, textFields.size() * 19 + 100)); // 19*#labels
-																				// +
-		// buttonheight +
-		// buttonheight + c
+
+		this.setMinimumSize(new Dimension(200, textFields.size() * 19 + 100));
+		// 19*#labels + 2*button height + c
 		System.out.println(getHeight());
 		System.out.println(getWidth());
 
 		optionPane.addPropertyChangeListener(this);
 		this.setLocationRelativeTo(root);
-	}
-
-	private class TextFieldAdder implements ActionListener {
-
-		EdgeEditMenu eem;
-
-		public TextFieldAdder(EdgeEditMenu eem) {
-			this.eem = eem;
-		}
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			if (e.getSource().equals(moreButton)) {
-				labelPanelLayout.setRows(labelPanelLayout.getRows() + 1);
-				JTextField textField = new JTextField();
-				textFields.add(textField);
-				labelPanel.add(textField);
-				System.out.println(labelPanel.getComponents().length);
-				labelPanel.updateUI();
-				eem.setMinimumSize(new Dimension(eem.getMinimumSize().width,
-						eem.getMinimumSize().height + 19));
-				eem.repaint();
-			}
-		}
 	}
 
 	@Override
@@ -130,9 +102,6 @@ public class EdgeEditMenu extends JDialog implements ActionListener,
 					if (i.getText().compareTo("") != 0) {
 						if (StringUtils.isAlphanumeric(i.getText())) {
 							retVals.add(i.getText());
-							System.out.println(i.getText()); // TODO : delete
-																// the
-																// comment
 							finish = finish && true;
 						} else {
 							JOptionPane.showMessageDialog(this,
@@ -144,7 +113,6 @@ public class EdgeEditMenu extends JDialog implements ActionListener,
 							break;
 
 						}
-						// TODO : add string confirmation
 					}
 				}
 				if (retVals.isEmpty() && finishedLoop) {
@@ -156,19 +124,28 @@ public class EdgeEditMenu extends JDialog implements ActionListener,
 				}
 			} else {
 				// currently nothing is happening after pressing cancel button
+				// i.e. it literally cancels the action
 			}
 			if (finish) {
 				this.getRootPane().repaint();
 				this.dispose();
 			}
 		}
-		// TODO make the below method work
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
-
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource().equals(moreButton)) {
+			labelPanelLayout.setRows(labelPanelLayout.getRows() + 1);
+			JTextField textField = new JTextField();
+			textFields.add(textField);
+			labelPanel.add(textField);
+			System.out.println(labelPanel.getComponents().length);
+			labelPanel.updateUI();
+			this.setMinimumSize(new Dimension(this.getMinimumSize().width, this
+					.getMinimumSize().height + 19));
+			this.repaint();
+		}
 	}
 
 }

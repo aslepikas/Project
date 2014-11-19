@@ -3,11 +3,9 @@ package control;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
-import java.util.Set;
 
 import javax.swing.AbstractAction;
 import javax.swing.JFrame;
-import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 
@@ -19,24 +17,10 @@ import org.apache.commons.collections15.Factory;
 
 import edu.uci.ics.jung.algorithms.layout.GraphElementAccessor;
 import edu.uci.ics.jung.algorithms.layout.Layout;
-import edu.uci.ics.jung.graph.DirectedGraph;
-import edu.uci.ics.jung.graph.Graph;
-import edu.uci.ics.jung.graph.UndirectedGraph;
-import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.EditingPopupGraphMousePlugin;
-import edu.uci.ics.jung.visualization.picking.PickedState;
 
 public class MyPopupPlugin extends EditingPopupGraphMousePlugin<Vertex, Edge> {
-
-
-	/*
-	 * protected Factory<V> vertexFactory;
-	 * 
-	 * protected Factory<E> edgeFactory;
-	 * 
-	 * protected JPopupMenu popup = new JPopupMenu();
-	 */
 
 	public MyPopupPlugin(Factory<Vertex> vertexFactory,
 			Factory<Edge> edgeFactory) {
@@ -53,7 +37,6 @@ public class MyPopupPlugin extends EditingPopupGraphMousePlugin<Vertex, Edge> {
 
 		GraphElementAccessor<Vertex, Edge> pickSupport = vv.getPickSupport();
 		Layout<Vertex, Edge> layout = vv.getGraphLayout();
-		Graph<Vertex, Edge> graph = layout.getGraph();
 		Point2D p = e.getPoint();
 		if (pickSupport != null) {
 			final Edge edge = pickSupport.getEdge(layout, p.getX(), p.getY());
