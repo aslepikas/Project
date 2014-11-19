@@ -120,9 +120,10 @@ public class EdgeEditMenu extends JDialog implements ActionListener,
 				// ignore reset
 				return;
 			}
-			
+
 			optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
 			if (buttonstr1.equals(value)) {
+				boolean finishedLoop = true;
 				System.out.println("stuff");
 				ArrayList<String> retVals = new ArrayList<String>();
 				for (JTextField i : textFields) {
@@ -138,13 +139,21 @@ public class EdgeEditMenu extends JDialog implements ActionListener,
 									"Alphanumeric characters only");
 							System.out.println("tracker");
 							finish = false;
+							retVals.clear();
+							finishedLoop = false;
 							break;
 
 						}
 						// TODO : add string confirmation
 					}
 				}
-				edge.setLabels(retVals);
+				if (retVals.isEmpty() && finishedLoop) {
+					JOptionPane.showMessageDialog(this,
+							"Set at least one label");
+					finish = false;
+				} else {
+					edge.setLabels(retVals);
+				}
 			} else {
 				// currently nothing is happening after pressing cancel button
 			}
