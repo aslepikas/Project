@@ -10,8 +10,7 @@ import edu.uci.ics.jung.graph.MultiGraph;
 import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.graph.util.Pair;
 
-public class Model implements DirectedGraph<Vertex, Edge>,
-		MultiGraph<Vertex, Edge> {
+public class Model implements DirectedGraph<Vertex, Edge> {
 
 	public Factory<Vertex> vertexFactory = new Factory<Vertex>() {
 		int count;

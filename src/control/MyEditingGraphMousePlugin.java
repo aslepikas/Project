@@ -2,8 +2,10 @@ package control;
 
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 import model.Edge;
@@ -44,14 +46,39 @@ public class MyEditingGraphMousePlugin<V, E> extends
 				if (vertex != null && startVertex != null) {
 					Graph<V, E> graph = vv.getGraphLayout().getGraph();
 					Edge newEdge = (Edge) edgeFactory.create();
+					if (layout.getGraph().isNeighbor(vertex, startVertex)) {
+						ArrayList<Edge> set = (ArrayList<Edge>) (layout
+								.getGraph().findEdgeSet(vertex, startVertex));
+						if (set.size() == 2) {
+							JOptionPane
+									.showMessageDialog(vv,
+											"An edge between these vertices already exists");
+							vv.removePostRenderPaintable(edgePaintable);
+							vv.removePostRenderPaintable(arrowPaintable);
+							vv.repaint();
+							return;
+						} else if (set.size() == 1) {
+							if (set.get(0).getStartV().equals(startVertex)) {
+								JOptionPane
+										.showMessageDialog(vv,
+												"An edge between these vertices already exists");
+								vv.removePostRenderPaintable(edgePaintable);
+								vv.removePostRenderPaintable(arrowPaintable);
+								vv.repaint();
+								return;
+							}
+						}
+					}
 
 					JFrame topFrame = (JFrame) SwingUtilities
 							.getWindowAncestor(vv);
-					EdgeEditMenu labelchange = new EdgeEditMenu(topFrame, newEdge);
+					EdgeEditMenu labelchange = new EdgeEditMenu(topFrame,
+							newEdge);
 
 					labelchange.setVisible(true);
 					if (!newEdge.getLabels().isEmpty())
-						graph.addEdge((E)newEdge, startVertex, vertex, edgeIsDirected);
+						graph.addEdge((E) newEdge, startVertex, vertex,
+								edgeIsDirected);
 					vv.repaint();
 				}
 			}
