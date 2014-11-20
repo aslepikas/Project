@@ -99,10 +99,18 @@ public class EdgeEditMenu extends JDialog implements ActionListener,
 				System.out.println("stuff");
 				ArrayList<String> retVals = new ArrayList<String>();
 				for (JTextField i : textFields) {
-					if (i.getText().compareTo("") != 0) {
-						if (StringUtils.isAlphanumeric(i.getText())) {
-							retVals.add(i.getText());
-							finish = finish && true;
+					String textString = i.getText();
+					if (textString.compareTo("") != 0) {
+						if (StringUtils.isAlphanumeric(textString)) {
+							boolean inRetVals = false;
+							for (String s : retVals) {
+
+								inRetVals = inRetVals || textString.matches(s);
+							}
+							if (!inRetVals) {
+								retVals.add(i.getText());
+								finish = finish && true;
+							}
 						} else {
 							JOptionPane.showMessageDialog(this,
 									"Alphanumeric characters only");

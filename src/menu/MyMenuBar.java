@@ -12,8 +12,8 @@ public class MyMenuBar {
 		JMenu fileMenu = new JMenu("File");
 		menuBar.add(fileMenu);
 
-		JMenuItem menuItem = new JMenuItem("item");
-		fileMenu.add(menuItem);
+//		JMenuItem menuItem = new JMenuItem("item");
+//		fileMenu.add(menuItem);
 
 		JMenu refactorMenu = new JMenu("Refactor");
 		menuBar.add(refactorMenu);
