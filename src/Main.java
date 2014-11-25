@@ -24,7 +24,7 @@ public class Main {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().add(canvasModel.getVisualizationViewer());
 
-		JMenuBar menuBar = MyMenuBar.create();
+		JMenuBar menuBar = MyMenuBar.create(canvasModel);
 		
 		JMenu modeMenu = canvasModel.getGraphMouse().getModeMenu(); // Obtain mode menu from the mouse
 		modeMenu.setText("Mouse Mode");

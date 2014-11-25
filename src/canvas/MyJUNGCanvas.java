@@ -27,7 +27,7 @@ public class MyJUNGCanvas {
 
 	public VisualizationViewer<Vertex, Edge> initialise() {
 		layout = new StaticLayout<Vertex, Edge>(this.model);
-		layout.setSize(new Dimension(300, 300));
+		layout.setSize(new Dimension(350, 350));
 		vv = new VisualizationViewer<Vertex, Edge>(layout);
 		vv.setPreferredSize(new Dimension(350, 350));
 
