@@ -70,8 +70,6 @@ public class EdgeEditMenu extends JDialog implements ActionListener,
 
 		this.setMinimumSize(new Dimension(200, textFields.size() * 19 + 100));
 		// 19*#labels + 2*button height + c
-		System.out.println(getHeight());
-		System.out.println(getWidth());
 
 		optionPane.addPropertyChangeListener(this);
 		this.setLocationRelativeTo(root);
@@ -82,7 +80,6 @@ public class EdgeEditMenu extends JDialog implements ActionListener,
 
 		boolean finish = true;
 		String val = e.getPropertyName();
-		System.out.println("tracker1");
 		if ((e.getSource() == optionPane)
 				&& (JOptionPane.VALUE_PROPERTY.equals(val) || JOptionPane.INPUT_VALUE_PROPERTY
 						.equals(val))) {
@@ -96,7 +93,6 @@ public class EdgeEditMenu extends JDialog implements ActionListener,
 			optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
 			if (buttonstr1.equals(value)) {
 				boolean finishedLoop = true;
-				System.out.println("stuff");
 				ArrayList<String> retVals = new ArrayList<String>();
 				for (JTextField i : textFields) {
 					String textString = i.getText();
