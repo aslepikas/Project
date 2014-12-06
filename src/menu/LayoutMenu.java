@@ -2,9 +2,11 @@ package menu;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JTabbedPane;
 
 import model.Edge;
 import model.Vertex;
@@ -18,16 +20,19 @@ import edu.uci.ics.jung.visualization.VisualizationViewer;
 @SuppressWarnings("serial")
 public class LayoutMenu extends JMenu {
 
-	MyJUNGCanvas canvas;
+	ArrayList<MyJUNGCanvas> canvasList;
+	JTabbedPane tabbedPane;
 	JMenuItem circle;
 	JMenuItem isom;
 	JMenuItem kk;
 	JMenuItem fr;
-	
-	public LayoutMenu(String title, final MyJUNGCanvas canvas) {
+
+	public LayoutMenu(String title, final ArrayList<MyJUNGCanvas> modelList,
+			JTabbedPane tabbedPane) {
 		super(title);
 
-		this.canvas = canvas;
+		this.canvasList = modelList;
+		this.tabbedPane = tabbedPane;
 
 		circle = new JMenuItem("Circle");
 		circle.addActionListener(new LayoutItemListener());
@@ -40,7 +45,7 @@ public class LayoutMenu extends JMenu {
 		kk = new JMenuItem("Kamada-Kawai");
 		kk.addActionListener(new LayoutItemListener());
 		this.add(kk);
-		
+
 		fr = new JMenuItem("Force directed");
 		fr.addActionListener(new LayoutItemListener());
 		this.add(fr);
@@ -51,26 +56,26 @@ public class LayoutMenu extends JMenu {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource().equals(circle)) {
-				VisualizationViewer<Vertex, Edge> vv = canvas
-						.getVisualizationViewer();
+				VisualizationViewer<Vertex, Edge> vv = canvasList.get(
+						tabbedPane.getSelectedIndex()).getVisualizationViewer();
 				vv.setGraphLayout(new CircleLayout<Vertex, Edge>(vv
 						.getGraphLayout().getGraph()));
 				vv.repaint();
 			} else if (e.getSource().equals(isom)) {
-				VisualizationViewer<Vertex, Edge> vv = canvas
-						.getVisualizationViewer();
+				VisualizationViewer<Vertex, Edge> vv = canvasList.get(
+						tabbedPane.getSelectedIndex()).getVisualizationViewer();
 				vv.setGraphLayout(new ISOMLayout<Vertex, Edge>(vv
 						.getGraphLayout().getGraph()));
 				vv.repaint();
 			} else if (e.getSource().equals(kk)) {
-				VisualizationViewer<Vertex, Edge> vv = canvas
-						.getVisualizationViewer();
+				VisualizationViewer<Vertex, Edge> vv = canvasList.get(
+						tabbedPane.getSelectedIndex()).getVisualizationViewer();
 				vv.setGraphLayout(new KKLayout<Vertex, Edge>(vv
 						.getGraphLayout().getGraph()));
 				vv.repaint();
 			} else if (e.getSource().equals(fr)) {
-				VisualizationViewer<Vertex, Edge> vv = canvas
-						.getVisualizationViewer();
+				VisualizationViewer<Vertex, Edge> vv = canvasList.get(
+						tabbedPane.getSelectedIndex()).getVisualizationViewer();
 				vv.setGraphLayout(new FRLayout<Vertex, Edge>(vv
 						.getGraphLayout().getGraph()));
 				vv.repaint();

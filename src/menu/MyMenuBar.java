@@ -1,21 +1,24 @@
 package menu;
 
+import java.util.ArrayList;
+
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JTabbedPane;
 
 import canvas.MyJUNGCanvas;
 
 public class MyMenuBar {
 
-	public static JMenuBar create(MyJUNGCanvas canvasModel) {
+	public static JMenuBar create(ArrayList<MyJUNGCanvas> modelList, JTabbedPane tabbedPane) {
 		
 		JMenuBar menuBar = new JMenuBar();
 
-		JMenu fileMenu = new JMenu("File");
+		JMenu fileMenu = new FileMenu("File", modelList, tabbedPane);
 		menuBar.add(fileMenu);
 
 		JMenu refactorMenu = new JMenu("Refactor");
-		refactorMenu.add(new LayoutMenu("Layout", canvasModel));
+		refactorMenu.add(new LayoutMenu("Layout", modelList, tabbedPane));
 		
 		menuBar.add(refactorMenu);
 		
