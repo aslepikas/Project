@@ -1,4 +1,5 @@
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
+import edu.uci.ics.jung.visualization.control.ModalGraphMouse.Mode;
 
 import java.awt.Dimension;
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ public class Main {
 		
 		MyJUNGCanvas canvasModel = new MyJUNGCanvas(myGraph);
 
-		canvasModel.initialise();
+		canvasModel.initialise(Mode.EDITING);
 		
 		JFrame frame = new JFrame("Editing Graph Viewer");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -32,12 +33,6 @@ public class Main {
 		frame.getContentPane().add(tabbedPane);
 
 		JMenuBar menuBar = MyMenuBar.create(modelList, tabbedPane);
-		
-		JMenu modeMenu = canvasModel.getGraphMouse().getModeMenu(); // Obtain mode menu from the mouse
-		modeMenu.setText("Mouse Mode");
-		modeMenu.setIcon(null); // I'm using this in a main menu
-		modeMenu.setPreferredSize(new Dimension(80, 20)); // Change the size
-		menuBar.add(modeMenu);
 		
 		canvasModel.getGraphMouse().setMode(ModalGraphMouse.Mode.EDITING);
 		

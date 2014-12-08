@@ -14,14 +14,16 @@ public class MyMenuBar {
 		
 		JMenuBar menuBar = new JMenuBar();
 
-		JMenu fileMenu = new FileMenu("File", modelList, tabbedPane);
-		menuBar.add(fileMenu);
-
+		ModeMenu modeMenu = new ModeMenu("Mode", modelList, tabbedPane);
+		
+		JMenu fileMenu = new FileMenu("File", modelList, tabbedPane, modeMenu);
+		
 		JMenu refactorMenu = new JMenu("Refactor");
 		refactorMenu.add(new LayoutMenu("Layout", modelList, tabbedPane));
 		
+		menuBar.add(fileMenu);
 		menuBar.add(refactorMenu);
-		
+		menuBar.add(modeMenu);
 
 		return menuBar;
 	}

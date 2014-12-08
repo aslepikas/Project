@@ -9,6 +9,7 @@ import control.MyGraphMouse;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.algorithms.layout.StaticLayout;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
+import edu.uci.ics.jung.visualization.control.ModalGraphMouse.Mode;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import model.Edge;
 import model.Model;
@@ -25,7 +26,7 @@ public class MyJUNGCanvas {
 		this.model = model;
 	}
 
-	public VisualizationViewer<Vertex, Edge> initialise() {
+	public VisualizationViewer<Vertex, Edge> initialise(Mode mode) {
 		layout = new StaticLayout<Vertex, Edge>(this.model);
 		layout.setSize(new Dimension(350, 350));
 		vv = new VisualizationViewer<Vertex, Edge>(layout);
@@ -35,12 +36,16 @@ public class MyJUNGCanvas {
 				new ToStringLabeller<Vertex>());
 		vv.getRenderContext().setEdgeLabelTransformer(
 				new ToStringLabeller<Edge>());
-		
-		vv.getRenderContext().setVertexFillPaintTransformer(new ColourTransformer());
-		vv.getRenderContext().setVertexDrawPaintTransformer(new OutlineColourTransformer(vv.getRenderContext()));
-		vv.getRenderContext().setVertexStrokeTransformer(new VertexStrokeWidthTransformer(vv.getRenderContext()));
+
+		vv.getRenderContext().setVertexFillPaintTransformer(
+				new ColourTransformer());
+		vv.getRenderContext().setVertexDrawPaintTransformer(
+				new OutlineColourTransformer(vv.getRenderContext()));
+		vv.getRenderContext().setVertexStrokeTransformer(
+				new VertexStrokeWidthTransformer(vv.getRenderContext()));
 		gm = new MyGraphMouse(vv.getRenderContext(), model.vertexFactory,
 				model.edgeFactory);
+		gm.setMode(mode);
 		vv.setGraphMouse(gm);
 		return vv;
 	}

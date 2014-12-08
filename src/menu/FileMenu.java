@@ -10,7 +10,7 @@ import javax.swing.JTabbedPane;
 
 import model.Model;
 import canvas.MyJUNGCanvas;
-import edu.uci.ics.jung.visualization.VisualizationViewer;
+import edu.uci.ics.jung.visualization.control.ModalGraphMouse.Mode;
 
 @SuppressWarnings("serial")
 public class FileMenu extends JMenu {
@@ -18,13 +18,15 @@ public class FileMenu extends JMenu {
 	ArrayList<MyJUNGCanvas> canvasList;
 	JTabbedPane tabbedPane;
 	JMenuItem addTab;
+	ModeMenu modeMenu;
 
 	public FileMenu(String title, ArrayList<MyJUNGCanvas> canvasList,
-			JTabbedPane tabbedPane) {
+			JTabbedPane tabbedPane, ModeMenu modeMenu) {
 		super(title);
 
 		this.canvasList = canvasList;
 		this.tabbedPane = tabbedPane;
+		this.modeMenu = modeMenu;
 
 		addTab = new JMenuItem("New model");
 		addTab.addActionListener(new FileMenuListener());
@@ -38,7 +40,7 @@ public class FileMenu extends JMenu {
 			if (e.getSource().equals(addTab)) {
 				Model myGraph = new Model();
 				MyJUNGCanvas myCanvas = new MyJUNGCanvas(myGraph);
-				myCanvas.initialise();
+				myCanvas.initialise(modeMenu.getMode());
 				tabbedPane.add("new tab", myCanvas.getVisualizationViewer());
 				canvasList.add(myCanvas);
 			}
