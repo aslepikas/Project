@@ -1,14 +1,14 @@
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse.Mode;
 
-import java.awt.Dimension;
+import java.awt.BorderLayout;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
-import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JTabbedPane;
 
+import control.TabCloseMenu;
 import canvas.MyJUNGCanvas;
 import menu.MyMenuBar;
 import model.*;
@@ -30,7 +30,11 @@ public class Main {
 		
 		JTabbedPane tabbedPane = new JTabbedPane();
 		tabbedPane.add("Tab 1", canvasModel.getVisualizationViewer());
-		frame.getContentPane().add(tabbedPane);
+		
+		tabbedPane.addMouseListener(new TabCloseMenu(tabbedPane, modelList));
+		
+		frame.getContentPane().setLayout(new BorderLayout());
+		frame.getContentPane().add(tabbedPane, BorderLayout.NORTH);
 
 		JMenuBar menuBar = MyMenuBar.create(modelList, tabbedPane);
 		
