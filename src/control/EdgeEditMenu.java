@@ -72,6 +72,8 @@ public class EdgeEditMenu extends JDialog implements ActionListener,
 		// 19*#labels + 2*button height + c
 
 		optionPane.addPropertyChangeListener(this);
+		
+		this.pack();
 		this.setLocationRelativeTo(root);
 	}
 

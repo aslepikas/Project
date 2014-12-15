@@ -1,6 +1,13 @@
 package canvas;
 
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Insets;
+
+import javax.swing.border.Border;
+import javax.swing.border.LineBorder;
 
 import canvas.transform.ColourTransformer;
 import canvas.transform.OutlineColourTransformer;
@@ -19,8 +26,9 @@ public class MyJUNGCanvas {
 
 	private Model model;
 	private Layout<Vertex, Edge> layout;
-	VisualizationViewer<Vertex, Edge> vv;
-	MyGraphMouse gm;
+	private VisualizationViewer<Vertex, Edge> vv;
+	private MyGraphMouse gm;
+	private String title;
 
 	public MyJUNGCanvas(Model model) {
 		this.model = model;
@@ -47,6 +55,7 @@ public class MyJUNGCanvas {
 				model.edgeFactory);
 		gm.setMode(mode);
 		vv.setGraphMouse(gm);
+		vv.setBorder(new LineBorder(Color.BLACK, 1));
 		return vv;
 	}
 
@@ -57,5 +66,24 @@ public class MyJUNGCanvas {
 	public MyGraphMouse getGraphMouse() {
 		return gm;
 	}
+	
+	public Model getModel(){
+		return model;
+	}
 
+	public void setTitle(String title){
+		this.title = title;
+	}
+
+	public String getTitle(){
+		return title;
+	}
+	
+	public void setNoMouse(){
+		vv.setGraphMouse(null);
+	}
+	
+	public void setMouse(){
+		vv.setGraphMouse(gm);
+	}
 }

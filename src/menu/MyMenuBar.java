@@ -14,7 +14,7 @@ public class MyMenuBar {
 		
 		JMenuBar menuBar = new JMenuBar();
 
-		ModeMenu modeMenu = new ModeMenu("Mode", modelList, tabbedPane);
+		ModeMenu modeMenu = new ModeMenu("Mode", modelList);
 		
 		JMenu fileMenu = new FileMenu("File", modelList, tabbedPane, modeMenu);
 		

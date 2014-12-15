@@ -1,7 +1,6 @@
 package control;
 
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
@@ -28,15 +27,11 @@ public class TabCloseMenu implements MouseListener {
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		System.out.println(e.getButton());
 		if (SwingUtilities.isRightMouseButton(e)) {
 
 			if (tabbedPane.getUI()
 					.getTabBounds(tabbedPane, tabbedPane.getSelectedIndex())
 					.contains(e.getPoint())) {
-				;
-
-				System.err.println("hi");
 				JPopupMenu popup = new JPopupMenu();
 				popup.add(new AbstractAction("Close tab") {
 
@@ -55,8 +50,11 @@ public class TabCloseMenu implements MouseListener {
 						int selected = tabbedPane.getSelectedIndex();
 						String title = JOptionPane
 								.showInputDialog("Enter new title");
-						if (!(title.equals(""))) {
-							tabbedPane.setTitleAt(selected, title);
+						if (title != null) {
+							if (!(title.equals(""))) {
+								tabbedPane.setTitleAt(selected, title);
+								modelList.get(selected).setTitle(title);
+							}
 						}
 					}
 				});

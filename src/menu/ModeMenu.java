@@ -6,7 +6,6 @@ import java.util.ArrayList;
 
 import javax.swing.JMenu;
 import javax.swing.JRadioButtonMenuItem;
-import javax.swing.JTabbedPane;
 
 import canvas.MyJUNGCanvas;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse.Mode;
@@ -15,17 +14,14 @@ import edu.uci.ics.jung.visualization.control.ModalGraphMouse.Mode;
 public class ModeMenu extends JMenu {
 
 	private ArrayList<MyJUNGCanvas> canvasList;
-	private JTabbedPane tabbedPane;
 	private JRadioButtonMenuItem editing;
 	private JRadioButtonMenuItem picking;
 	private JRadioButtonMenuItem transforming;
 
-	public ModeMenu(String title, ArrayList<MyJUNGCanvas> canvasList,
-			JTabbedPane tabbedPane) {
+	public ModeMenu(String title, ArrayList<MyJUNGCanvas> canvasList) {
 		super(title);
 
 		this.canvasList = canvasList;
-		this.tabbedPane = tabbedPane;
 
 		editing = new JRadioButtonMenuItem("editing");
 		picking = new JRadioButtonMenuItem("picking");
