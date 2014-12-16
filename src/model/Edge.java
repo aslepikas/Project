@@ -6,29 +6,29 @@ public class Edge {
 
 	private Vertex startV;
 	private Vertex targetV;
-	private ArrayList<String> labels;
+	private ArrayList<Character> labels;
 
 	public Edge(Vertex start, Vertex target) {
 		startV = start;
 		targetV = target;
-		labels = new ArrayList<String>();
+		labels = new ArrayList<Character>();
 	}
 
-	public Edge(Vertex start, Vertex target, ArrayList<String> labels) {
+	public Edge(Vertex start, Vertex target, ArrayList<Character> labels) {
 		startV = start;
 		targetV = target;
 		this.labels = labels;
 	}
 
-	public void setLabels(ArrayList<String> labels) {
+	public void setLabels(ArrayList<Character> labels) {
 		this.labels = labels;
 	}
 
 	public void setLabels() {
-		labels = new ArrayList<String>();
+		labels = new ArrayList<Character>();
 	}
 
-	public ArrayList<String> getLabels() {
+	public ArrayList<Character> getLabels() {
 		return labels;
 	}
 
@@ -57,16 +57,16 @@ public class Edge {
 		boolean equal = true;
 		boolean intermediate = false;
 
-		for (String i : e.getLabels()) {
-			for (String j : labels) {
-				intermediate = intermediate || (j.compareToIgnoreCase(i) == 0);
+		for (Character i : e.getLabels()) {
+			for (Character j : labels) {
+				intermediate = intermediate || (j.charValue() == i.charValue());
 			}
 			equal = equal && intermediate;
 		}
 
-		for (String j : e.getLabels()) {
-			for (String i : labels) {
-				intermediate = intermediate || (j.compareToIgnoreCase(i) == 0);
+		for (Character j : e.getLabels()) {
+			for (Character i : labels) {
+				intermediate = intermediate || (j.charValue() == i.charValue());
 			}
 			equal = equal && intermediate;
 		}
@@ -79,9 +79,9 @@ public class Edge {
 		String str = "";
 		for (int i = 0; i < labels.size(); i++) {
 			if (i == 0)
-				str = labels.get(i);
+				str = Character.toString(labels.get(i));
 			else
-				str = String.format("%s, %s", str, labels.get(i));
+				str = String.format("%s, %s", str, Character.toString(labels.get(i)));
 		}
 		return str;
 	}

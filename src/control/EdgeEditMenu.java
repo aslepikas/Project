@@ -40,9 +40,9 @@ public class EdgeEditMenu extends JDialog implements ActionListener,
 	public EdgeEditMenu(JFrame root, Edge edge) {
 		super(root, true);
 		this.edge = edge;
-		ArrayList<String> labels = edge.getLabels();
+		ArrayList<Character> labels = edge.getLabels();
 		textFields = new ArrayList<JTextField>();
-		for (String i : labels) {
+		for (Character i : labels) {
 			textFields.add(new JTextField(i));
 		}
 		textFields.add(new JTextField());
@@ -95,37 +95,40 @@ public class EdgeEditMenu extends JDialog implements ActionListener,
 			optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
 			if (buttonstr1.equals(value)) {
 				boolean finishedLoop = true;
-				ArrayList<String> retVals = new ArrayList<String>();
+				ArrayList<String> retStrings = new ArrayList<String>();
 				for (JTextField i : textFields) {
 					String textString = i.getText();
 					if (textString.compareTo("") != 0) {
 						if (StringUtils.isAlphanumeric(textString)) {
 							boolean inRetVals = false;
-							for (String s : retVals) {
+							for (String s : retStrings) {
 
 								inRetVals = inRetVals || textString.matches(s);
 							}
 							if (!inRetVals) {
-								retVals.add(i.getText());
+								retStrings.add(i.getText());
 								finish = finish && true;
 							}
 						} else {
 							JOptionPane.showMessageDialog(this,
 									"Alphanumeric characters only");
-							System.out.println("tracker");
 							finish = false;
-							retVals.clear();
+							retStrings.clear();
 							finishedLoop = false;
 							break;
 
 						}
 					}
 				}
-				if (retVals.isEmpty() && finishedLoop) {
+				if (retStrings.isEmpty() && finishedLoop) {
 					JOptionPane.showMessageDialog(this,
 							"Set at least one label");
 					finish = false;
 				} else {
+					ArrayList<Character> retVals = new ArrayList<Character>();
+					for (String i : retStrings) {
+						retVals.add(i.charAt(0));
+					}
 					edge.setLabels(retVals);
 				}
 			} else {
@@ -146,7 +149,6 @@ public class EdgeEditMenu extends JDialog implements ActionListener,
 			JTextField textField = new JTextField();
 			textFields.add(textField);
 			labelPanel.add(textField);
-			System.out.println(labelPanel.getComponents().length);
 			labelPanel.updateUI();
 			this.setMinimumSize(new Dimension(this.getMinimumSize().width, this
 					.getMinimumSize().height + 19));

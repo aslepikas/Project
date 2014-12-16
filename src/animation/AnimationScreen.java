@@ -36,21 +36,22 @@ public class AnimationScreen extends JPanel {
 	private JButton stepButton;
 	private JButton goButton;
 	private JPanel textLabelPanel;
-
-	private ArrayList<MyJUNGCanvas>modelList;
 	private String tape;
+
+	private JPanel placeHolder;
+
+	private ArrayList<MyJUNGCanvas> modelList;
 
 	public AnimationScreen(ArrayList<MyJUNGCanvas> modelList) {
 
 		this.modelList = modelList;
-		
 		tape = "";
 
 		LayoutManager layout = new BorderLayout();
 		setLayout(layout);
 
 		animationPanel = new JPanel();
-		
+
 		for (MyJUNGCanvas i : modelList) {
 			animationPanel.add(i.getVisualizationViewer());
 		}
@@ -68,73 +69,171 @@ public class AnimationScreen extends JPanel {
 		textEntry.addMouseListener(buttonListener);
 		ButtonPanel.add(textEntry, BorderLayout.WEST);
 
-		stepButton = new JButton("step");
+		stepButton = new JButton("start");
 		stepButton.addMouseListener(buttonListener);
-		ButtonPanel.add(stepButton, BorderLayout.EAST);
+		ButtonPanel.add(stepButton, BorderLayout.CENTER);
+		stepButton.setEnabled(false);
 
 		goButton = new JButton("go");
 		goButton.addMouseListener(buttonListener);
-		ButtonPanel.add(stepButton, BorderLayout.CENTER);
+		ButtonPanel.add(goButton, BorderLayout.EAST);
+		goButton.setEnabled(false);
 
 		textPanel.add(ButtonPanel, BorderLayout.WEST);
 
 		textLabelPanel = new JPanel();
-		JPanel placeHolder = new JPanel(new GridLayout(2, 1));
+		placeHolder = new JPanel(new GridLayout(2, 1));
 		placeHolder.add(new JLabel("	"));
 		placeHolder.add(new JLabel("	"));
 		textLabelPanel.add(placeHolder);
-		
+
 		textPanel.add(textLabelPanel, BorderLayout.EAST);
 
 		this.add(textPanel, BorderLayout.SOUTH);
 
-		this.setMinimumSize(new Dimension(350, 350));
+		this.setMinimumSize(new Dimension(500, 350));
 
 		this.setVisible(true);
 	}
 
+	private ArrayList<Vertex> findPath() {
+		Vertex startVertex = modelList.get(0).getModel().getStartVertex();
+		if (startVertex == null) {
+			JOptionPane.showConfirmDialog(this, "No starting vertex");
+			return null;
+		}
+		ArrayList<Vertex> path = new ArrayList<Vertex>();
+		path.add(startVertex);
+
+		if (findPath(0, path))
+			return path;
+		else
+			return null;
+	}
+
+	private boolean findPath(int step, ArrayList<Vertex> path) {
+		for (Vertex i : path) {
+			System.out.println(i.toString());
+		}
+		Vertex v = path.get(path.size() - 1);
+		if (tape.length() >= path.size()) {
+			ArrayList<Edge> edges = v.getEdgesOut();
+			for (Edge i : edges) {
+				ArrayList<Character> labels = i.getLabels();
+				boolean hasTransition = false;
+				for (Character j : labels) {
+					hasTransition = hasTransition
+							|| (j.charValue() == tape.charAt(step));
+				}
+				if (hasTransition) {
+					path.add(i.getTargetV());
+					if (findPath(step + 1, path)) {
+						return true;
+					} else {
+						path.remove(path.size() - 1);
+					}
+				}
+			}
+			return false;
+		} else if (v.isFinal()) {
+			return true;
+		} else
+			return false;
+	}
+
 	private class ButtonListener implements MouseListener {
 
-		private ArrayList<JLabel> arrow;
-		
-		public ButtonListener(){
-			arrow = new ArrayList<JLabel>();
+		ArrayList<Vertex> path;
+		private ArrayList<JLabel> arrowPosition;
+		private boolean started;
+		private int index;
+
+		public ButtonListener() {
+			arrowPosition = new ArrayList<JLabel>();
+			started = false;
 		}
-		
+
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			if (e.getSource().equals(textEntry)) {
+			if (e.getSource().equals(textEntry) && textEntry.isEnabled()) {
+				started = false;
 				String message = JOptionPane.showInputDialog(textPanel, "",
 						"Enter a string");
 				textLabelPanel.removeAll();
+				arrowPosition.clear();
+
+				JLabel firstArrow = new JLabel(" ");
+				JPanel firstPanel = new JPanel();
+				firstPanel.setLayout(new GridLayout(2, 1));
+				firstPanel.add(firstArrow);
+				firstPanel.add(new JLabel());
+				textLabelPanel.add(firstPanel);
+				arrowPosition.add(firstArrow);
+
 				if (StringUtils.isAlphanumeric(message)) {
 					tape = message;
 					JLabel character;
 					JPanel characterPanel;
 					for (int i = 0, n = message.length(); i < n; i++) {
-					    char c = message.charAt(i);
-					    character = new JLabel(Character.toString(c));
-					    characterPanel = new JPanel();
-					    characterPanel.setLayout(new GridLayout(2, 1));
-					    JLabel arrowLabel = new JLabel("");
-					    arrow.add(arrowLabel);
-					    characterPanel.add(arrowLabel);
-					    characterPanel.add(character);
-					    
-					    textLabelPanel.add(characterPanel);
+						char c = message.charAt(i);
+						character = new JLabel(Character.toString(c));
+						characterPanel = new JPanel();
+						characterPanel.setLayout(new GridLayout(2, 1));
+						JLabel arrowLabel = new JLabel("");
+						arrowPosition.add(arrowLabel);
+						characterPanel.add(arrowLabel);
+						characterPanel.add(character);
+
+						textLabelPanel.add(characterPanel);
 					}
-					SwingUtilities.getWindowAncestor(textLabelPanel).repaint();
+					stepButton.setEnabled(true);
 				} else {
-					tape = "";
-					JPanel placeHolder = new JPanel(new GridLayout(2, 1));
-					placeHolder.add(new JLabel("	"));
-					placeHolder.add(new JLabel("	"));
 					textLabelPanel.add(placeHolder);
+					stepButton.setEnabled(false);
 				}
-			} else if (e.getSource().equals(stepButton)) {
-
+				SwingUtilities.getWindowAncestor(textLabelPanel).repaint();
+			} else if (e.getSource().equals(stepButton) && stepButton.isEnabled()) {
+				if (!started) {
+					index = 0;
+					path = findPath();
+					if (path != null) {
+						started = true;
+						stepButton.setText("step");
+						textEntry.setEnabled(false);
+						arrowPosition.get(0).setText("↓");
+						for (Vertex i : path) {
+							System.out.println(i.toString());
+						}
+						modelList.get(0).getVisualizationViewer()
+								.getPickedVertexState().clear();
+						modelList.get(0).getVisualizationViewer()
+								.getPickedVertexState()
+								.pick(path.get(index), true);
+					} else {
+					}
+				} else {
+					if (index < arrowPosition.size() - 1) {
+						arrowPosition.get(index).setText("");
+						index++;
+						arrowPosition.get(index).setText("↓");
+						modelList.get(0).getVisualizationViewer()
+								.getPickedVertexState().clear();
+						modelList.get(0).getVisualizationViewer()
+								.getPickedVertexState()
+								.pick(path.get(index), true);
+						if (index == arrowPosition.size() - 1)
+							stepButton.setText("finish");
+					} else {
+						started = false;
+						arrowPosition.get(index).setText("");
+						index = 0;
+						textEntry.setEnabled(true);
+						stepButton.setText("start");
+						modelList.get(0).getVisualizationViewer()
+								.getPickedVertexState().clear();
+					}
+				}
 			} else if (e.getSource().equals(goButton)) {
-
 			}
 		}
 

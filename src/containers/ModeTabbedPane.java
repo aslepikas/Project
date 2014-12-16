@@ -58,7 +58,6 @@ public class ModeTabbedPane extends JTabbedPane {
 	private class TabListener implements MouseListener {
 
 		private boolean lastSelected;
-		private Dimension preferedSize = new Dimension(350, 350);
 
 		public TabListener() {
 			super();
@@ -77,16 +76,21 @@ public class ModeTabbedPane extends JTabbedPane {
 						vv.getRenderContext().getPickedVertexState().clear();
 						vv.getRenderContext().getPickedEdgeState().clear();
 						
-						vv.setPreferredSize(new Dimension(350, 325));
+						vv.setPreferredSize(new Dimension(500, 325));
 					}
 					animationPanel.add(new AnimationScreen(modelList));
 				}
 			} else if (getSelectedComponent().equals(creationTab)) {
+				if (lastSelected){
+					for (MyJUNGCanvas i: modelList){
+						i.getVisualizationViewer().getPickedVertexState().clear();
+						i.getVisualizationViewer().getPickedEdgeState().clear();
+					}
+				}
 				lastSelected = false;
 				for (MyJUNGCanvas i : modelList) {
 					VisualizationViewer<Vertex, Edge> vv = i
 							.getVisualizationViewer();
-					vv.setPreferredSize(preferedSize);
 					creationTab.add(i.getTitle(), vv);
 					i.setMouse();
 				}

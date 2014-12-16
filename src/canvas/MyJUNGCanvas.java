@@ -36,9 +36,9 @@ public class MyJUNGCanvas {
 
 	public VisualizationViewer<Vertex, Edge> initialise(Mode mode) {
 		layout = new StaticLayout<Vertex, Edge>(this.model);
-		layout.setSize(new Dimension(350, 350));
+		//layout.setSize(new Dimension(500, 350));
 		vv = new VisualizationViewer<Vertex, Edge>(layout);
-		vv.setPreferredSize(new Dimension(350, 350));
+		vv.setPreferredSize(new Dimension(500, 350));
 
 		vv.getRenderContext().setVertexLabelTransformer(
 				new ToStringLabeller<Vertex>());
