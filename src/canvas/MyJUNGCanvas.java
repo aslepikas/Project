@@ -1,12 +1,8 @@
 package canvas;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Insets;
 
-import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 
 import canvas.transform.ColourTransformer;
@@ -36,7 +32,6 @@ public class MyJUNGCanvas {
 
 	public VisualizationViewer<Vertex, Edge> initialise(Mode mode) {
 		layout = new StaticLayout<Vertex, Edge>(this.model);
-		//layout.setSize(new Dimension(500, 350));
 		vv = new VisualizationViewer<Vertex, Edge>(layout);
 		vv.setPreferredSize(new Dimension(500, 350));
 

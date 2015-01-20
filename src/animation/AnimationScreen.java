@@ -4,7 +4,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.LayoutManager;
 import java.awt.event.MouseEvent;
@@ -12,19 +11,14 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+import javax.swing.JFrame;
 
 import canvas.MyJUNGCanvas;
-import edu.uci.ics.jung.algorithms.layout.KKLayout;
-import edu.uci.ics.jung.visualization.VisualizationViewer;
-import edu.uci.ics.jung.visualization.control.ModalGraphMouse.Mode;
 import model.Edge;
-import model.Model;
 import model.Vertex;
 
 @SuppressWarnings("serial")
@@ -38,13 +32,21 @@ public class AnimationScreen extends JPanel {
 	private JPanel textLabelPanel;
 	private String tape;
 
+	private SelectionDialogue select;
+
 	private JPanel placeHolder;
 
 	private ArrayList<MyJUNGCanvas> modelList;
 
 	public AnimationScreen(ArrayList<MyJUNGCanvas> modelList) {
 
-		this.modelList = modelList;
+		this.modelList = new ArrayList<MyJUNGCanvas>();
+
+		select = new SelectionDialogue(
+				(JFrame) SwingUtilities.getWindowAncestor(this), modelList,
+				this.modelList);
+		select.setVisible(true);
+
 		tape = "";
 
 		LayoutManager layout = new BorderLayout();
@@ -52,7 +54,7 @@ public class AnimationScreen extends JPanel {
 
 		animationPanel = new JPanel();
 
-		for (MyJUNGCanvas i : modelList) {
+		for (MyJUNGCanvas i : this.modelList) {
 			animationPanel.add(i.getVisualizationViewer());
 		}
 		this.add(animationPanel, BorderLayout.NORTH);
@@ -96,8 +98,8 @@ public class AnimationScreen extends JPanel {
 		this.setVisible(true);
 	}
 
-	private ArrayList<Vertex> findPath() {
-		Vertex startVertex = modelList.get(0).getModel().getStartVertex();
+	private ArrayList<Vertex> findPath(MyJUNGCanvas canvas) {
+		Vertex startVertex = canvas.getModel().getStartVertex();
 		if (startVertex == null) {
 			JOptionPane.showConfirmDialog(this, "No starting vertex");
 			return null;
@@ -112,18 +114,17 @@ public class AnimationScreen extends JPanel {
 	}
 
 	private boolean findPath(int step, ArrayList<Vertex> path) {
-		for (Vertex i : path) {
-			System.out.println(i.toString());
-		}
+		/*
+		 * for (Vertex i : path) { System.out.println(i.toString()); }
+		 */
 		Vertex v = path.get(path.size() - 1);
 		if (tape.length() >= path.size()) {
 			ArrayList<Edge> edges = v.getEdgesOut();
 			for (Edge i : edges) {
 				ArrayList<Character> labels = i.getLabels();
 				boolean hasTransition = false;
-				for (Character j : labels) {
-					hasTransition = hasTransition
-							|| (j.charValue() == tape.charAt(step));
+				for (char j : labels) {
+					hasTransition = hasTransition || (j == tape.charAt(step));
 				}
 				if (hasTransition) {
 					path.add(i.getTargetV());
@@ -143,20 +144,37 @@ public class AnimationScreen extends JPanel {
 
 	private class ButtonListener implements MouseListener {
 
-		ArrayList<Vertex> path;
+		ArrayList<ArrayList<Vertex>> pathList;
 		private ArrayList<JLabel> arrowPosition;
-		private boolean started;
+		private ArrayList<Boolean> notFinishedList;
 		private int index;
+		private ArrayList<Vertex> current;
+		private boolean started;
+		private int countFinished;
 
 		public ButtonListener() {
 			arrowPosition = new ArrayList<JLabel>();
-			started = false;
+			notFinishedList = new ArrayList<Boolean>();
+			pathList = new ArrayList<ArrayList<Vertex>>();
+			current = new ArrayList<Vertex>();
+			for (int i = 0; i < modelList.size(); i++) {
+				notFinishedList.add(false);
+				started = false;
+				countFinished = 0;
+				current.add(null);
+			}
+		}
+
+		private void resetNotFinished() {
+			for (int i = 0; i < notFinishedList.size(); i++) {
+				notFinishedList.set(i, false);
+			}
+			;
 		}
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
 			if (e.getSource().equals(textEntry) && textEntry.isEnabled()) {
-				started = false;
 				String message = JOptionPane.showInputDialog(textPanel, "",
 						"Enter a string");
 				textLabelPanel.removeAll();
@@ -192,45 +210,157 @@ public class AnimationScreen extends JPanel {
 					stepButton.setEnabled(false);
 				}
 				SwingUtilities.getWindowAncestor(textLabelPanel).repaint();
-			} else if (e.getSource().equals(stepButton) && stepButton.isEnabled()) {
-				if (!started) {
+			} else if (e.getSource().equals(stepButton)
+					&& stepButton.isEnabled()) {
+				if (!started) { // if it's only starting the thing
+					resetNotFinished();
+					countFinished = 0;
+					started = true;
 					index = 0;
-					path = findPath();
-					if (path != null) {
-						started = true;
-						stepButton.setText("step");
-						textEntry.setEnabled(false);
-						arrowPosition.get(0).setText("↓");
-						for (Vertex i : path) {
-							System.out.println(i.toString());
-						}
-						modelList.get(0).getVisualizationViewer()
-								.getPickedVertexState().clear();
-						modelList.get(0).getVisualizationViewer()
-								.getPickedVertexState()
-								.pick(path.get(index), true);
-					} else {
+					for (int i = 0; i < modelList.size(); i++) {
+						pathList.add(findPath(modelList.get(i)));
 					}
-				} else {
-					if (index < arrowPosition.size() - 1) {
+					stepButton.setText("step");
+					textEntry.setEnabled(false);
+					arrowPosition.get(index).setText("↓");
+
+					for (int i = 0; i < modelList.size(); i++) {
+						if (pathList.get(i) != null) {
+							notFinishedList.set(i, true);
+							for (Vertex j : pathList.get(i)) {
+								System.out.println(j.toString());
+							}
+							modelList.get(i).getVisualizationViewer()
+									.getPickedVertexState().clear();
+							modelList.get(i).getVisualizationViewer()
+									.getPickedVertexState()
+									.pick(pathList.get(i).get(index), true);
+						} else {
+							current.set(i, modelList.get(i).getModel()
+									.getStartVertex());
+							if (current.get(i) != null) {
+								notFinishedList.set(i, true);
+								modelList.get(i).getVisualizationViewer()
+										.getPickedVertexState()
+										.pick(current.get(i), true);
+							}
+						}
+					}
+				} else { // if it is further stepping
+					if (index < arrowPosition.size() - 1) { // arrow is not out
+															// of bounds
 						arrowPosition.get(index).setText("");
 						index++;
 						arrowPosition.get(index).setText("↓");
-						modelList.get(0).getVisualizationViewer()
-								.getPickedVertexState().clear();
-						modelList.get(0).getVisualizationViewer()
-								.getPickedVertexState()
-								.pick(path.get(index), true);
 						if (index == arrowPosition.size() - 1)
 							stepButton.setText("finish");
-					} else {
-						started = false;
+						for (int i = 0; i < modelList.size(); i++) {
+							if (notFinishedList.get(i)) {
+								if (pathList.get(i) != null) {
+									modelList.get(i).getVisualizationViewer()
+											.getPickedVertexState().clear();
+									modelList
+											.get(i)
+											.getVisualizationViewer()
+											.getPickedVertexState()
+											.pick(pathList.get(i).get(index),
+													true);
+								} else {
+									System.out.printf("%d, %d\n",
+											tape.length(), index);
+									if (tape.length() >= index) {
+										boolean hasTransition = false;
+										for (Edge k : current.get(i)
+												.getEdgesOut()) {
+											for (char j : k.getLabels()) {
+												hasTransition = hasTransition
+														|| (j == tape
+																.charAt(index - 1));
+											}
+											System.out.println(hasTransition);
+											if (hasTransition) {
+												System.out.println("checkpoint");
+												modelList
+														.get(i)
+														.getVisualizationViewer()
+														.getPickedVertexState()
+														.clear();
+												System.out.println(k.getTargetV().toString());
+												
+												modelList
+														.get(i)
+														.getVisualizationViewer()
+														.getPickedVertexState()
+														.pick(k.getTargetV(),
+																true);
+												current.set(i, k.getTargetV());
+												break;
+											}
+										}
+										if (!hasTransition) {
+											notFinishedList.set(i, false);
+											countFinished++;
+											modelList.get(i)
+													.getVisualizationViewer()
+													.getPickedVertexState()
+													.clear();
+										}
+									} /*
+									 * else { modelList.get(i)
+									 * .getVisualizationViewer()
+									 * .getPickedVertexState().clear();
+									 * 
+									 * notFinishedList.set(i, false);
+									 * countFinished++; }
+									 */
+
+								}
+							}
+						}
+
+					} else { // arrow went out of bounds
+
+						for (int i = 0; i < modelList.size(); i++) {
+							if (notFinishedList.get(i)) {
+								notFinishedList.set(i, false);
+								countFinished++;
+								modelList.get(i).getVisualizationViewer()
+										.getPickedVertexState().clear();
+							}
+						}
+					}
+					//
+					/*
+					 * for (int i = 0; i < modelList.size(); i++) { if
+					 * (pathList.get(i) != null) {
+					 * 
+					 * } else { if (tape.length() > index) { for (Edge k :
+					 * current.getEdgesOut()) { boolean hasTransition = false;
+					 * for (char j : k.getLabels()) { hasTransition =
+					 * hasTransition || (j == tape.charAt(index)); } if
+					 * (hasTransition) { modelList.get(i)
+					 * .getVisualizationViewer()
+					 * .getPickedVertexState().clear(); modelList.get(i)
+					 * .getVisualizationViewer() .getPickedVertexState()
+					 * .pick(k.getTargetV(), true);
+					 * arrowPosition.get(index).setText(""); index++;
+					 * arrowPosition.get(index).setText("↓"); return; } } }
+					 * modelList.get(i).getVisualizationViewer()
+					 * .getPickedVertexState().clear();
+					 * arrowPosition.get(index).setText(""); index = 0;
+					 * stepButton.setText("start"); notFinishedList.set(i,
+					 * false); countFinished++;
+					 * 
+					 * JOptionPane.showMessageDialog(animationPanel,
+					 * "Finished in a non-accepting state"); } }
+					 */
+					//
+					if (countFinished == notFinishedList.size()) {
 						arrowPosition.get(index).setText("");
 						index = 0;
-						textEntry.setEnabled(true);
 						stepButton.setText("start");
-						modelList.get(0).getVisualizationViewer()
-								.getPickedVertexState().clear();
+						textEntry.setEnabled(true);
+						started = false;
 					}
 				}
 			} else if (e.getSource().equals(goButton)) {
