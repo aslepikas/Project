@@ -43,7 +43,7 @@ public class EdgeEditMenu extends JDialog implements ActionListener,
 		ArrayList<Character> labels = edge.getLabels();
 		textFields = new ArrayList<JTextField>();
 		for (Character i : labels) {
-			textFields.add(new JTextField(i));
+			textFields.add(new JTextField(String.valueOf(i)));
 		}
 		textFields.add(new JTextField());
 

@@ -279,14 +279,13 @@ public class AnimationScreen extends JPanel {
 											}
 											System.out.println(hasTransition);
 											if (hasTransition) {
-												System.out.println("checkpoint");
+												
 												modelList
 														.get(i)
 														.getVisualizationViewer()
 														.getPickedVertexState()
 														.clear();
-												System.out.println(k.getTargetV().toString());
-												
+
 												modelList
 														.get(i)
 														.getVisualizationViewer()
@@ -305,15 +304,7 @@ public class AnimationScreen extends JPanel {
 													.getPickedVertexState()
 													.clear();
 										}
-									} /*
-									 * else { modelList.get(i)
-									 * .getVisualizationViewer()
-									 * .getPickedVertexState().clear();
-									 * 
-									 * notFinishedList.set(i, false);
-									 * countFinished++; }
-									 */
-
+									}
 								}
 							}
 						}
@@ -329,32 +320,6 @@ public class AnimationScreen extends JPanel {
 							}
 						}
 					}
-					//
-					/*
-					 * for (int i = 0; i < modelList.size(); i++) { if
-					 * (pathList.get(i) != null) {
-					 * 
-					 * } else { if (tape.length() > index) { for (Edge k :
-					 * current.getEdgesOut()) { boolean hasTransition = false;
-					 * for (char j : k.getLabels()) { hasTransition =
-					 * hasTransition || (j == tape.charAt(index)); } if
-					 * (hasTransition) { modelList.get(i)
-					 * .getVisualizationViewer()
-					 * .getPickedVertexState().clear(); modelList.get(i)
-					 * .getVisualizationViewer() .getPickedVertexState()
-					 * .pick(k.getTargetV(), true);
-					 * arrowPosition.get(index).setText(""); index++;
-					 * arrowPosition.get(index).setText("↓"); return; } } }
-					 * modelList.get(i).getVisualizationViewer()
-					 * .getPickedVertexState().clear();
-					 * arrowPosition.get(index).setText(""); index = 0;
-					 * stepButton.setText("start"); notFinishedList.set(i,
-					 * false); countFinished++;
-					 * 
-					 * JOptionPane.showMessageDialog(animationPanel,
-					 * "Finished in a non-accepting state"); } }
-					 */
-					//
 					if (countFinished == notFinishedList.size()) {
 						arrowPosition.get(index).setText("");
 						index = 0;
