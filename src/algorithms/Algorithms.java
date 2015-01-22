@@ -53,4 +53,26 @@ public class Algorithms {
 		return retList;
 	}
 
+	public boolean isDFA(Model model) {
+
+		Collection<Vertex> vertices = model.getVertices();
+
+		for (Vertex v : vertices) {
+			ArrayList<Edge> edges = v.getEdgesOut();
+			ArrayList<Character> characters = new ArrayList<Character>();
+			for (Edge e : edges) {
+				ArrayList<Character> labels = e.getLabels();
+				for (Character c : labels) {
+					if (characters.contains(c)) {
+						return false;
+					} else {
+						characters.add(c);
+					}
+				}
+			}
+		}
+
+		return true;
+	}
+
 }
