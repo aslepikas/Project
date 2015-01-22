@@ -75,4 +75,28 @@ public class Algorithms {
 		return true;
 	}
 
+	/**
+	 * 
+	 * @param model - a DFA to be minimised. Removes unreachable states by default.
+	 * @return Success of minimisation operation. If supplied with an NDFA, returns false.
+	 */
+	public boolean minimise(Model model) {
+		if (isDFA(model)) {
+			removeUnreachable(model);
+			
+			
+		}
+		return false;
+	}
+	
+	private ArrayList<ArrayList<Boolean>> createTable(Model model){
+		int size = model.getVertexCount() - 1;
+		for (int i = 0; i < size; i++) {
+			for (int j = 0; j < size - 1; j++) {
+				
+			}
+		}
+		
+		return null;
+	}
 }
