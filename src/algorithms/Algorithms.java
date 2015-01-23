@@ -77,26 +77,57 @@ public class Algorithms {
 
 	/**
 	 * 
-	 * @param model - a DFA to be minimised. Removes unreachable states by default.
-	 * @return Success of minimisation operation. If supplied with an NDFA, returns false.
+	 * @param model
+	 *            - a DFA to be minimised. Removes unreachable states by
+	 *            default.
+	 * @return Success of minimisation operation. If supplied with an NDFA,
+	 *         returns false.
 	 */
 	public boolean minimise(Model model) {
 		if (isDFA(model)) {
 			removeUnreachable(model);
-			
-			
+			ArrayList<ArrayList<Boolean>> table = createTable(model);
+			ArrayList<Vertex> vertices = model.getVertices();
+			// first iteration
+			for (int i = 0; i < table.size(); i++) {
+				for (int j = 0; j < table.get(i).size(); j++) {
+
+					if (vertices.get(i).isFinal()
+							^ (!vertices.get(j).isFinal())) {
+						table.get(i).set(j, true);
+					}
+				}
+			}
+
+			boolean hadChange = true;
+			while (hadChange) {
+				hadChange = false;
+				for (int i = 0; i < table.size(); i++) {
+					for (int j = 0; j < table.get(i).size(); j++) {
+
+						if (true) { // TODO add the test comparing two vertices
+							table.get(i).set(j, true);
+						}
+					}
+				}
+			}
+
+			// TODO add removal of nodes.
+
 		}
 		return false;
 	}
-	
-	private ArrayList<ArrayList<Boolean>> createTable(Model model){
+
+	private ArrayList<ArrayList<Boolean>> createTable(Model model) {
 		int size = model.getVertexCount() - 1;
+		ArrayList<ArrayList<Boolean>> table = new ArrayList<ArrayList<Boolean>>();
 		for (int i = 0; i < size; i++) {
+			table.add(new ArrayList<Boolean>());
 			for (int j = 0; j < size - 1; j++) {
-				
+				table.get(i).add(false);
 			}
 		}
-		
-		return null;
+
+		return table;
 	}
 }

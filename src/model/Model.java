@@ -358,7 +358,7 @@ public class Model implements DirectedGraph<Vertex, Edge> {
 	}
 
 	@Override
-	public Collection<Vertex> getVertices() {
+	public ArrayList<Vertex> getVertices() {
 		return vertexList;
 	}
 
