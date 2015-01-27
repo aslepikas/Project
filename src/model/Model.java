@@ -85,6 +85,35 @@ public class Model implements DirectedGraph<Vertex, Edge> {
 		startVertex = null;
 	}
 
+	
+	/**
+	 * 
+	 * @param v1 - vertex that gets v2 merged into
+	 * @param v2 - vertex merged into v1
+	 * 
+	 * this method does not remove v2 from the model, this has to be done manually
+	 */
+	public void mergeVertices(Vertex v1, Vertex v2) {
+		ArrayList<Edge> v2outEdges = v2.getEdgesOut();
+		ArrayList<Edge> v2inEdges = v2.getEdgesIn();
+		
+		for (Edge e : v2inEdges) {
+			if (!isPredecessor(e.getStartV(), v1)) {
+				addEdge(new Edge(e.getStartV(), v1, e.getLabels()), e.getStartV(), v1);
+			}
+		}
+		
+		for (Edge e : v2outEdges) {
+			if (!isPredecessor(v1, e.getStartV())) {
+				addEdge(new Edge(v1, e.getStartV(), e.getLabels()), v1, e.getStartV());
+			}
+		}
+		
+		if (isStartVertex(v2)) {
+			setStartVertex(v1);
+		}
+	}
+
 	@Override
 	public boolean addEdge(Edge e, Vertex v1, Vertex v2) {
 		v1.addEdgeOut(e);
