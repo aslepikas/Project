@@ -3,12 +3,27 @@ package algorithms;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import containers.ModeTabbedPane;
+import canvas.MyJUNGCanvas;
+import edu.uci.ics.jung.visualization.VisualizationViewer;
+import menu.ModeMenu;
 import model.Edge;
 import model.Model;
 import model.Vertex;
 
 public class Algorithms {
 
+	public static void copyActive (ModeTabbedPane tabPane, ModeMenu modeMenu) {
+		
+		MyJUNGCanvas canvas = tabPane.getModelList().get(tabPane.getCreationTab().getSelectedIndex());
+		Model copyModel = canvas.getModel().copy();
+		MyJUNGCanvas nCanvas = new MyJUNGCanvas(copyModel);
+		nCanvas.setTitle(String.format("copy of %s", canvas.getTitle()));
+		nCanvas.initialise(modeMenu.getMode());
+		
+		tabPane.getCreationTab().add(nCanvas.getTitle(), nCanvas.getVisualizationViewer());
+	}
+	
 	public static synchronized void removeUnreachable(Model model) {
 
 		ArrayList<Vertex> visitedVertices = new ArrayList<Vertex>();

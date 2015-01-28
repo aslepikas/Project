@@ -12,8 +12,6 @@ import edu.uci.ics.jung.graph.util.Pair;
 public class Model implements DirectedGraph<Vertex, Edge> {
 
 	public Factory<Vertex> vertexFactory = new Factory<Vertex>() {
-		int count;
-
 		public Vertex create() {
 			count++;
 			return new Vertex(count, 0, 0);
@@ -113,6 +111,23 @@ public class Model implements DirectedGraph<Vertex, Edge> {
 			setStartVertex(v1);
 		}
 	}
+	//TODO
+	public Model copy() {
+		
+		Model m = new Model();
+		m.count = count;
+		
+		for (Vertex v : vertexList){
+			
+			Vertex nv = new Vertex(v.getNumber(), 0, 0);
+			m.vertexList.add(nv);
+		}
+		
+		
+		
+		return null;
+	}
+	
 
 	@Override
 	public boolean addEdge(Edge e, Vertex v1, Vertex v2) {
@@ -323,7 +338,7 @@ public class Model implements DirectedGraph<Vertex, Edge> {
 	}
 
 	@Override
-	public Collection<Edge> getEdges() {
+	public ArrayList<Edge> getEdges() {
 		ArrayList<Edge> retList = new ArrayList<Edge>();
 		for (Vertex n : vertexList) {
 			retList.addAll(n.getEdgesIn());
