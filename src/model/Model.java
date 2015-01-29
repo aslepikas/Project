@@ -14,7 +14,7 @@ public class Model implements DirectedGraph<Vertex, Edge> {
 	public Factory<Vertex> vertexFactory = new Factory<Vertex>() {
 		public Vertex create() {
 			count++;
-			return new Vertex(count, 0, 0);
+			return new Vertex(count);
 		}
 	};
 
@@ -49,7 +49,7 @@ public class Model implements DirectedGraph<Vertex, Edge> {
 
 	public void addNewVertex(int x, int y) {
 		count++;
-		vertexList.add(new Vertex(count, x, y));
+		vertexList.add(new Vertex(count));
 	}
 
 	public void addNewEdge(Vertex v1, Vertex v2) {
@@ -83,51 +83,74 @@ public class Model implements DirectedGraph<Vertex, Edge> {
 		startVertex = null;
 	}
 
-	
 	/**
 	 * 
-	 * @param v1 - vertex that gets v2 merged into
-	 * @param v2 - vertex merged into v1
+	 * @param v1
+	 *            - vertex that gets v2 merged into
+	 * @param v2
+	 *            - vertex merged into v1
 	 * 
-	 * this method does not remove v2 from the model, this has to be done manually
+	 *            this method does not remove v2 from the model, this has to be
+	 *            done manually
 	 */
 	public void mergeVertices(Vertex v1, Vertex v2) {
 		ArrayList<Edge> v2outEdges = v2.getEdgesOut();
 		ArrayList<Edge> v2inEdges = v2.getEdgesIn();
-		
+
 		for (Edge e : v2inEdges) {
 			if (!isPredecessor(e.getStartV(), v1)) {
-				addEdge(new Edge(e.getStartV(), v1, e.getLabels()), e.getStartV(), v1);
+				addEdge(new Edge(e.getStartV(), v1, e.getLabels()),
+						e.getStartV(), v1);
 			}
 		}
-		
+
 		for (Edge e : v2outEdges) {
 			if (!isPredecessor(v1, e.getStartV())) {
-				addEdge(new Edge(v1, e.getStartV(), e.getLabels()), v1, e.getStartV());
+				addEdge(new Edge(v1, e.getStartV(), e.getLabels()), v1,
+						e.getStartV());
 			}
 		}
-		
+
 		if (isStartVertex(v2)) {
 			setStartVertex(v1);
 		}
 	}
-	//TODO
+
+	// TODO
 	public Model copy() {
-		
+
 		Model m = new Model();
 		m.count = count;
-		
-		for (Vertex v : vertexList){
-			
-			Vertex nv = new Vertex(v.getNumber(), 0, 0);
+
+		for (Vertex v : vertexList) {
+			Vertex nv = new Vertex(v.getNumber());
 			m.vertexList.add(nv);
+			
+			if (v.isFinal()) {
+				nv.setFinal();
+			}
+			if (v.isStarting()) {
+				m.setStartVertex(nv);
+			}
 		}
-		
-		
-		
-		return null;
+
+		for (int i = 0; i < vertexList.size(); i++) {
+			Vertex v = vertexList.get(i);
+			ArrayList<Edge> edges = v.getEdgesOut();
+			for (Edge e : edges) {
+				Edge eNew = new Edge(m.vertexList.get(i), m.vertexList.get(vertexList
+						.indexOf(e.getTargetV())));
+				m.vertexList.get(i).addEdgeOut(eNew);
+				m.vertexList.get(vertexList
+						.indexOf(e.getTargetV())).addEdgeIn(eNew);
+				for (Character c : e.getLabels()) {
+					eNew.getLabels().add(c);
+				}
+			}
+		}
+
+		return m;
 	}
-	
 
 	@Override
 	public boolean addEdge(Edge e, Vertex v1, Vertex v2) {

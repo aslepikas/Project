@@ -9,69 +9,93 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JTabbedPane;
 
+import model.Edge;
+import model.Vertex;
 import algorithms.Algorithms;
 import canvas.MyJUNGCanvas;
+import edu.uci.ics.jung.algorithms.layout.FRLayout;
+import edu.uci.ics.jung.visualization.VisualizationViewer;
 
 public class MyMenuBar {
 
 	private static JMenuItem minimise;
 	private static JMenuItem removeUnreachable;
+	private static JMenuItem duplicate;
 	private static JMenuBar menuBar;
 	private static ModeMenu modeMenu;
 	private static JMenu fileMenu;
 	private static JMenu refactorMenu;
-	
-	public static JMenuBar create(ArrayList<MyJUNGCanvas> modelList, JTabbedPane tabbedPane) {
-		
+
+	public static JMenuBar create(ArrayList<MyJUNGCanvas> modelList,
+			JTabbedPane tabbedPane) {
+
 		menuBar = new JMenuBar();
 
 		modeMenu = new ModeMenu("Mode", modelList);
-		
+
 		fileMenu = new FileMenu("File", modelList, tabbedPane, modeMenu);
-		
+
 		refactorMenu = new JMenu("Refactor");
 		refactorMenu.add(new LayoutMenu("Layout", modelList, tabbedPane));
-		
+
 		minimise = new JMenuItem("Minimise");
 		refactorMenu.add(minimise);
 		minimise.addActionListener(new MinimiseListener(modelList, tabbedPane));
-		
+
 		removeUnreachable = new JMenuItem("Remove unreachable");
 		refactorMenu.add(removeUnreachable);
-		removeUnreachable.addActionListener(new MinimiseListener(modelList, tabbedPane));
-		
+		removeUnreachable.addActionListener(new MinimiseListener(modelList,
+				tabbedPane));
+
+		duplicate = new JMenuItem("Duplicate");
+		refactorMenu.add(duplicate);
+		duplicate
+				.addActionListener(new MinimiseListener(modelList, tabbedPane));
+
 		menuBar.add(fileMenu);
 		menuBar.add(refactorMenu);
 		menuBar.add(modeMenu);
 
 		return menuBar;
 	}
-	
+
 	private static class MinimiseListener implements ActionListener {
 
 		ArrayList<MyJUNGCanvas> modelList;
 		JTabbedPane tabbedPane;
-		
-		public MinimiseListener(ArrayList<MyJUNGCanvas> modelList, JTabbedPane tabbedPane) {
+
+		public MinimiseListener(ArrayList<MyJUNGCanvas> modelList,
+				JTabbedPane tabbedPane) {
 			super();
 			this.modelList = modelList;
 			this.tabbedPane = tabbedPane;
 		}
-		
+
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
 			if (e.getSource().equals(minimise)) {
-				Algorithms.minimise(modelList.get(tabbedPane.getSelectedIndex()).getModel());
-				modelList.get(tabbedPane.getSelectedIndex()).getVisualizationViewer().repaint();
+				Algorithms.minimise(modelList
+						.get(tabbedPane.getSelectedIndex()).getModel());
+				modelList.get(tabbedPane.getSelectedIndex())
+						.getVisualizationViewer().repaint();
 			}
-			
-			if (e.getSource().equals(removeUnreachable)) {
-				Algorithms.removeUnreachable(modelList.get(tabbedPane.getSelectedIndex()).getModel());
-				modelList.get(tabbedPane.getSelectedIndex()).getVisualizationViewer().repaint();
+
+			else if (e.getSource().equals(removeUnreachable)) {
+				Algorithms.removeUnreachable(modelList.get(
+						tabbedPane.getSelectedIndex()).getModel());
+				modelList.get(tabbedPane.getSelectedIndex())
+						.getVisualizationViewer().repaint();
+			}
+
+			else if (e.getSource().equals(duplicate)) {
+				Algorithms.copyActive(modelList, tabbedPane, modeMenu);
+				VisualizationViewer<Vertex, Edge> vv = modelList.get(tabbedPane.getSelectedIndex()).getVisualizationViewer();
+				vv.setGraphLayout(new FRLayout<Vertex, Edge>(vv.getGraphLayout().getGraph()));
+				modelList.get(tabbedPane.getSelectedIndex())
+						.getVisualizationViewer().repaint();
 			}
 		}
-		
+
 	}
 
 }

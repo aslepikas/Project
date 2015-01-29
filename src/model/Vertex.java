@@ -12,7 +12,7 @@ public class Vertex {
 	private ArrayList<Edge> edgesIn;
 	private ArrayList<Edge> edgesOut;
 
-	public Vertex(int n, int x, int y) {
+	public Vertex(int n) {
 		number = n;
 		endState = false;
 		edgesIn = new ArrayList<Edge>();
@@ -62,34 +62,6 @@ public class Vertex {
 		return startState;
 	}
 
-	/**
-	 * sets x coordinate
-	 */
-	public void setX(int x) {
-		this.x = x;
-	}
-
-	/**
-	 * sets y coordinate
-	 */
-	public void setY(int y) {
-		this.y = y;
-	}
-
-	/**
-	 * @return X coordinate
-	 */
-	public int getX() {
-		return x;
-	}
-
-	/**
-	 * @return Y coordinate
-	 */
-	public int getY() {
-		return y;
-	}
-
 	public boolean isFinal() {
 		return endState;
 	}
@@ -108,19 +80,6 @@ public class Vertex {
 		return edgesOut;
 	}
 
-	/*
-	 * /**
-	 * 
-	 * @param x : x coordinate
-	 * 
-	 * @param y : y coordinate
-	 * 
-	 * @return returns whether the point is in the node
-	 * 
-	 * public boolean pointInNode(int x, int y) { int diffX = this.x - x; int
-	 * diffY = this.y - y; int r = Vertex.NODE_WIDTH / 2; return ((diffX *
-	 * diffX) + (diffY * diffY)) < (r * r); }
-	 */
 	public boolean addEdgeIn(Edge e) {
 		return edgesIn.add(e);
 	}
