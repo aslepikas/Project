@@ -256,11 +256,6 @@ public class Algorithms {
 			}
 		}
 
-		/*
-		 * public void set(int pos, int row, int col) {
-		 * pairs.get(pos).setRow(row); pairs.get(pos).setCol(col); }
-		 */
-
 		public void setRow(int pos, int row) {
 			pairs.get(pos).setRow(row);
 
