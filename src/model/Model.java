@@ -90,8 +90,8 @@ public class Model implements DirectedGraph<Vertex, Edge> {
 	 * @param v2
 	 *            - vertex merged into v1
 	 * 
-	 *            this method does not remove v2 from the model, this has to be
-	 *            done manually
+	 * @code this method does not remove v2 from the model, it has to be done
+	 *       manually
 	 */
 	public void mergeVertices(Vertex v1, Vertex v2) {
 		ArrayList<Edge> v2outEdges = v2.getEdgesOut();
@@ -101,13 +101,27 @@ public class Model implements DirectedGraph<Vertex, Edge> {
 			if (!isPredecessor(e.getStartV(), v1)) {
 				addEdge(new Edge(e.getStartV(), v1, e.getLabels()),
 						e.getStartV(), v1);
+			} else {
+				for (Edge i : v1.getEdgesIn()) {
+					if (i.getStartV().equals(e.getStartV())) {
+						i.addLabels(e.getLabels());
+						break;
+					}
+				}
 			}
 		}
 
 		for (Edge e : v2outEdges) {
-			if (!isPredecessor(v1, e.getStartV())) {
-				addEdge(new Edge(v1, e.getStartV(), e.getLabels()), v1,
-						e.getStartV());
+			if (!isPredecessor(v1, e.getTargetV())) {
+				addEdge(new Edge(v1, e.getTargetV(), e.getLabels()), v1,
+						e.getTargetV());
+			} else {
+				for (Edge i : v1.getEdgesOut()) {
+					if (i.getTargetV().equals(e.getTargetV())) {
+						i.addLabels(e.getLabels());
+						break;
+					}
+				}
 			}
 		}
 
@@ -116,7 +130,6 @@ public class Model implements DirectedGraph<Vertex, Edge> {
 		}
 	}
 
-	// TODO
 	public Model copy() {
 
 		Model m = new Model();
@@ -125,7 +138,7 @@ public class Model implements DirectedGraph<Vertex, Edge> {
 		for (Vertex v : vertexList) {
 			Vertex nv = new Vertex(v.getNumber());
 			m.vertexList.add(nv);
-			
+
 			if (v.isFinal()) {
 				nv.setFinal();
 			}
@@ -138,11 +151,11 @@ public class Model implements DirectedGraph<Vertex, Edge> {
 			Vertex v = vertexList.get(i);
 			ArrayList<Edge> edges = v.getEdgesOut();
 			for (Edge e : edges) {
-				Edge eNew = new Edge(m.vertexList.get(i), m.vertexList.get(vertexList
-						.indexOf(e.getTargetV())));
+				Edge eNew = new Edge(m.vertexList.get(i),
+						m.vertexList.get(vertexList.indexOf(e.getTargetV())));
 				m.vertexList.get(i).addEdgeOut(eNew);
-				m.vertexList.get(vertexList
-						.indexOf(e.getTargetV())).addEdgeIn(eNew);
+				m.vertexList.get(vertexList.indexOf(e.getTargetV())).addEdgeIn(
+						eNew);
 				for (Character c : e.getLabels()) {
 					eNew.getLabels().add(c);
 				}
@@ -202,8 +215,12 @@ public class Model implements DirectedGraph<Vertex, Edge> {
 	}
 
 	@Override
-	public Collection<Vertex> getPredecessors(Vertex arg0) {
-		return null;
+	public ArrayList<Vertex> getPredecessors(Vertex v) {
+		ArrayList<Vertex> retList = new ArrayList<Vertex>();
+		for (Edge e : v.getEdgesIn()) {
+			retList.add(e.getStartV());
+		}
+		return retList;
 	}
 
 	@Override
@@ -239,7 +256,13 @@ public class Model implements DirectedGraph<Vertex, Edge> {
 
 	@Override
 	public boolean isPredecessor(Vertex v1, Vertex v2) {
-		return this.getPredecessors(v1).contains(v2);
+		/*
+		 * if (v1 == null) { System.out.println("error1"); // TODO } if (v1 ==
+		 * null) { System.out.println("error2"); // TODO } if
+		 * (this.getPredecessors(v1) == null) { System.out.println("error3"); //
+		 * TODO }
+		 */
+		return this.getPredecessors(v2).contains(v1);
 	}
 
 	@Override

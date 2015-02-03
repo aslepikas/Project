@@ -86,4 +86,12 @@ public class Edge {
 		return str;
 	}
 
+	public void addLabels(ArrayList<Character> labels2) {
+		for (Character c : labels2) {
+			if (!labels.contains(c)) {
+				labels.add(c);
+			}
+		}
+	}
+
 }
