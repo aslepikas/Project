@@ -13,20 +13,21 @@ import model.Vertex;
 
 public class Algorithms {
 
-	public static void copyActive (ArrayList<MyJUNGCanvas> modelList, JTabbedPane tabbedPane, ModeMenu modeMenu) {
-		
+	public static void copyActive(ArrayList<MyJUNGCanvas> modelList,
+			JTabbedPane tabbedPane, ModeMenu modeMenu) {
+
 		MyJUNGCanvas canvas = modelList.get(tabbedPane.getSelectedIndex());
 		Model copyModel = canvas.getModel().copy();
 		MyJUNGCanvas nCanvas = new MyJUNGCanvas(copyModel);
 		nCanvas.setTitle(String.format("copy of %s", canvas.getTitle()));
 		nCanvas.initialise(modeMenu.getMode());
-		
+
 		modelList.add(nCanvas);
 		tabbedPane.add(nCanvas.getTitle(), nCanvas.getVisualizationViewer());
 		tabbedPane.setSelectedIndex(tabbedPane.getTabCount() - 1);
 		nCanvas.getVisualizationViewer().repaint();
 	}
-	
+
 	public static synchronized void removeUnreachable(Model model) {
 
 		ArrayList<Vertex> visitedVertices = new ArrayList<Vertex>();
@@ -116,34 +117,38 @@ public class Algorithms {
 			removeUnreachable(model);
 
 			ArrayList<ArrayList<Entry>> table = createTable(model);
-
-			for (int i = 0; i < table.size(); i++) { //TODO
-				for (int j = 0; j < table.get(i).size(); j++) {
-					System.out.print(table.get(i).get(j).isEquivalent());
-					System.out.print(" ");
-				}
-				System.out.print("\n");
-			}
-
+			/*
+			 * for (int i = 0; i < table.size(); i++) { // TODO for (int j = 0;
+			 * j < table.get(i).size(); j++) { System.out
+			 * .print(printfn(table.get(i).get(j).isEquivalent()));
+			 * System.out.print(" "); } System.out.printf("%d\n", i); }
+			 */
 			ArrayList<Vertex> vertices = model.getVertices();
 			// first iteration
-			for (int i = 0; i < table.size(); i++) {
+			for (int i = 0; i < table.size() - 1; i++) {
 				for (int j = 0; j < table.get(i).size(); j++) {
-					if (vertices.get(i).isFinal()
-							^ (!vertices.get(j).isFinal())) {
+					if (vertices.get(i).isFinal() ^ (vertices.get(j).isFinal())) {
 						table.get(i).get(j).setEquivalent(false);
 					}
 				}
-			}
-			// TODO
-			for (int i = 0; i < table.size(); i++) {
-				for (int j = 0; j < table.get(i).size(); j++) {
-					System.out.print(table.get(i).get(j).isEquivalent());
-					System.out.print(" ");
+			}/*
+			 * for (int i = 0; i < table.size(); i++) { // TODO for (int j = 0;
+			 * j < table.get(i).size(); j++) { System.out
+			 * .print(printfn(table.get(i).get(j).isEquivalent()));
+			 * System.out.print(" "); } System.out.printf("%d\n", i); }
+			 */
+			for (int j = 0; j < table.get(table.size() - 1).size(); j++) {
+				if (vertices.get(j).isFinal()) {
+					table.get(table.size() - 1).get(j).setEquivalent(false);
 				}
-				System.out.print("\n");
 			}
-
+			// end of first iteration
+			/*
+			 * // TODO for (int i = 0; i < table.size(); i++) { for (int j = 0;
+			 * j < table.get(i).size(); j++) { System.out
+			 * .print(printfn(table.get(i).get(j).isEquivalent()));
+			 * System.out.print(" "); } System.out.printf("%d\n", i); }
+			 */
 			boolean hadChange = true;
 			while (hadChange) {
 				hadChange = false;
@@ -156,29 +161,42 @@ public class Algorithms {
 							for (Pairing p : pairs) {
 								int col = p.getCol();
 								int row = p.getRow();
+
 								if (row == -1) {
 									row = table.size() - 1;
 								}
-								if (!table.get(row).get(col).isEquivalent()) {
-									table.get(i).get(j).setEquivalent(false);
-									hadChange = true;
-									break;
+
+								if (col == -1) {
+									col = table.size() - 1;
+								}
+								/*
+								 * System.out.printf(
+								 * "Col: %d row: %d, Rowln: %d\n", col, row,
+								 * table.get(row).size()); // TODO
+								 */
+								if (!(row == col)) {
+
+									if (!table.get(row).get(col).isEquivalent()) {
+										table.get(i).get(j)
+												.setEquivalent(false);
+										hadChange = true;
+										break;
+									}
 								}
 							}
 						}
 					}
 				}
-			}
-			for (int i = 0; i < table.size(); i++) { //TODO
-				for (int j = 0; j < table.get(i).size(); j++) {
-					System.out.print(table.get(i).get(j).isEquivalent());
-					System.out.print(" ");
-				}
-				System.out.print("\n");
-			}
-			
-			System.out.println(table.size()); // TODO
-			Boolean[] merged = new Boolean[table.size()];
+			}/*
+			 * for (int i = 0; i < table.size(); i++) { // TODO for (int j = 0;
+			 * j < table.get(i).size(); j++) { System.out
+			 * .print(printfn(table.get(i).get(j).isEquivalent()));
+			 * System.out.print(" "); } System.out.printf("%d\n", i); }
+			 */
+			/*
+			 * System.out.println(table.size()); // TODO
+			 */
+			Boolean[] merged = new Boolean[table.size() - 1];
 			for (int i = 0; i < merged.length; i++) {
 				merged[i] = false;
 			}
@@ -206,6 +224,11 @@ public class Algorithms {
 		return false;
 	}
 
+	/*
+	 * private static String printfn(boolean tf) { if (tf) { return "t"; }
+	 * return "f"; }
+	 */
+
 	private static ArrayList<ArrayList<Entry>> createTable(Model model) {
 		int size = model.getVertexCount();
 		ArrayList<ArrayList<Entry>> table = new ArrayList<ArrayList<Entry>>();
@@ -219,7 +242,7 @@ public class Algorithms {
 				Entry entry = new Entry(alphabet.size());
 				Vertex v1 = vertices.get(i);
 				Vertex v2 = vertices.get(j);
-				
+
 				table.get(i);
 				alphabet.size();
 
@@ -239,7 +262,26 @@ public class Algorithms {
 				tableRow.add(entry);
 			}
 		}
-		System.out.println(table.size());
+		// last iteration, adding the -1th line.
+
+		ArrayList<Entry> tableRow = new ArrayList<Entry>();
+		table.add(tableRow);
+		for (int j = 0; j < size; j++) {
+			Entry entry = new Entry(alphabet.size());
+			Vertex v1 = null;
+			Vertex v2 = vertices.get(j);
+
+			for (Edge e : v2.getEdgesOut()) {
+				for (Character c : e.getLabels()) {
+					entry.setRow(alphabet.indexOf(c),
+							vertices.indexOf(e.getTargetV()));
+				}
+			}
+			tableRow.add(entry);
+		}
+		/*
+		 * System.out.println(table.size()); //TODO
+		 */
 		return table;
 	}
 
@@ -259,11 +301,18 @@ public class Algorithms {
 		public void setRow(int pos, int row) {
 			pairs.get(pos).setRow(row);
 
-			if ((pairs.get(pos).getCol() > row) && (row != -1)) {
+			if (((pairs.get(pos).getCol() > row) && (row != -1))
+					|| (pairs.get(pos).getCol() == -1)) {
 				int temp = pairs.get(pos).getCol();
 				pairs.get(pos).setCol(row);
 				pairs.get(pos).setRow(temp);
 			}
+			/*
+			 * if (pairs.get(pos).getRow() == pairs.get(pos).getCol() &&
+			 * pairs.get(pos).getRow() != -1) {
+			 * System.out.printf("Error. %d %d\n", pairs.get(pos).getRow(),
+			 * pairs.get(pos).getCol()); // TODO }
+			 */
 		}
 
 		public void setCol(int pos, int col) {
