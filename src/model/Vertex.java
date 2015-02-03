@@ -5,22 +5,20 @@ import java.util.ArrayList;
 public class Vertex {
 
 	private int number;
-	private int x;
-	private int y;
 	private boolean endState;
 	private boolean startState;
 	private ArrayList<Edge> edgesIn;
 	private ArrayList<Edge> edgesOut;
+	private String toolTip;
 
 	public Vertex(int n) {
 		number = n;
 		endState = false;
 		edgesIn = new ArrayList<Edge>();
 		edgesOut = new ArrayList<Edge>();
-		this.x = x;
-		this.y = y;
 		endState = false;
 		startState = false;
+		toolTip = "";
 	}
 
 	/**
@@ -43,7 +41,7 @@ public class Vertex {
 	public void unSetFinal() {
 		endState = false;
 	}
-	
+
 	/**
 	 * To be only used from the model.
 	 */
@@ -57,7 +55,7 @@ public class Vertex {
 	public void unSetStart() {
 		startState = false;
 	}
-	
+
 	public boolean isStarting() {
 		return startState;
 	}
@@ -94,6 +92,14 @@ public class Vertex {
 
 	public void removeEdgeOut(Edge e) {
 		edgesOut.remove(e);
+	}
+
+	public void setToolTip(String toolTip) {
+		this.toolTip = toolTip;
+	}
+
+	public String getToolTip() {
+		return toolTip;
 	}
 
 	public boolean equals(Vertex n) {

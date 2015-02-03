@@ -9,6 +9,7 @@ import canvas.transform.ColourTransformer;
 import canvas.transform.OutlineColourTransformer;
 import canvas.transform.VertexStrokeWidthTransformer;
 import control.MyGraphMouse;
+import control.TooltipDisplay;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.algorithms.layout.StaticLayout;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
@@ -51,6 +52,9 @@ public class MyJUNGCanvas {
 		gm.setMode(mode);
 		vv.setGraphMouse(gm);
 		vv.setBorder(new LineBorder(Color.BLACK, 1));
+		
+		vv.addMouseMotionListener(new TooltipDisplay());
+		
 		return vv;
 	}
 

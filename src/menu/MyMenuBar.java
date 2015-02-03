@@ -40,17 +40,17 @@ public class MyMenuBar {
 
 		minimise = new JMenuItem("Minimise");
 		refactorMenu.add(minimise);
-		minimise.addActionListener(new MinimiseListener(modelList, tabbedPane));
+		minimise.addActionListener(new AlgorithmListener(modelList, tabbedPane));
 
 		removeUnreachable = new JMenuItem("Remove unreachable");
 		refactorMenu.add(removeUnreachable);
-		removeUnreachable.addActionListener(new MinimiseListener(modelList,
+		removeUnreachable.addActionListener(new AlgorithmListener(modelList,
 				tabbedPane));
 
 		duplicate = new JMenuItem("Duplicate");
 		refactorMenu.add(duplicate);
 		duplicate
-				.addActionListener(new MinimiseListener(modelList, tabbedPane));
+				.addActionListener(new AlgorithmListener(modelList, tabbedPane));
 
 		menuBar.add(fileMenu);
 		menuBar.add(refactorMenu);
@@ -59,12 +59,12 @@ public class MyMenuBar {
 		return menuBar;
 	}
 
-	private static class MinimiseListener implements ActionListener {
+	private static class AlgorithmListener implements ActionListener {
 
 		ArrayList<MyJUNGCanvas> modelList;
 		JTabbedPane tabbedPane;
 
-		public MinimiseListener(ArrayList<MyJUNGCanvas> modelList,
+		public AlgorithmListener(ArrayList<MyJUNGCanvas> modelList,
 				JTabbedPane tabbedPane) {
 			super();
 			this.modelList = modelList;
@@ -74,6 +74,12 @@ public class MyMenuBar {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource().equals(minimise)) {
+				Algorithms.copyActive(modelList, tabbedPane, modeMenu);
+				VisualizationViewer<Vertex, Edge> vv = modelList.get(
+						tabbedPane.getSelectedIndex()).getVisualizationViewer();
+				vv.setGraphLayout(new FRLayout<Vertex, Edge>(vv
+						.getGraphLayout().getGraph()));
+
 				Algorithms.minimise(modelList
 						.get(tabbedPane.getSelectedIndex()).getModel());
 				modelList.get(tabbedPane.getSelectedIndex())
@@ -89,8 +95,10 @@ public class MyMenuBar {
 
 			else if (e.getSource().equals(duplicate)) {
 				Algorithms.copyActive(modelList, tabbedPane, modeMenu);
-				VisualizationViewer<Vertex, Edge> vv = modelList.get(tabbedPane.getSelectedIndex()).getVisualizationViewer();
-				vv.setGraphLayout(new FRLayout<Vertex, Edge>(vv.getGraphLayout().getGraph()));
+				VisualizationViewer<Vertex, Edge> vv = modelList.get(
+						tabbedPane.getSelectedIndex()).getVisualizationViewer();
+				vv.setGraphLayout(new FRLayout<Vertex, Edge>(vv
+						.getGraphLayout().getGraph()));
 				modelList.get(tabbedPane.getSelectedIndex())
 						.getVisualizationViewer().repaint();
 			}

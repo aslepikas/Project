@@ -114,15 +114,10 @@ public class Algorithms {
 	 */
 	public static synchronized boolean minimise(Model model) {
 		if (isDFA(model)) {
+
 			removeUnreachable(model);
 
 			ArrayList<ArrayList<Entry>> table = createTable(model);
-			/*
-			 * for (int i = 0; i < table.size(); i++) { // TODO for (int j = 0;
-			 * j < table.get(i).size(); j++) { System.out
-			 * .print(printfn(table.get(i).get(j).isEquivalent()));
-			 * System.out.print(" "); } System.out.printf("%d\n", i); }
-			 */
 			ArrayList<Vertex> vertices = model.getVertices();
 			// first iteration
 			for (int i = 0; i < table.size() - 1; i++) {
@@ -131,24 +126,14 @@ public class Algorithms {
 						table.get(i).get(j).setEquivalent(false);
 					}
 				}
-			}/*
-			 * for (int i = 0; i < table.size(); i++) { // TODO for (int j = 0;
-			 * j < table.get(i).size(); j++) { System.out
-			 * .print(printfn(table.get(i).get(j).isEquivalent()));
-			 * System.out.print(" "); } System.out.printf("%d\n", i); }
-			 */
+			}
 			for (int j = 0; j < table.get(table.size() - 1).size(); j++) {
 				if (vertices.get(j).isFinal()) {
 					table.get(table.size() - 1).get(j).setEquivalent(false);
 				}
 			}
 			// end of first iteration
-			/*
-			 * // TODO for (int i = 0; i < table.size(); i++) { for (int j = 0;
-			 * j < table.get(i).size(); j++) { System.out
-			 * .print(printfn(table.get(i).get(j).isEquivalent()));
-			 * System.out.print(" "); } System.out.printf("%d\n", i); }
-			 */
+
 			boolean hadChange = true;
 			while (hadChange) {
 				hadChange = false;
@@ -169,11 +154,7 @@ public class Algorithms {
 								if (col == -1) {
 									col = table.size() - 1;
 								}
-								/*
-								 * System.out.printf(
-								 * "Col: %d row: %d, Rowln: %d\n", col, row,
-								 * table.get(row).size()); // TODO
-								 */
+
 								if (!(row == col)) {
 
 									if (!table.get(row).get(col).isEquivalent()) {
@@ -187,15 +168,8 @@ public class Algorithms {
 						}
 					}
 				}
-			}/*
-			 * for (int i = 0; i < table.size(); i++) { // TODO for (int j = 0;
-			 * j < table.get(i).size(); j++) { System.out
-			 * .print(printfn(table.get(i).get(j).isEquivalent()));
-			 * System.out.print(" "); } System.out.printf("%d\n", i); }
-			 */
-			/*
-			 * System.out.println(table.size()); // TODO
-			 */
+			}
+
 			Boolean[] merged = new Boolean[table.size() - 1];
 			for (int i = 0; i < merged.length; i++) {
 				merged[i] = false;
@@ -205,10 +179,13 @@ public class Algorithms {
 				if (!merged[i]) {
 					for (int j = 0; j < i; j++) {
 						if (table.get(i).get(j).isEquivalent()) {
+							Vertex v1 = vertices.get(i);
+							Vertex v2 = vertices.get(j);
 							merged[j] = true;
-							model.mergeVertices(model.getVertices().get(i),
-									model.getVertices().get(j));
-							purgeList.add(model.getVertices().get(j));
+							model.mergeVertices(v1, v2);
+							purgeList.add(v2);
+							v1.setToolTip(v1.toString() + ", " + v2.toString());
+							;
 						}
 					}
 				}
@@ -223,11 +200,6 @@ public class Algorithms {
 		}
 		return false;
 	}
-
-	/*
-	 * private static String printfn(boolean tf) { if (tf) { return "t"; }
-	 * return "f"; }
-	 */
 
 	private static ArrayList<ArrayList<Entry>> createTable(Model model) {
 		int size = model.getVertexCount();
@@ -268,7 +240,6 @@ public class Algorithms {
 		table.add(tableRow);
 		for (int j = 0; j < size; j++) {
 			Entry entry = new Entry(alphabet.size());
-			Vertex v1 = null;
 			Vertex v2 = vertices.get(j);
 
 			for (Edge e : v2.getEdgesOut()) {
@@ -279,9 +250,6 @@ public class Algorithms {
 			}
 			tableRow.add(entry);
 		}
-		/*
-		 * System.out.println(table.size()); //TODO
-		 */
 		return table;
 	}
 
@@ -307,21 +275,12 @@ public class Algorithms {
 				pairs.get(pos).setCol(row);
 				pairs.get(pos).setRow(temp);
 			}
-			/*
-			 * if (pairs.get(pos).getRow() == pairs.get(pos).getCol() &&
-			 * pairs.get(pos).getRow() != -1) {
-			 * System.out.printf("Error. %d %d\n", pairs.get(pos).getRow(),
-			 * pairs.get(pos).getCol()); // TODO }
-			 */
 		}
 
 		public void setCol(int pos, int col) {
 			pairs.get(pos).setCol(col);
 		}
 
-		/*
-		 * public Pairing getPair(int pos) { return pairs.get(pos); }
-		 */
 		public ArrayList<Pairing> getAllPairs() {
 			return pairs;
 		}

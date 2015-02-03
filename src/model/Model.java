@@ -164,7 +164,7 @@ public class Model implements DirectedGraph<Vertex, Edge> {
 
 		return m;
 	}
-
+	
 	@Override
 	public boolean addEdge(Edge e, Vertex v1, Vertex v2) {
 		v1.addEdgeOut(e);
@@ -256,12 +256,6 @@ public class Model implements DirectedGraph<Vertex, Edge> {
 
 	@Override
 	public boolean isPredecessor(Vertex v1, Vertex v2) {
-		/*
-		 * if (v1 == null) { System.out.println("error1"); // TODO } if (v1 ==
-		 * null) { System.out.println("error2"); // TODO } if
-		 * (this.getPredecessors(v1) == null) { System.out.println("error3"); //
-		 * TODO }
-		 */
 		return this.getPredecessors(v2).contains(v1);
 	}
 
@@ -492,5 +486,5 @@ public class Model implements DirectedGraph<Vertex, Edge> {
 		removeAllEdges(v);
 		return vertexList.remove(v);
 	}
-
+	
 }
