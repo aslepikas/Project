@@ -3,8 +3,12 @@ package algorithms;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import javax.swing.JTabbedPane;
+
+import com.sun.corba.se.impl.oa.poa.ActiveObjectMap.Key;
 
 import canvas.MyJUNGCanvas;
 import menu.ModeMenu;
@@ -105,29 +109,107 @@ public class Algorithms {
 		return true;
 	}
 
+	/**
+	 * Requires the model to have a starting node.
+	 * 
+	 * @param model
+	 *            - the model to be converted.
+	 * @return a new model, that has been converted.
+	 */
 	public static Model nfaToDfa(Model model) {
 		Vertex start = model.getStartVertex();
 
 		if (start != null) {
-			HashMap<Long, ArrayList> table = new HashMap<Long, ArrayList>();
 
 			ArrayList<Character> alphabet = getAlphabet(model);
-			
-			
-			
+			HashMap<Integer, ArrayList<Integer>[]> referenceTable = new HashMap<Integer, ArrayList<Integer>[]>();
+			ArrayList<Vertex> vertices = model.getVertices();
+
+			// construct vertex to position table here
+			int[] vertexPos = new int[vertices.get(vertices.size() - 1)
+					.getNumber()];
+			for (int i = 0; i < vertices.size(); i++) {
+				vertexPos[vertices.get(i).getNumber()] = i;
+			}
+
+			// construct reference table for every single vertex
+			for (Vertex v : vertices) {
+				ArrayList<Edge> edges = v.getEdgesOut();
+				@SuppressWarnings("unchecked")
+				ArrayList<Integer>[] destinations = new ArrayList[alphabet
+						.size()];
+				for (Edge e : edges) {
+					ArrayList<Character> labels = e.getLabels();
+					Vertex target = e.getTargetV();
+					for (Character c : labels) {
+						int pos = alphabet.indexOf(c);
+						if (destinations[pos] == null) {
+							destinations[pos] = new ArrayList<Integer>();
+						}
+						destinations[pos].add(vertexPos[target.getNumber()]);
+					}
+				}
+				referenceTable
+						.put(Integer.valueOf(v.getNumber()), destinations);
+			}
+			// -------------------- preliminary work done
+
+			HashMap<Long, ArrayList[]> table = new HashMap<Long, ArrayList[]>();
+
+			ArrayList<Integer> queueItem = new ArrayList<Integer>();
+			queueItem.add(start.getNumber());
+
+			LinkedList<ArrayList<Integer>> queue = new LinkedList<ArrayList<Integer>>();
+			queue.add(queueItem);
+
+			while (!queue.isEmpty()) {
+				queueItem = queue.poll();
+
+				long key = 0;
+				for (Integer v : queueItem) {
+					key += Math.round(Math.pow(2, vertexPos[v]));
+				}
+				if (!table.containsKey(key)) {
+					@SuppressWarnings("unchecked")
+					ArrayList<Integer>[] tableItem = new ArrayList[alphabet
+							.size()];
+
+					for (Integer v : queueItem) {
+						ArrayList<Integer>[] transitions = referenceTable
+								.get(v);
+						for (int i = 0; i < transitions.length; i++) {
+							if (transitions[i] != null) {
+								if (tableItem[i] == null) {
+									tableItem[i] = new ArrayList<Integer>();
+								}
+
+								for (int j : transitions[i]) {
+									if (!tableItem[i].contains(j)) {
+										tableItem[i].add(j);
+									}
+								}
+
+							}
+						}
+					}
+					table.put(key, tableItem);
+
+					for (ArrayList<Integer> i : tableItem) {
+						if (i != null)
+							queue.add(i);
+					}
+				}
+
+			}
+
+			//constructing model
 			Model retModel = new Model();
-		
+			
+			
+			
+			return retModel;
 		}
 		return null;
-	}
-	
-	private static long createKey(ArrayList<Integer> list){
-		long retNum = 0;
-		for (int i : list) {
-			retNum += Math.round(Math.pow(2, i));
-		}
-		
-		return retNum;
 	}
 
 	/**
