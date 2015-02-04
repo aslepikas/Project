@@ -2,6 +2,7 @@ package algorithms;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 
 import javax.swing.JTabbedPane;
 
@@ -104,6 +105,31 @@ public class Algorithms {
 		return true;
 	}
 
+	public static Model nfaToDfa(Model model) {
+		Vertex start = model.getStartVertex();
+
+		if (start != null) {
+			HashMap<Long, ArrayList> table = new HashMap<Long, ArrayList>();
+
+			ArrayList<Character> alphabet = getAlphabet(model);
+			
+			
+			
+			Model retModel = new Model();
+		
+		}
+		return null;
+	}
+	
+	private static long createKey(ArrayList<Integer> list){
+		long retNum = 0;
+		for (int i : list) {
+			retNum += Math.round(Math.pow(2, i));
+		}
+		
+		return retNum;
+	}
+
 	/**
 	 * 
 	 * @param model
@@ -112,7 +138,7 @@ public class Algorithms {
 	 * @return Success of minimisation operation. If supplied with an NDFA,
 	 *         returns false.
 	 */
-	public static synchronized boolean minimise(Model model) {
+	public static boolean minimise(Model model) {
 		if (isDFA(model)) {
 
 			removeUnreachable(model);
@@ -322,4 +348,5 @@ public class Algorithms {
 		}
 
 	}
+
 }
