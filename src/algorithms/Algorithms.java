@@ -127,7 +127,7 @@ public class Algorithms {
 
 			// construct vertex to position table here
 			int[] vertexPos = new int[vertices.get(vertices.size() - 1)
-					.getNumber()];
+					.getNumber() + 1];
 			for (int i = 0; i < vertices.size(); i++) {
 				vertexPos[vertices.get(i).getNumber()] = i;
 			}

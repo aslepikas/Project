@@ -10,6 +10,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JTabbedPane;
 
 import model.Edge;
+import model.Model;
 import model.Vertex;
 import algorithms.Algorithms;
 import canvas.MyJUNGCanvas;
@@ -21,6 +22,7 @@ public class MyMenuBar {
 	private static JMenuItem minimise;
 	private static JMenuItem removeUnreachable;
 	private static JMenuItem duplicate;
+	private static JMenuItem nfaToDfa;
 	private static JMenuBar menuBar;
 	private static ModeMenu modeMenu;
 	private static JMenu fileMenu;
@@ -38,19 +40,24 @@ public class MyMenuBar {
 		refactorMenu = new JMenu("Refactor");
 		refactorMenu.add(new LayoutMenu("Layout", modelList, tabbedPane));
 
+		AlgorithmListener refactorListener = new AlgorithmListener(modelList,
+				tabbedPane);
+
 		minimise = new JMenuItem("Minimise");
 		refactorMenu.add(minimise);
-		minimise.addActionListener(new AlgorithmListener(modelList, tabbedPane));
+		minimise.addActionListener(refactorListener);
 
 		removeUnreachable = new JMenuItem("Remove unreachable");
 		refactorMenu.add(removeUnreachable);
-		removeUnreachable.addActionListener(new AlgorithmListener(modelList,
-				tabbedPane));
+		removeUnreachable.addActionListener(refactorListener);
 
 		duplicate = new JMenuItem("Duplicate");
 		refactorMenu.add(duplicate);
-		duplicate
-				.addActionListener(new AlgorithmListener(modelList, tabbedPane));
+		duplicate.addActionListener(refactorListener);
+
+		nfaToDfa = new JMenuItem("NFA to DFA");
+		refactorMenu.add(nfaToDfa);
+		nfaToDfa.addActionListener(refactorListener);
 
 		menuBar.add(fileMenu);
 		menuBar.add(refactorMenu);
@@ -102,8 +109,24 @@ public class MyMenuBar {
 				modelList.get(tabbedPane.getSelectedIndex())
 						.getVisualizationViewer().repaint();
 			}
-		}
 
+			else if (e.getSource().equals(nfaToDfa)) {
+				Model dfa = Algorithms.nfaToDfa(modelList.get(
+						tabbedPane.getSelectedIndex()).getModel());
+				MyJUNGCanvas nCanvas = new MyJUNGCanvas(dfa);
+				nCanvas.setTitle(String
+						.format("copy of %s",
+								modelList.get(tabbedPane.getSelectedIndex())
+										.getTitle()));
+				nCanvas.initialise(modeMenu.getMode());
+
+				modelList.add(nCanvas);
+				tabbedPane.add(nCanvas.getTitle(),
+						nCanvas.getVisualizationViewer());
+				tabbedPane.setSelectedIndex(tabbedPane.getTabCount() - 1);
+				nCanvas.getVisualizationViewer().repaint();
+			}
+		}
 	}
 
 }
