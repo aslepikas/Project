@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Set;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import javax.swing.JTabbedPane;
@@ -154,13 +155,15 @@ public class Algorithms {
 			}
 			// -------------------- preliminary work done
 
-			HashMap<Long, ArrayList[]> table = new HashMap<Long, ArrayList[]>();
+			HashMap<Long, ArrayList<Integer>[]> table = new HashMap<Long, ArrayList<Integer>[]>();
 
 			ArrayList<Integer> queueItem = new ArrayList<Integer>();
 			queueItem.add(start.getNumber());
 
 			LinkedList<ArrayList<Integer>> queue = new LinkedList<ArrayList<Integer>>();
 			queue.add(queueItem);
+
+			ArrayList<Long> keyList = new ArrayList<Long>();
 
 			while (!queue.isEmpty()) {
 				queueItem = queue.poll();
@@ -170,6 +173,7 @@ public class Algorithms {
 					key += Math.round(Math.pow(2, vertexPos[v]));
 				}
 				if (!table.containsKey(key)) {
+					keyList.add(key);
 					@SuppressWarnings("unchecked")
 					ArrayList<Integer>[] tableItem = new ArrayList[alphabet
 							.size()];
@@ -202,9 +206,40 @@ public class Algorithms {
 
 			}
 
-			//constructing model
+			// constructing model
 			Model retModel = new Model();
-			
+
+			for (Long key : keyList) {
+				Vertex nv = retModel.vertexFactory.create();
+				retModel.addVertex(nv);
+				String tooltip = null;
+				long num = key;
+				for (int i = 0; i < vertices.size(); i++) {
+					if (num % 2 == 1) {
+						Vertex v = vertices.get(i);
+						if (v.isFinal()) {
+							nv.setFinal();
+						}
+						if (tooltip == null) {
+							tooltip = v.toString();
+						} else {
+							tooltip = tooltip + " " + v.toString();
+						}
+					}
+					num = num / 2;
+				}
+			}
+			retModel.setStartVertex(retModel.getVertices().get(0));
+
+			for (int i = 0; i < keyList.size(); i++) {
+				Vertex nv = retModel.getVertices().get(i);
+				ArrayList<Integer>[] tableItem = table.get(keyList.get(i));
+				for (ArrayList<Integer> j : tableItem) {
+					if (j != null) {
+
+					}
+				}
+			}
 			
 			
 			return retModel;
@@ -293,7 +328,6 @@ public class Algorithms {
 							model.mergeVertices(v1, v2);
 							purgeList.add(v2);
 							v1.setToolTip(v1.toString() + ", " + v2.toString());
-							;
 						}
 					}
 				}
