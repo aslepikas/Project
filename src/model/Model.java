@@ -47,11 +47,6 @@ public class Model implements DirectedGraph<Vertex, Edge> {
 		return null;
 	}
 
-	public void addNewVertex(int x, int y) {
-		count++;
-		vertexList.add(new Vertex(count));
-	}
-
 	public void addNewEdge(Vertex v1, Vertex v2) {
 		Edge e = new Edge(v1, v2);
 		v1.addEdgeOut(e);
