@@ -14,7 +14,7 @@ import model.Model;
 import model.Vertex;
 import algorithms.Algorithms;
 import canvas.MyJUNGCanvas;
-import edu.uci.ics.jung.algorithms.layout.FRLayout;
+import edu.uci.ics.jung.algorithms.layout.KKLayout;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 
 public class MyMenuBar {
@@ -84,7 +84,7 @@ public class MyMenuBar {
 				Algorithms.copyActive(modelList, tabbedPane, modeMenu);
 				VisualizationViewer<Vertex, Edge> vv = modelList.get(
 						tabbedPane.getSelectedIndex()).getVisualizationViewer();
-				vv.setGraphLayout(new FRLayout<Vertex, Edge>(vv
+				vv.setGraphLayout(new KKLayout<Vertex, Edge>(vv
 						.getGraphLayout().getGraph()));
 
 				Algorithms.minimise(modelList
@@ -104,7 +104,7 @@ public class MyMenuBar {
 				Algorithms.copyActive(modelList, tabbedPane, modeMenu);
 				VisualizationViewer<Vertex, Edge> vv = modelList.get(
 						tabbedPane.getSelectedIndex()).getVisualizationViewer();
-				vv.setGraphLayout(new FRLayout<Vertex, Edge>(vv
+				vv.setGraphLayout(new KKLayout<Vertex, Edge>(vv
 						.getGraphLayout().getGraph()));
 				modelList.get(tabbedPane.getSelectedIndex())
 						.getVisualizationViewer().repaint();
@@ -113,18 +113,24 @@ public class MyMenuBar {
 			else if (e.getSource().equals(nfaToDfa)) {
 				Model dfa = Algorithms.nfaToDfa(modelList.get(
 						tabbedPane.getSelectedIndex()).getModel());
-				MyJUNGCanvas nCanvas = new MyJUNGCanvas(dfa);
-				nCanvas.setTitle(String
-						.format("copy of %s",
-								modelList.get(tabbedPane.getSelectedIndex())
-										.getTitle()));
-				nCanvas.initialise(modeMenu.getMode());
+				if (dfa != null) {
+					MyJUNGCanvas nCanvas = new MyJUNGCanvas(dfa);
+					nCanvas.setTitle(String.format("copy of %s",
+							modelList.get(tabbedPane.getSelectedIndex())
+									.getTitle()));
+					nCanvas.initialise(modeMenu.getMode());
 
-				modelList.add(nCanvas);
-				tabbedPane.add(nCanvas.getTitle(),
-						nCanvas.getVisualizationViewer());
-				tabbedPane.setSelectedIndex(tabbedPane.getTabCount() - 1);
-				nCanvas.getVisualizationViewer().repaint();
+					modelList.add(nCanvas);
+					tabbedPane.add(nCanvas.getTitle(),
+							nCanvas.getVisualizationViewer());
+					tabbedPane.setSelectedIndex(tabbedPane.getTabCount() - 1);
+					VisualizationViewer<Vertex, Edge> vv = modelList.get(
+							tabbedPane.getSelectedIndex())
+							.getVisualizationViewer();
+					vv.setGraphLayout(new KKLayout<Vertex, Edge>(vv
+							.getGraphLayout().getGraph()));
+					nCanvas.getVisualizationViewer().repaint();
+				}
 			}
 		}
 	}
