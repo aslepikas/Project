@@ -47,12 +47,6 @@ public class Model implements DirectedGraph<Vertex, Edge> {
 		return null;
 	}
 
-	public void addNewEdge(Vertex v1, Vertex v2) {
-		Edge e = new Edge(v1, v2);
-		v1.addEdgeOut(e);
-		v2.addEdgeIn(e);
-	}
-
 	public void setStartVertex(Vertex v) {
 		if (startVertex != null)
 			startVertex.unSetStart();
@@ -295,6 +289,9 @@ public class Model implements DirectedGraph<Vertex, Edge> {
 	@Override
 	public boolean addVertex(Vertex v) {
 		vertexList.add(v);
+		if (v.getNumber() > count) {
+			count = v.getNumber();
+		}
 		return true;
 	}
 
