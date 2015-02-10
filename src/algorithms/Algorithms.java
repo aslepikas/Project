@@ -144,7 +144,7 @@ public class Algorithms {
 							destinations[pos] = new ArrayList<Integer>();
 						}
 						destinations[pos].add(target.getNumber());
-						
+
 					}
 				}
 				referenceTable
@@ -156,7 +156,7 @@ public class Algorithms {
 			 * positions in alphabet each number in the arraylist is a node that
 			 * is lead to.
 			 */
-			
+
 			// -------------------- preliminary work done
 
 			HashMap<Long, ArrayList<Integer>[]> table = new HashMap<Long, ArrayList<Integer>[]>();
@@ -202,7 +202,7 @@ public class Algorithms {
 					for (ArrayList<Integer> i : tableItem) {
 						if (i != null) {
 							queue.add(i);
-							
+
 						}
 					}
 				}
@@ -250,6 +250,7 @@ public class Algorithms {
 							retModel.addEdge(e, nv, target);
 						} else {
 							Edge e = retModel.findEdge(nv, target);
+
 							ArrayList<Character> label = new ArrayList<Character>();
 							label.add(alphabet.get(j));
 							e.addLabels(label);
@@ -257,7 +258,6 @@ public class Algorithms {
 					}
 				}
 			}
-
 			return retModel;
 		}
 		return null;
