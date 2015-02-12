@@ -68,11 +68,11 @@ public class FileMenu extends JMenu {
 				canvasList.add(myCanvas);
 			} else if (e.getSource().equals(saveCurrent)) {
 				String fileName = tabbedPane.getTitleAt(tabbedPane.getSelectedIndex()) + ".txt";
-				FileOpener.writeModel(fileName, canvasList.get(tabbedPane.getSelectedIndex()).getModel());
+				FileOpener.saveModel(fileName, canvasList.get(tabbedPane.getSelectedIndex()).getModel());
 			} else if (e.getSource().equals(saveSession)) {
 				//TODO
 			} else if (e.getSource().equals(openFile)) {
-				Model myGraph = FileOpener.readFile("./examples/example.txt");
+				Model myGraph = FileOpener.readModel("./examples/example.txt");
 				if (myGraph != null) {
 					MyJUNGCanvas nCanvas = new MyJUNGCanvas(myGraph);
 					nCanvas.setTitle("example");
