@@ -106,7 +106,7 @@ public class FileOpener {
 		return null;
 	}
 	
-	private static ArrayList<Model> openWorkspace() {
+	public static ArrayList<Model> openWorkspace() {
 		
 		
 		return null;

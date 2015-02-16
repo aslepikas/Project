@@ -13,7 +13,7 @@ import model.Vertex;
 import canvas.MyJUNGCanvas;
 import edu.uci.ics.jung.algorithms.layout.CircleLayout;
 import edu.uci.ics.jung.algorithms.layout.FRLayout;
-import edu.uci.ics.jung.algorithms.layout.ISOMLayout;
+//import edu.uci.ics.jung.algorithms.layout.ISOMLayout;
 import edu.uci.ics.jung.algorithms.layout.KKLayout;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 
@@ -23,7 +23,7 @@ public class LayoutMenu extends JMenu {
 	ArrayList<MyJUNGCanvas> canvasList;
 	JTabbedPane tabbedPane;
 	JMenuItem circle;
-	JMenuItem isom;
+	// JMenuItem isom;
 	JMenuItem kk;
 	JMenuItem fr;
 
@@ -37,11 +37,10 @@ public class LayoutMenu extends JMenu {
 		circle = new JMenuItem("Circle");
 		circle.addActionListener(new LayoutItemListener());
 		this.add(circle);
-
-		isom = new JMenuItem("Self-organising");
-		isom.addActionListener(new LayoutItemListener());
-		this.add(isom);
-
+		/*
+		 * isom = new JMenuItem("Self-organising"); isom.addActionListener(new
+		 * LayoutItemListener()); this.add(isom);
+		 */
 		kk = new JMenuItem("Kamada-Kawai");
 		kk.addActionListener(new LayoutItemListener());
 		this.add(kk);
@@ -61,12 +60,13 @@ public class LayoutMenu extends JMenu {
 				vv.setGraphLayout(new CircleLayout<Vertex, Edge>(vv
 						.getGraphLayout().getGraph()));
 				vv.repaint();
-			} else if (e.getSource().equals(isom)) {
-				VisualizationViewer<Vertex, Edge> vv = canvasList.get(
-						tabbedPane.getSelectedIndex()).getVisualizationViewer();
-				vv.setGraphLayout(new ISOMLayout<Vertex, Edge>(vv
-						.getGraphLayout().getGraph()));
-				vv.repaint();
+				/*
+				 * } else if (e.getSource().equals(isom)) {
+				 * VisualizationViewer<Vertex, Edge> vv = canvasList.get(
+				 * tabbedPane.getSelectedIndex()).getVisualizationViewer ();
+				 * vv.setGraphLayout(new ISOMLayout<Vertex, Edge>(vv
+				 * .getGraphLayout().getGraph())); vv.repaint();
+				 */
 			} else if (e.getSource().equals(kk)) {
 				VisualizationViewer<Vertex, Edge> vv = canvasList.get(
 						tabbedPane.getSelectedIndex()).getVisualizationViewer();

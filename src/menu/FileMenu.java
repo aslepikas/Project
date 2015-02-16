@@ -19,13 +19,13 @@ import file.FileOpener;
 @SuppressWarnings("serial")
 public class FileMenu extends JMenu {
 
-	ArrayList<MyJUNGCanvas> canvasList;
-	JTabbedPane tabbedPane;
-	JMenuItem addTab;
-	JMenuItem saveCurrent;
-	JMenuItem saveSession;
-	JMenuItem openFile;
-	ModeMenu modeMenu;
+	private ArrayList<MyJUNGCanvas> canvasList;
+	private JTabbedPane tabbedPane;
+	private JMenuItem addTab;
+	private JMenuItem saveCurrent;
+	private JMenuItem saveSession;
+	private JMenuItem openFile;
+	private ModeMenu modeMenu;
 
 	public FileMenu(String title, ArrayList<MyJUNGCanvas> canvasList,
 			JTabbedPane tabbedPane, ModeMenu modeMenu) {
