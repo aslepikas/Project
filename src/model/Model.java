@@ -27,10 +27,12 @@ public class Model implements DirectedGraph<Vertex, Edge> {
 	private ArrayList<Vertex> vertexList;
 	private Vertex startVertex;
 	private int count = 0;
-
+	private String tag;
+	
 	public Model() {
 		vertexList = new ArrayList<Vertex>();
 		startVertex = null;
+		tag = TagSetter.getTag();
 	}
 
 	public ArrayList<Vertex> getNodeList() {
@@ -153,7 +155,7 @@ public class Model implements DirectedGraph<Vertex, Edge> {
 
 		return m;
 	}
-	
+
 	@Override
 	public boolean addEdge(Edge e, Vertex v1, Vertex v2) {
 		v1.addEdgeOut(e);
@@ -292,6 +294,7 @@ public class Model implements DirectedGraph<Vertex, Edge> {
 		if (v.getNumber() > count) {
 			count = v.getNumber();
 		}
+		v.setTag(tag);
 		return true;
 	}
 
@@ -478,5 +481,37 @@ public class Model implements DirectedGraph<Vertex, Edge> {
 		removeAllEdges(v);
 		return vertexList.remove(v);
 	}
-	
+
+	private static class TagSetter {
+
+		private static boolean initialised = false;
+		private static int count;
+		private static int len;
+		private static char start;
+
+		private static void initialise() {
+			initialised = true;
+			count = 0;
+			len = 10;
+			start = 'q';
+		}
+
+		public static String getTag() {
+			if (!initialised) {
+				initialise();
+			}
+			String retString = "";
+			int temp = count;
+			while (temp/len > 0) {
+				temp = temp/len;
+				retString = (char)(temp - 1 + (int)start) + retString;
+			}
+			retString = retString + (char)(count%len + (int)start);
+			
+			count++;
+			System.out.println(retString);//TODO
+			return retString;
+		}
+	}
+
 }
