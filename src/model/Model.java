@@ -28,7 +28,7 @@ public class Model implements DirectedGraph<Vertex, Edge> {
 	private Vertex startVertex;
 	private int count = 0;
 	private String tag;
-	
+
 	public Model() {
 		vertexList = new ArrayList<Vertex>();
 		startVertex = null;
@@ -478,8 +478,18 @@ public class Model implements DirectedGraph<Vertex, Edge> {
 
 	@Override
 	public boolean removeVertex(Vertex v) {
-		removeAllEdges(v);
-		return vertexList.remove(v);
+		if (vertexList.remove(v)) {
+			removeAllEdges(v);
+			int highest = 0;
+			for (Vertex u : vertexList) {
+				if (u.getNumber()>highest) {
+					highest = u.getNumber();
+				}
+			}
+			count = highest;
+			return true;
+		}
+		return false;
 	}
 
 	private static class TagSetter {
@@ -502,14 +512,13 @@ public class Model implements DirectedGraph<Vertex, Edge> {
 			}
 			String retString = "";
 			int temp = count;
-			while (temp/len > 0) {
-				temp = temp/len;
-				retString = (char)(temp - 1 + (int)start) + retString;
+			while (temp / len > 0) {
+				temp = temp / len;
+				retString = (char) (temp - 1 + (int) start) + retString;
 			}
-			retString = retString + (char)(count%len + (int)start);
-			
+			retString = retString + (char) (count % len + (int) start);
+
 			count++;
-			System.out.println(retString);//TODO
 			return retString;
 		}
 	}

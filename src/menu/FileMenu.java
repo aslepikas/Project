@@ -2,6 +2,7 @@ package menu;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.ArrayList;
 
 import javax.swing.JMenu;
@@ -12,7 +13,7 @@ import model.Edge;
 import model.Model;
 import model.Vertex;
 import canvas.MyJUNGCanvas;
-import edu.uci.ics.jung.algorithms.layout.ISOMLayout;
+import edu.uci.ics.jung.algorithms.layout.KKLayout;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import file.FileOpener;
 
@@ -44,11 +45,11 @@ public class FileMenu extends JMenu {
 		saveCurrent = new JMenuItem("Save model");
 		saveCurrent.addActionListener(listener);
 		this.add(saveCurrent);
-	
+
 		saveSession = new JMenuItem("Save workspace");
 		saveSession.addActionListener(listener);
 		this.add(saveSession);
-		
+
 		openFile = new JMenuItem("Open");
 		openFile.addActionListener(listener);
 		this.add(openFile);
@@ -67,26 +68,86 @@ public class FileMenu extends JMenu {
 						myCanvas.getVisualizationViewer());
 				canvasList.add(myCanvas);
 			} else if (e.getSource().equals(saveCurrent)) {
-				String fileName = tabbedPane.getTitleAt(tabbedPane.getSelectedIndex()) + ".txt";
-				FileOpener.saveModel(fileName, canvasList.get(tabbedPane.getSelectedIndex()).getModel());
+				File file = FileOpener.fileSaveChoose();
+				if (file != null) {
+					String fileName = file.getPath();
+					if (fileName.length() > 4) {
+						if (!fileName.substring(fileName.length() - 4,
+								fileName.length()).equals(".txt")) {
+							fileName = fileName + ".txt";
+						}
+					} else {
+						fileName = fileName + ".txt";
+					}
+					FileOpener.saveModel(fileName,
+							canvasList.get(tabbedPane.getSelectedIndex())
+									.getModel());
+				}
 			} else if (e.getSource().equals(saveSession)) {
-				//TODO
+				File file = FileOpener.fileSaveChoose();
+				if (file != null) {
+					String fileName = file.getPath();
+					if (fileName.length() > 4) {
+						if (!fileName.substring(fileName.length() - 4,
+								fileName.length()).equals(".txt")) {
+							fileName = fileName + ".txt";
+						}
+					} else {
+						fileName = fileName + ".txt";
+					}
+					FileOpener.saveWorkspace(fileName, canvasList);
+				}
 			} else if (e.getSource().equals(openFile)) {
-				Model myGraph = FileOpener.readModel("./examples/example.txt");
-				if (myGraph != null) {
-					MyJUNGCanvas nCanvas = new MyJUNGCanvas(myGraph);
-					nCanvas.setTitle("example");
-					nCanvas.initialise(modeMenu.getMode());
+				File file = FileOpener.fileOpenChoose();
+				int mode = FileOpener.isModelOrWorkspace(file);
+				if (mode == 1) {
+					Model myGraph = FileOpener.readModel(file);
+					if (myGraph != null) {
+						MyJUNGCanvas nCanvas = new MyJUNGCanvas(myGraph);
+						nCanvas.setTitle("example");
+						nCanvas.initialise(modeMenu.getMode());
 
-					canvasList.add(nCanvas);
-					tabbedPane.add(nCanvas.getTitle(), nCanvas.getVisualizationViewer());
-					tabbedPane.setSelectedIndex(tabbedPane.getTabCount() - 1);
-					nCanvas.getVisualizationViewer().repaint();
-					
-					VisualizationViewer<Vertex, Edge> vv = nCanvas.getVisualizationViewer();
-					vv.setGraphLayout(new ISOMLayout<Vertex, Edge>(vv
-							.getGraphLayout().getGraph()));
-					vv.repaint();
+						canvasList.add(nCanvas);
+						tabbedPane.add(nCanvas.getTitle(),
+								nCanvas.getVisualizationViewer());
+						tabbedPane
+								.setSelectedIndex(tabbedPane.getTabCount() - 1);
+						nCanvas.getVisualizationViewer().repaint();
+
+						VisualizationViewer<Vertex, Edge> vv = nCanvas
+								.getVisualizationViewer();
+						vv.setGraphLayout(new KKLayout<Vertex, Edge>(vv
+								.getGraphLayout().getGraph()));
+						vv.repaint();
+					}
+				} else if (mode == 2) {
+					ArrayList<Model> retList = new ArrayList<Model>();
+					ArrayList<String> titleList = new ArrayList<String>();
+					if (FileOpener.readWorkspace(file, retList, titleList)) {
+						for (int i = 0; i < retList.size(); i++) {
+							Model myGraph = retList.get(i);
+							if (myGraph != null) {
+								MyJUNGCanvas nCanvas = new MyJUNGCanvas(myGraph);
+								nCanvas.setTitle(titleList.get(i));
+								System.out.println(titleList.get(i));
+								nCanvas.initialise(modeMenu.getMode());
+
+								canvasList.add(nCanvas);
+								tabbedPane.add(nCanvas.getTitle(),
+										nCanvas.getVisualizationViewer());
+								tabbedPane
+										.setSelectedIndex(tabbedPane.getTabCount() - 1);
+								nCanvas.getVisualizationViewer().repaint();
+
+								VisualizationViewer<Vertex, Edge> vv = nCanvas
+										.getVisualizationViewer();
+								vv.setGraphLayout(new KKLayout<Vertex, Edge>(vv
+										.getGraphLayout().getGraph()));
+								vv.repaint();
+							}
+						}
+					}
+				} else {
 				}
 			}
 		}

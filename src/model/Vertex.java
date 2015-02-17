@@ -103,7 +103,7 @@ public class Vertex {
 		edgesOut.remove(e);
 	}
 
-	public void setToolTip(String toolTip) {
+	public void setTooltip(String toolTip) {
 		this.toolTip = toolTip;
 	}
 

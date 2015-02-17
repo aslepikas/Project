@@ -26,10 +26,11 @@ public class RefactorMenu extends JMenu {
 	private ModeMenu modeMenu;
 
 	public RefactorMenu(String title, ArrayList<MyJUNGCanvas> modelList,
-			JTabbedPane tabbedPane) {
+			JTabbedPane tabbedPane, ModeMenu modeMenu) {
 
 		super(title);
 		
+		this.modeMenu = modeMenu;
 		add(new LayoutMenu("Layout", modelList, tabbedPane));
 
 		AlgorithmListener refactorListener = new AlgorithmListener(modelList,

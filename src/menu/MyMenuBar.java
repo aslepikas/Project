@@ -24,7 +24,7 @@ public class MyMenuBar {
 
 		fileMenu = new FileMenu("File", modelList, tabbedPane, modeMenu);
 
-		refactorMenu = new RefactorMenu("Refactor", modelList, tabbedPane);
+		refactorMenu = new RefactorMenu("Refactor", modelList, tabbedPane, modeMenu);
 
 		menuBar.add(fileMenu);
 		menuBar.add(refactorMenu);

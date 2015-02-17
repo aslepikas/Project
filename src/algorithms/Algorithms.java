@@ -231,7 +231,7 @@ public class Algorithms {
 					}
 					num = num / 2;
 				}
-				nv.setToolTip(tooltip);
+				nv.setTooltip(tooltip);
 			}
 			retModel.setStartVertex(retModel.getVertices().get(0));
 			for (int i = 0; i < keyList.size(); i++) {
@@ -351,7 +351,7 @@ public class Algorithms {
 							merged[j] = true;
 							model.mergeVertices(v1, v2);
 							purgeList.add(v2);
-							v1.setToolTip(v1.toString() + ", " + v2.toString());
+							v1.setTooltip(v1.toString() + ", " + v2.toString());
 						}
 					}
 				}
