@@ -1,26 +1,15 @@
 package menu;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JTabbedPane;
 
-import model.Edge;
-import model.Vertex;
-import algorithms.Algorithms;
 import canvas.MyJUNGCanvas;
-import edu.uci.ics.jung.algorithms.layout.FRLayout;
-import edu.uci.ics.jung.visualization.VisualizationViewer;
 
 public class MyMenuBar {
 
-	private static JMenuItem minimise;
-	private static JMenuItem removeUnreachable;
-	private static JMenuItem duplicate;
 	private static JMenuBar menuBar;
 	private static ModeMenu modeMenu;
 	private static JMenu fileMenu;
@@ -35,75 +24,13 @@ public class MyMenuBar {
 
 		fileMenu = new FileMenu("File", modelList, tabbedPane, modeMenu);
 
-		refactorMenu = new JMenu("Refactor");
-		refactorMenu.add(new LayoutMenu("Layout", modelList, tabbedPane));
-
-		minimise = new JMenuItem("Minimise");
-		refactorMenu.add(minimise);
-		minimise.addActionListener(new AlgorithmListener(modelList, tabbedPane));
-
-		removeUnreachable = new JMenuItem("Remove unreachable");
-		refactorMenu.add(removeUnreachable);
-		removeUnreachable.addActionListener(new AlgorithmListener(modelList,
-				tabbedPane));
-
-		duplicate = new JMenuItem("Duplicate");
-		refactorMenu.add(duplicate);
-		duplicate
-				.addActionListener(new AlgorithmListener(modelList, tabbedPane));
+		refactorMenu = new RefactorMenu("Refactor", modelList, tabbedPane, modeMenu);
 
 		menuBar.add(fileMenu);
 		menuBar.add(refactorMenu);
 		menuBar.add(modeMenu);
 
 		return menuBar;
-	}
-
-	private static class AlgorithmListener implements ActionListener {
-
-		ArrayList<MyJUNGCanvas> modelList;
-		JTabbedPane tabbedPane;
-
-		public AlgorithmListener(ArrayList<MyJUNGCanvas> modelList,
-				JTabbedPane tabbedPane) {
-			super();
-			this.modelList = modelList;
-			this.tabbedPane = tabbedPane;
-		}
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			if (e.getSource().equals(minimise)) {
-				Algorithms.copyActive(modelList, tabbedPane, modeMenu);
-				VisualizationViewer<Vertex, Edge> vv = modelList.get(
-						tabbedPane.getSelectedIndex()).getVisualizationViewer();
-				vv.setGraphLayout(new FRLayout<Vertex, Edge>(vv
-						.getGraphLayout().getGraph()));
-
-				Algorithms.minimise(modelList
-						.get(tabbedPane.getSelectedIndex()).getModel());
-				modelList.get(tabbedPane.getSelectedIndex())
-						.getVisualizationViewer().repaint();
-			}
-
-			else if (e.getSource().equals(removeUnreachable)) {
-				Algorithms.removeUnreachable(modelList.get(
-						tabbedPane.getSelectedIndex()).getModel());
-				modelList.get(tabbedPane.getSelectedIndex())
-						.getVisualizationViewer().repaint();
-			}
-
-			else if (e.getSource().equals(duplicate)) {
-				Algorithms.copyActive(modelList, tabbedPane, modeMenu);
-				VisualizationViewer<Vertex, Edge> vv = modelList.get(
-						tabbedPane.getSelectedIndex()).getVisualizationViewer();
-				vv.setGraphLayout(new FRLayout<Vertex, Edge>(vv
-						.getGraphLayout().getGraph()));
-				modelList.get(tabbedPane.getSelectedIndex())
-						.getVisualizationViewer().repaint();
-			}
-		}
-
 	}
 
 }

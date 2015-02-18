@@ -68,7 +68,7 @@ public class EdgeEditMenu extends JDialog implements ActionListener,
 				JOptionPane.OK_CANCEL_OPTION, null, options, options[0]);
 		setContentPane(optionPane);
 
-		this.setMinimumSize(new Dimension(200, textFields.size() * 19 + 100));
+		this.setMinimumSize(new Dimension(200, textFields.size() * 20 + 120));
 		// 19*#labels + 2*button height + c
 
 		optionPane.addPropertyChangeListener(this);
@@ -151,7 +151,7 @@ public class EdgeEditMenu extends JDialog implements ActionListener,
 			labelPanel.add(textField);
 			labelPanel.updateUI();
 			this.setMinimumSize(new Dimension(this.getMinimumSize().width, this
-					.getMinimumSize().height + 19));
+					.getMinimumSize().height + 20));
 			this.repaint();
 		}
 	}

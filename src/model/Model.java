@@ -27,10 +27,12 @@ public class Model implements DirectedGraph<Vertex, Edge> {
 	private ArrayList<Vertex> vertexList;
 	private Vertex startVertex;
 	private int count = 0;
+	private String tag;
 
 	public Model() {
 		vertexList = new ArrayList<Vertex>();
 		startVertex = null;
+		tag = TagSetter.getTag();
 	}
 
 	public ArrayList<Vertex> getNodeList() {
@@ -45,17 +47,6 @@ public class Model implements DirectedGraph<Vertex, Edge> {
 		}
 
 		return null;
-	}
-
-	public void addNewVertex(int x, int y) {
-		count++;
-		vertexList.add(new Vertex(count));
-	}
-
-	public void addNewEdge(Vertex v1, Vertex v2) {
-		Edge e = new Edge(v1, v2);
-		v1.addEdgeOut(e);
-		v2.addEdgeIn(e);
 	}
 
 	public void setStartVertex(Vertex v) {
@@ -164,7 +155,7 @@ public class Model implements DirectedGraph<Vertex, Edge> {
 
 		return m;
 	}
-	
+
 	@Override
 	public boolean addEdge(Edge e, Vertex v1, Vertex v2) {
 		v1.addEdgeOut(e);
@@ -300,6 +291,10 @@ public class Model implements DirectedGraph<Vertex, Edge> {
 	@Override
 	public boolean addVertex(Vertex v) {
 		vertexList.add(v);
+		if (v.getNumber() > count) {
+			count = v.getNumber();
+		}
+		v.setTag(tag);
 		return true;
 	}
 
@@ -331,8 +326,8 @@ public class Model implements DirectedGraph<Vertex, Edge> {
 
 	@Override
 	public Edge findEdge(Vertex v1, Vertex v2) {
-		for (Edge e : v1.getEdgesIn()) {
-			if (e.getStartV().equals(v2)) {
+		for (Edge e : v1.getEdgesOut()) {
+			if (e.getTargetV().equals(v2)) {
 				return e;
 			}
 		}
@@ -342,8 +337,8 @@ public class Model implements DirectedGraph<Vertex, Edge> {
 	@Override
 	public Collection<Edge> findEdgeSet(Vertex v1, Vertex v2) {
 		ArrayList<Edge> retSet = new ArrayList<Edge>();
-		for (Edge e : v1.getEdgesIn()) {
-			if (e.getStartV().equals(v2)) {
+		for (Edge e : v1.getEdgesOut()) {
+			if (e.getTargetV().equals(v2)) {
 				retSet.add(e);
 			}
 		}
@@ -483,8 +478,49 @@ public class Model implements DirectedGraph<Vertex, Edge> {
 
 	@Override
 	public boolean removeVertex(Vertex v) {
-		removeAllEdges(v);
-		return vertexList.remove(v);
+		if (vertexList.remove(v)) {
+			removeAllEdges(v);
+			int highest = 0;
+			for (Vertex u : vertexList) {
+				if (u.getNumber()>highest) {
+					highest = u.getNumber();
+				}
+			}
+			count = highest;
+			return true;
+		}
+		return false;
 	}
-	
+
+	private static class TagSetter {
+
+		private static boolean initialised = false;
+		private static int count;
+		private static int len;
+		private static char start;
+
+		private static void initialise() {
+			initialised = true;
+			count = 0;
+			len = 10;
+			start = 'q';
+		}
+
+		public static String getTag() {
+			if (!initialised) {
+				initialise();
+			}
+			String retString = "";
+			int temp = count;
+			while (temp / len > 0) {
+				temp = temp / len;
+				retString = (char) (temp - 1 + (int) start) + retString;
+			}
+			retString = retString + (char) (count % len + (int) start);
+
+			count++;
+			return retString;
+		}
+	}
+
 }

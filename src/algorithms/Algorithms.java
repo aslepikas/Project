@@ -4,11 +4,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.concurrent.LinkedBlockingQueue;
 
 import javax.swing.JTabbedPane;
-
-import com.sun.corba.se.impl.oa.poa.ActiveObjectMap.Key;
 
 import canvas.MyJUNGCanvas;
 import menu.ModeMenu;
@@ -127,7 +124,7 @@ public class Algorithms {
 
 			// construct vertex to position table here
 			int[] vertexPos = new int[vertices.get(vertices.size() - 1)
-					.getNumber()];
+					.getNumber() + 1];
 			for (int i = 0; i < vertices.size(); i++) {
 				vertexPos[vertices.get(i).getNumber()] = i;
 			}
@@ -146,15 +143,23 @@ public class Algorithms {
 						if (destinations[pos] == null) {
 							destinations[pos] = new ArrayList<Integer>();
 						}
-						destinations[pos].add(vertexPos[target.getNumber()]);
+						destinations[pos].add(target.getNumber());
+
 					}
 				}
 				referenceTable
 						.put(Integer.valueOf(v.getNumber()), destinations);
 			}
+			/*
+			 * reference table works as such: key is the number of the vertex it
+			 * holds an array, where each position corresponds to letter
+			 * positions in alphabet each number in the arraylist is a node that
+			 * is lead to.
+			 */
+
 			// -------------------- preliminary work done
 
-			HashMap<Long, ArrayList[]> table = new HashMap<Long, ArrayList[]>();
+			HashMap<Long, ArrayList<Integer>[]> table = new HashMap<Long, ArrayList<Integer>[]>();
 
 			ArrayList<Integer> queueItem = new ArrayList<Integer>();
 			queueItem.add(start.getNumber());
@@ -162,21 +167,21 @@ public class Algorithms {
 			LinkedList<ArrayList<Integer>> queue = new LinkedList<ArrayList<Integer>>();
 			queue.add(queueItem);
 
+			ArrayList<Long> keyList = new ArrayList<Long>();
+
 			while (!queue.isEmpty()) {
 				queueItem = queue.poll();
 
-				long key = 0;
-				for (Integer v : queueItem) {
-					key += Math.round(Math.pow(2, vertexPos[v]));
-				}
-				if (!table.containsKey(key)) {
+				long key = getKey(queueItem, vertexPos);
+				if (!keyList.contains(new Long(key))) {
+					keyList.add(key);
 					@SuppressWarnings("unchecked")
 					ArrayList<Integer>[] tableItem = new ArrayList[alphabet
 							.size()];
 
-					for (Integer v : queueItem) {
+					for (Integer vertex : queueItem) {
 						ArrayList<Integer>[] transitions = referenceTable
-								.get(v);
+								.get(vertex);
 						for (int i = 0; i < transitions.length; i++) {
 							if (transitions[i] != null) {
 								if (tableItem[i] == null) {
@@ -195,21 +200,75 @@ public class Algorithms {
 					table.put(key, tableItem);
 
 					for (ArrayList<Integer> i : tableItem) {
-						if (i != null)
+						if (i != null) {
 							queue.add(i);
+
+						}
 					}
 				}
 
 			}
 
-			//constructing model
+			// constructing model
 			Model retModel = new Model();
-			
-			
-			
+
+			for (Long key : keyList) {
+				Vertex nv = retModel.vertexFactory.create();
+				retModel.addVertex(nv);
+				String tooltip = null;
+				long num = key;
+				for (int i = 0; i < vertices.size(); i++) {
+					if (num % 2 == 1) {
+						Vertex v = vertices.get(i);
+						if (v.isFinal()) {
+							nv.setFinal();
+						}
+						if (tooltip == null) {
+							tooltip = v.toString();
+						} else {
+							tooltip = tooltip + " " + v.toString();
+						}
+					}
+					num = num / 2;
+				}
+				nv.setTooltip(tooltip);
+			}
+			retModel.setStartVertex(retModel.getVertices().get(0));
+			for (int i = 0; i < keyList.size(); i++) {
+				Vertex nv = retModel.getVertices().get(i);
+				ArrayList<Integer>[] tableItem = table.get(keyList.get(i));
+				for (int j = 0; j < tableItem.length; j++) {
+					if (tableItem[j] != null) {
+						long key = getKey(tableItem[j], vertexPos);
+						Vertex target = retModel.getVertices().get(
+								keyList.indexOf(new Long(key)));
+						if (!retModel.isPredecessor(nv, target)) {
+							Edge e = new Edge(nv, target);
+							ArrayList<Character> label = new ArrayList<Character>();
+							label.add(alphabet.get(j));
+							e.addLabels(label);
+							retModel.addEdge(e, nv, target);
+						} else {
+							Edge e = retModel.findEdge(nv, target);
+
+							ArrayList<Character> label = new ArrayList<Character>();
+							label.add(alphabet.get(j));
+							e.addLabels(label);
+						}
+					}
+				}
+			}
 			return retModel;
 		}
 		return null;
+	}
+
+	private static long getKey(ArrayList<Integer> items, int[] vertexPos) {
+		long key = 0;
+		for (Integer v : items) {
+			key += Math.round(Math.pow(2, vertexPos[v]));
+		}
+		return key;
 	}
 
 	/**
@@ -292,8 +351,7 @@ public class Algorithms {
 							merged[j] = true;
 							model.mergeVertices(v1, v2);
 							purgeList.add(v2);
-							v1.setToolTip(v1.toString() + ", " + v2.toString());
-							;
+							v1.setTooltip(v1.toString() + ", " + v2.toString());
 						}
 					}
 				}

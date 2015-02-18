@@ -10,6 +10,7 @@ public class Vertex {
 	private ArrayList<Edge> edgesIn;
 	private ArrayList<Edge> edgesOut;
 	private String toolTip;
+	private String tag;
 
 	public Vertex(int n) {
 		number = n;
@@ -19,6 +20,14 @@ public class Vertex {
 		endState = false;
 		startState = false;
 		toolTip = "";
+	}
+	
+	public void setTag(String tag) {
+		this.tag = tag;
+	}
+	
+	public String getTag() {
+		return tag;
 	}
 
 	/**
@@ -94,7 +103,7 @@ public class Vertex {
 		edgesOut.remove(e);
 	}
 
-	public void setToolTip(String toolTip) {
+	public void setTooltip(String toolTip) {
 		this.toolTip = toolTip;
 	}
 
@@ -107,7 +116,7 @@ public class Vertex {
 	}
 
 	public String toString() {
-		return String.format("q%d", number);
+		return String.format("%s%d", tag, number);
 	}
 
 	public void clear() {
