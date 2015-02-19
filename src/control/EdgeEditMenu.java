@@ -15,6 +15,9 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.PlainDocument;
+import javax.swing.text.AttributeSet;
 
 import model.Edge;
 
@@ -45,7 +48,18 @@ public class EdgeEditMenu extends JDialog implements ActionListener,
 		for (Character i : labels) {
 			textFields.add(new JTextField(String.valueOf(i)));
 		}
-		textFields.add(new JTextField());
+		JTextField textField = new JTextField();
+		final int limit = 1;
+		textField.setDocument(new PlainDocument() {
+			@Override
+			public void insertString(int offs, String str, AttributeSet a)
+					throws BadLocationException {
+				if (getLength() + str.length() <= limit) {
+					super.insertString(offs, str, a);
+				}
+			}
+		});
+		textFields.add(textField);
 
 		changePanel = new JPanel();
 		labelPanel = new JPanel();
@@ -72,7 +86,7 @@ public class EdgeEditMenu extends JDialog implements ActionListener,
 		// 19*#labels + 2*button height + c
 
 		optionPane.addPropertyChangeListener(this);
-		
+
 		this.pack();
 		this.setLocationRelativeTo(root);
 	}
@@ -146,7 +160,17 @@ public class EdgeEditMenu extends JDialog implements ActionListener,
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource().equals(moreButton)) {
 			labelPanelLayout.setRows(labelPanelLayout.getRows() + 1);
-			JTextField textField = new JTextField();
+			JTextField textField = new JTextField("");
+			final int limit = 1;
+			textField.setDocument(new PlainDocument() {
+				@Override
+				public void insertString(int offs, String str, AttributeSet a)
+						throws BadLocationException {
+					if (getLength() + str.length() <= limit) {
+						super.insertString(offs, str, a);
+					}
+				}
+			});
 			textFields.add(textField);
 			labelPanel.add(textField);
 			labelPanel.updateUI();
