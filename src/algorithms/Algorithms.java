@@ -63,6 +63,37 @@ public class Algorithms {
 			}
 		}
 	}
+	
+	public static Model parseExpression(String exp) {
+		if (!isExpression(exp)) {
+			return null;
+		}
+		Model retModel = new Model();
+		
+		return retModel;
+	}
+
+	//TODO not done actually, might delete it after all
+	private static boolean isExpression(String exp) {
+		int bracketCount = 0;
+		for (int i = 0; i < exp.length(); i++) {
+			char c = exp.charAt(i);
+			if (c == '(') {
+				bracketCount++;
+			} else if (c == ')') {
+				bracketCount--;
+			} else if (c == '*' || c == '|' || c == ' ') {
+			} else if (!Character.isLetterOrDigit(c)) {
+				return false;
+			}
+			if (bracketCount < 0)
+				return false;
+		}
+		if (bracketCount!=0)
+			return false;
+
+		return true;
+	}
 
 	public static ArrayList<Character> getAlphabet(Model model) {
 
