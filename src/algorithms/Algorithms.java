@@ -7,7 +7,10 @@ import java.util.LinkedList;
 
 import javax.swing.JTabbedPane;
 
+import org.apache.commons.collections15.Factory;
+
 import canvas.MyJUNGCanvas;
+import edu.uci.ics.jung.graph.util.Pair;
 import menu.ModeMenu;
 import model.Edge;
 import model.Model;
@@ -63,17 +66,200 @@ public class Algorithms {
 			}
 		}
 	}
-	
+
 	public static Model parseExpression(String exp) {
-		if (!isExpression(exp)) {
+		if (exp == null || exp.length() == 0) {
 			return null;
 		}
+		if (!isExpression(exp))
+			return null;
 		Model retModel = new Model();
-		
+		Factory<Vertex> factory = retModel.vertexFactory;
+		Vertex start = factory.create();
+		retModel.addVertex(start);
+		retModel.setStartVertex(start);
+		Vertex end = factory.create();
+		retModel.addVertex(end);
+		end.setFinal();
+
+		ArrayList<Pair<Vertex>> pairArray = new ArrayList<Pair<Vertex>>();
+
+		for (int i = 0; i < exp.length(); i++) {
+			char c = exp.charAt(i);
+			if (Character.isLetterOrDigit(c)) {
+				pairArray.add(new Pair<Vertex>(factory.create(), factory
+						.create()));
+			} else if (c == '(') {
+				pairArray.add(new Pair<Vertex>(factory.create(), factory
+						.create()));
+			} else if (c == ')') {
+				pairArray.add(new Pair<Vertex>(null, null));
+			} else if (c == '*') {
+				Vertex v = factory.create();
+				pairArray.add(new Pair<Vertex>(v, v));
+			} else if (c == '|') {
+				pairArray.add(new Pair<Vertex>(factory.create(), factory
+						.create()));
+			}
+		}
+		mergeVertexList(pairArray, exp, new Pair<Vertex>(start, end));
 		return retModel;
 	}
 
-	//TODO not done actually, might delete it after all
+	private static boolean mergeVertexList(ArrayList<Pair<Vertex>> vertexList,
+			String exp, Pair<Vertex> outerPair) {
+		String tracker = exp;
+
+		// gets rid of brackets;
+		int end = exp.indexOf(')');
+		while (end != -1) {
+			boolean found = false;
+			for (int start = end; start >= 0 && !found; start--) {
+				if (exp.charAt(start) == '(') {
+
+					Pair<Vertex> p = vertexList.get(start);
+
+					ArrayList<Pair<Vertex>> innerList = new ArrayList<Pair<Vertex>>();
+					for (int i = start + 1; i < end; i++) {
+						innerList.add(vertexList.get(i));
+					}
+
+					mergeVertexList(innerList, exp.substring(start + 1, end), p);
+
+					for (int i = 1; i <= end - start; i++) {
+						vertexList.remove(start + 1);
+					}
+					exp = exp.substring(0, start) + "\\"
+							+ exp.substring(end + 1, exp.length());
+
+					found = true;
+				}
+			}
+			if (!found) {
+				return false;
+			}
+			end = exp.indexOf(')');
+		}
+		if (exp.indexOf('(') != -1) {
+			return false;
+		}
+		// ---end;
+
+		// gets rid of *
+		int pos = exp.lastIndexOf('*'); // TODO ask about this spot
+		while (pos != -1) {
+			char prev = exp.charAt(pos - 1);
+			if (prev == '\\' || Character.isLetterOrDigit(prev)) {
+
+				Pair<Vertex> outer = vertexList.get(pos);
+				Pair<Vertex> inner = vertexList.get(pos - 1);
+
+				Edge e = new Edge(outer.getFirst(), inner.getFirst());
+				outer.getFirst().addEdgeOut(e);
+				inner.getFirst().addEdgeIn(e);
+				e = new Edge(inner.getSecond(), outer.getFirst());
+				outer.getFirst().addEdgeIn(e);
+				inner.getSecond().addEdgeOut(e);
+
+				vertexList.remove(pos);
+				vertexList.set(pos - 1, outer);
+				exp = exp.substring(0, pos - 1) + '\\' + exp.substring(pos + 1);
+			} else {
+				return false;
+			}
+		}
+		// ---end
+
+		// gets rid of |
+		pos = exp.lastIndexOf('|');
+		while (pos != -1) {
+			char prev = exp.charAt(pos - 1);
+			char next = exp.charAt(pos + 1);
+			if ((prev == '\\' || Character.isLetterOrDigit(prev))
+					&& (next == '\\' || Character.isLetterOrDigit(next))) {
+
+				Pair<Vertex> outer = vertexList.get(pos);
+				Pair<Vertex> inner1 = vertexList.get(pos - 1);
+				Pair<Vertex> inner2 = vertexList.get(pos + 1);
+
+				Edge e = new Edge(outer.getFirst(), inner1.getFirst());
+				outer.getFirst().addEdgeOut(e);
+				inner1.getFirst().addEdgeIn(e);
+				e = new Edge(inner1.getSecond(), outer.getSecond());
+				outer.getSecond().addEdgeIn(e);
+				inner1.getSecond().addEdgeOut(e);
+
+				e = new Edge(outer.getFirst(), inner2.getFirst());
+				outer.getFirst().addEdgeOut(e);
+				inner2.getFirst().addEdgeIn(e);
+				e = new Edge(inner2.getSecond(), outer.getSecond());
+				outer.getSecond().addEdgeIn(e);
+				inner2.getSecond().addEdgeOut(e);
+
+				vertexList.remove(pos + 1);
+				vertexList.remove(pos - 1);
+
+				exp = exp.substring(0, pos - 1) + '\\' + exp.substring(pos + 2);
+			} else {
+				return false;
+			}
+		}
+		// ---end
+
+		// creates the labeled transitions
+		for (int i = 0; i < vertexList.size(); i++) {
+
+			char c = exp.charAt(i);
+			if (Character.isLetterOrDigit(c)) {
+				Pair<Vertex> p = vertexList.get(i);
+
+				ArrayList<Character> label = new ArrayList<Character>();
+				label.add(c);
+				Edge e = new Edge(p.getFirst(), p.getSecond(), label);
+				p.getFirst().addEdgeOut(e);
+				p.getSecond().addEdgeIn(e);
+
+				exp = exp.substring(0, i) + "\\" + exp.substring(i + 1);
+			}
+
+		}
+
+		// joins together two regular expressions
+		while (exp.length() > 1) {
+			int pos1 = vertexList.size() - 2;
+			int pos2 = vertexList.size() - 1;
+			if (exp.charAt(pos1) == '\\' && exp.charAt(pos2) == '\\') {
+
+				Pair<Vertex> first = vertexList.get(pos1);
+				Pair<Vertex> second = vertexList.get(pos2);
+
+				Edge e = new Edge(first.getSecond(), second.getFirst());
+				first.getSecond().addEdgeOut(e);
+				second.getFirst().addEdgeIn(e);
+
+				vertexList.remove(pos2);
+				exp = exp.substring(0, pos2);
+			} else {
+				return false;
+			}
+
+		}
+
+		System.out.println(vertexList.size() == exp.length()); // TODO
+
+		Pair<Vertex> inner = vertexList.get(0);
+		Edge e = new Edge(outerPair.getFirst(), inner.getFirst());
+		outerPair.getFirst().addEdgeOut(e);
+		inner.getFirst().addEdgeIn(e);
+		e = new Edge(inner.getSecond(), outerPair.getSecond());
+		inner.getSecond().addEdgeOut(e);
+		outerPair.getSecond().addEdgeIn(e);
+
+		return true;
+
+	}
+
+	// TODO not done actually, might delete it after all
 	private static boolean isExpression(String exp) {
 		int bracketCount = 0;
 		for (int i = 0; i < exp.length(); i++) {
@@ -89,7 +275,7 @@ public class Algorithms {
 			if (bracketCount < 0)
 				return false;
 		}
-		if (bracketCount!=0)
+		if (bracketCount != 0)
 			return false;
 
 		return true;
