@@ -335,7 +335,7 @@ public class Model implements DirectedGraph<Vertex, Edge> {
 	}
 
 	@Override
-	public Collection<Edge> findEdgeSet(Vertex v1, Vertex v2) {
+	public ArrayList<Edge> findEdgeSet(Vertex v1, Vertex v2) {
 		ArrayList<Edge> retSet = new ArrayList<Edge>();
 		for (Edge e : v1.getEdgesOut()) {
 			if (e.getTargetV().equals(v2)) {

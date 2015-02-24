@@ -102,14 +102,17 @@ public class Algorithms {
 						.create()));
 			}
 		}
-		mergeVertexList(pairArray, exp, new Pair<Vertex>(start, end));
+		parseExpression(pairArray, exp, new Pair<Vertex>(start, end));
+
+		removeEmptyTransitions(retModel);
+		
+		mergeEdges(retModel);
+
 		return retModel;
 	}
 
-	private static boolean mergeVertexList(ArrayList<Pair<Vertex>> vertexList,
+	private static boolean parseExpression(ArrayList<Pair<Vertex>> vertexList,
 			String exp, Pair<Vertex> outerPair) {
-		String tracker = exp;
-
 		// gets rid of brackets;
 		int end = exp.indexOf(')');
 		while (end != -1) {
@@ -118,14 +121,12 @@ public class Algorithms {
 				if (exp.charAt(start) == '(') {
 
 					Pair<Vertex> p = vertexList.get(start);
-
 					ArrayList<Pair<Vertex>> innerList = new ArrayList<Pair<Vertex>>();
 					for (int i = start + 1; i < end; i++) {
 						innerList.add(vertexList.get(i));
 					}
 
-					mergeVertexList(innerList, exp.substring(start + 1, end), p);
-
+					parseExpression(innerList, exp.substring(start + 1, end), p);
 					for (int i = 1; i <= end - start; i++) {
 						vertexList.remove(start + 1);
 					}
@@ -279,6 +280,64 @@ public class Algorithms {
 			return false;
 
 		return true;
+	}
+
+	private static void removeEmptyTransitions(Model model) {
+		ArrayList<Vertex> vertexList = model.getVertices();
+		int track = 0;
+		boolean again = false;
+		while (track < vertexList.size()) {
+			Vertex v = vertexList.get(track);
+			if (!v.isStarting() && v.getEdgesIn().size() == 0) {
+				vertexList.remove(track);
+			} else {
+				ArrayList<Edge> edges = v.getEdgesOut();
+				int i = 0;
+				while (i < edges.size()) {
+					Edge e = edges.get(i);
+					if (e.getLabels().size() == 0) {
+						Vertex target = e.getTargetV();
+						if (target.isFinal()) {
+							v.setFinal();
+						}
+						for (Edge tarE : target.getEdgesOut()) {
+							Vertex t = tarE.getTargetV();
+
+							Edge nEdge = new Edge(v, t);
+							nEdge.addLabels(tarE.getLabels());
+							edges.add(nEdge);
+							t.addEdgeIn(nEdge);
+						}
+						edges.remove(e);
+						again = true;
+					} else {
+						i++;
+					}
+				}
+				track++;
+			}
+		}
+		if (again) {
+			removeEmptyTransitions(model);
+		}
+	}
+	
+	private static void mergeEdges (Model model) {
+		ArrayList<Vertex> vertexList = model.getVertices();
+		
+		for (Vertex v1 : vertexList) {
+			for (Vertex v2 : vertexList) {
+				ArrayList<Edge> edgeSet = model.findEdgeSet(v1, v2);
+				if (edgeSet.size() > 1) {
+					Edge edge = edgeSet.get(0);
+					for (int i = 1; i < edgeSet.size(); i++) {
+						Edge edge2 = edgeSet.get(i);
+						edge.addLabels(edge2.getLabels());
+						model.removeEdge(edge2);
+					}
+				}
+			}
+		}
 	}
 
 	public static ArrayList<Character> getAlphabet(Model model) {
