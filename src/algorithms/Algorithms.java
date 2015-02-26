@@ -87,25 +87,39 @@ public class Algorithms {
 		for (int i = 0; i < exp.length(); i++) {
 			char c = exp.charAt(i);
 			if (Character.isLetterOrDigit(c)) {
-				pairArray.add(new Pair<Vertex>(factory.create(), factory
-						.create()));
+				Vertex v1 = factory.create();
+				Vertex v2 = factory.create();
+				retModel.addVertex(v1);
+				retModel.addVertex(v2);
+				pairArray.add(new Pair<Vertex>(v1, v2));
 			} else if (c == '(') {
-				pairArray.add(new Pair<Vertex>(factory.create(), factory
-						.create()));
+				Vertex v1 = factory.create();
+				Vertex v2 = factory.create();
+				retModel.addVertex(v1);
+				retModel.addVertex(v2);
+				pairArray.add(new Pair<Vertex>(v1, v2));
 			} else if (c == ')') {
-				pairArray.add(new Pair<Vertex>(null, null));
+				pairArray.add(new Pair<Vertex>(new Vertex(0), new Vertex(0)));
 			} else if (c == '*') {
 				Vertex v = factory.create();
+				retModel.addVertex(v);
 				pairArray.add(new Pair<Vertex>(v, v));
 			} else if (c == '|') {
-				pairArray.add(new Pair<Vertex>(factory.create(), factory
-						.create()));
+				Vertex v1 = factory.create();
+				Vertex v2 = factory.create();
+				retModel.addVertex(v1);
+				retModel.addVertex(v2);
+				pairArray.add(new Pair<Vertex>(v1, v2));
 			}
 		}
-		parseExpression(pairArray, exp, new Pair<Vertex>(start, end));
+		if (!parseExpression(pairArray, exp, new Pair<Vertex>(start, end))) {
+			return null;
+		}
 
 		removeEmptyTransitions(retModel);
 		
+		removeUnreachable(retModel);
+
 		mergeEdges(retModel);
 
 		return retModel;
@@ -144,10 +158,28 @@ public class Algorithms {
 		if (exp.indexOf('(') != -1) {
 			return false;
 		}
+
+		// creates the labeled transitions
+		for (int i = 0; i < vertexList.size(); i++) {
+
+			char c = exp.charAt(i);
+			if (Character.isLetterOrDigit(c)) {
+				Pair<Vertex> p = vertexList.get(i);
+
+				ArrayList<Character> label = new ArrayList<Character>();
+				label.add(c);
+				Edge e = new Edge(p.getFirst(), p.getSecond(), label);
+				p.getFirst().addEdgeOut(e);
+				p.getSecond().addEdgeIn(e);
+
+				exp = exp.substring(0, i) + "\\" + exp.substring(i + 1);
+			}
+
+		}
 		// ---end;
 
 		// gets rid of *
-		int pos = exp.lastIndexOf('*'); // TODO ask about this spot
+		int pos = exp.indexOf('*');
 		while (pos != -1) {
 			char prev = exp.charAt(pos - 1);
 			if (prev == '\\' || Character.isLetterOrDigit(prev)) {
@@ -162,12 +194,12 @@ public class Algorithms {
 				outer.getFirst().addEdgeIn(e);
 				inner.getSecond().addEdgeOut(e);
 
-				vertexList.remove(pos);
-				vertexList.set(pos - 1, outer);
+				vertexList.remove(pos-1);
 				exp = exp.substring(0, pos - 1) + '\\' + exp.substring(pos + 1);
 			} else {
-				return false;
+				//return false;
 			}
+			pos = exp.indexOf('*');
 		}
 		// ---end
 
@@ -204,26 +236,9 @@ public class Algorithms {
 			} else {
 				return false;
 			}
+			pos = exp.lastIndexOf('|');
 		}
 		// ---end
-
-		// creates the labeled transitions
-		for (int i = 0; i < vertexList.size(); i++) {
-
-			char c = exp.charAt(i);
-			if (Character.isLetterOrDigit(c)) {
-				Pair<Vertex> p = vertexList.get(i);
-
-				ArrayList<Character> label = new ArrayList<Character>();
-				label.add(c);
-				Edge e = new Edge(p.getFirst(), p.getSecond(), label);
-				p.getFirst().addEdgeOut(e);
-				p.getSecond().addEdgeIn(e);
-
-				exp = exp.substring(0, i) + "\\" + exp.substring(i + 1);
-			}
-
-		}
 
 		// joins together two regular expressions
 		while (exp.length() > 1) {
@@ -238,6 +253,9 @@ public class Algorithms {
 				first.getSecond().addEdgeOut(e);
 				second.getFirst().addEdgeIn(e);
 
+				vertexList.set(pos1,
+						new Pair<Vertex>(first.getFirst(), second.getSecond()));
+
 				vertexList.remove(pos2);
 				exp = exp.substring(0, pos2);
 			} else {
@@ -245,8 +263,6 @@ public class Algorithms {
 			}
 
 		}
-
-		System.out.println(vertexList.size() == exp.length()); // TODO
 
 		Pair<Vertex> inner = vertexList.get(0);
 		Edge e = new Edge(outerPair.getFirst(), inner.getFirst());
@@ -321,10 +337,10 @@ public class Algorithms {
 			removeEmptyTransitions(model);
 		}
 	}
-	
-	private static void mergeEdges (Model model) {
+
+	private static void mergeEdges(Model model) {
 		ArrayList<Vertex> vertexList = model.getVertices();
-		
+
 		for (Vertex v1 : vertexList) {
 			for (Vertex v2 : vertexList) {
 				ArrayList<Edge> edgeSet = model.findEdgeSet(v1, v2);

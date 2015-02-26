@@ -128,6 +128,7 @@ public class Model implements DirectedGraph<Vertex, Edge> {
 
 		for (Vertex v : vertexList) {
 			Vertex nv = new Vertex(v.getNumber());
+			nv.setTag(m.tag);
 			m.vertexList.add(nv);
 
 			if (v.isFinal()) {

@@ -14,6 +14,7 @@ public class MyMenuBar {
 	private static ModeMenu modeMenu;
 	private static JMenu fileMenu;
 	private static JMenu refactorMenu;
+	private static JMenu regexMenu;
 
 	public static JMenuBar create(ArrayList<MyJUNGCanvas> modelList,
 			JTabbedPane tabbedPane) {
@@ -26,9 +27,13 @@ public class MyMenuBar {
 
 		refactorMenu = new RefactorMenu("Refactor", modelList, tabbedPane, modeMenu);
 
+		regexMenu = new RegexMenu("Regex", modelList, tabbedPane, modeMenu);
+		
 		menuBar.add(fileMenu);
 		menuBar.add(refactorMenu);
 		menuBar.add(modeMenu);
+		menuBar.add(regexMenu);
+		
 
 		return menuBar;
 	}
