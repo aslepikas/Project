@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import javax.swing.border.LineBorder;
 
 import canvas.transform.ColourTransformer;
+import canvas.transform.MyVertexShapeTransformer;
 import canvas.transform.OutlineColourTransformer;
 import canvas.transform.VertexStrokeWidthTransformer;
 import control.MyGraphMouse;
@@ -15,6 +16,7 @@ import edu.uci.ics.jung.algorithms.layout.StaticLayout;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse.Mode;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
+import edu.uci.ics.jung.visualization.renderers.Renderer;
 import model.Edge;
 import model.Model;
 import model.Vertex;
@@ -47,6 +49,7 @@ public class MyJUNGCanvas {
 				new OutlineColourTransformer(vv.getRenderContext()));
 		vv.getRenderContext().setVertexStrokeTransformer(
 				new VertexStrokeWidthTransformer(vv.getRenderContext()));
+		vv.getRenderContext().setVertexShapeTransformer(new MyVertexShapeTransformer());
 		gm = new MyGraphMouse(vv.getRenderContext(), model.vertexFactory,
 				model.edgeFactory);
 		gm.setMode(mode);
@@ -54,7 +57,7 @@ public class MyJUNGCanvas {
 		vv.setBorder(new LineBorder(Color.BLACK, 1));
 		
 		vv.addMouseMotionListener(new TooltipDisplay());
-		
+		vv.getRenderer().getVertexLabelRenderer().setPosition(Renderer.VertexLabel.Position.CNTR);
 		return vv;
 	}
 
