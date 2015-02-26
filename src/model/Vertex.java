@@ -36,6 +36,10 @@ public class Vertex {
 	public int getNumber() {
 		return number;
 	}
+	
+	public void setnumber(int number) {
+		this.number = number;
+	}
 
 	/**
 	 * Sets the node to be final

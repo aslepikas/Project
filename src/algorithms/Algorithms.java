@@ -67,10 +67,17 @@ public class Algorithms {
 		}
 	}
 
-	public static Model parseExpression(String exp) {
-		if (exp == null || exp.length() == 0) {
+	/**
+	 * @return a new Model structure constructed from the given expression.
+	 *         Returns null if the expression is faulty (contains not accepted
+	 *         symbols, expression == null, etc.
+	 */
+	public static Model parseExpression(String expression) {
+		if (expression == null) {
 			return null;
 		}
+		String exp = expression;
+		exp = exp.replaceAll("\\s","");
 		if (!isExpression(exp))
 			return null;
 		Model retModel = new Model();
@@ -117,11 +124,13 @@ public class Algorithms {
 		}
 
 		removeEmptyTransitions(retModel);
-		
+
 		removeUnreachable(retModel);
 
 		mergeEdges(retModel);
 
+		retModel.relabel();
+		
 		return retModel;
 	}
 
@@ -194,10 +203,10 @@ public class Algorithms {
 				outer.getFirst().addEdgeIn(e);
 				inner.getSecond().addEdgeOut(e);
 
-				vertexList.remove(pos-1);
+				vertexList.remove(pos - 1);
 				exp = exp.substring(0, pos - 1) + '\\' + exp.substring(pos + 1);
 			} else {
-				//return false;
+				// return false;
 			}
 			pos = exp.indexOf('*');
 		}
@@ -276,18 +285,67 @@ public class Algorithms {
 
 	}
 
-	// TODO not done actually, might delete it after all
 	private static boolean isExpression(String exp) {
 		int bracketCount = 0;
 		for (int i = 0; i < exp.length(); i++) {
 			char c = exp.charAt(i);
-			if (c == '(') {
+
+			switch (c) {
+			case '(':
+				try {
+					char d = exp.charAt(i + 1);
+					if (d == '(' || Character.isLetterOrDigit(d)) {
+					} else {
+						return false;
+					}
+				} catch (IndexOutOfBoundsException e) {
+					return false;
+				}
 				bracketCount++;
-			} else if (c == ')') {
+				break;
+			case ')':
+				try {
+					char d = exp.charAt(i - 1);
+					if (d == ')' || d == '*' || Character.isLetterOrDigit(d)) {
+					} else {
+						return false;
+					}
+				} catch (IndexOutOfBoundsException e) {
+					return false;
+				}
 				bracketCount--;
-			} else if (c == '*' || c == '|' || c == ' ') {
-			} else if (!Character.isLetterOrDigit(c)) {
-				return false;
+				break;
+			case '*':
+				try {
+					char d = exp.charAt(i - 1);
+					if (d == ')' || d == '*' || Character.isLetterOrDigit(d)) {
+					} else {
+						return false;
+					}
+				} catch (IndexOutOfBoundsException e) {
+					return false;
+				}
+				break;
+			case '|':
+				try {
+					char d1 = exp.charAt(i - 1);
+					char d2 = exp.charAt(i + 1);
+					if (d1 == ')' || d1 == '*' || Character.isLetterOrDigit(d1)) {
+					} else {
+						return false;
+					}
+					if ((d2 == '(') || Character.isLetterOrDigit(d2)) {
+					} else {
+						return false;
+					}
+				} catch (IndexOutOfBoundsException e) {
+					return false;
+				}
+				break;
+			default:
+				if (!Character.isLetterOrDigit(c)) {
+					return false;
+				}
 			}
 			if (bracketCount < 0)
 				return false;
@@ -550,6 +608,7 @@ public class Algorithms {
 					}
 				}
 			}
+			retModel.relabel();
 			return retModel;
 		}
 		return null;
@@ -652,7 +711,7 @@ public class Algorithms {
 			for (Vertex v : purgeList) {
 				model.removeVertex(v);
 			}
-
+			model.relabel();
 			return true;
 
 		}

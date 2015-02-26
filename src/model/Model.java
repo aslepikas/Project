@@ -120,6 +120,13 @@ public class Model implements DirectedGraph<Vertex, Edge> {
 			setStartVertex(v1);
 		}
 	}
+	
+	public void relabel() {
+		for (int i = 0; i < vertexList.size(); i++) {
+			vertexList.get(i).setnumber(i+1);
+		}
+		count = vertexList.size();
+	}
 
 	public Model copy() {
 
