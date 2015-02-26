@@ -77,7 +77,7 @@ public class Algorithms {
 			return null;
 		}
 		String exp = expression;
-		exp = exp.replaceAll("\\s","");
+		exp = exp.replaceAll("\\s", "");
 		if (!isExpression(exp))
 			return null;
 		Model retModel = new Model();
@@ -130,7 +130,7 @@ public class Algorithms {
 		mergeEdges(retModel);
 
 		retModel.relabel();
-		
+
 		return retModel;
 	}
 
@@ -292,55 +292,55 @@ public class Algorithms {
 
 			switch (c) {
 			case '(':
-				try {
-					char d = exp.charAt(i + 1);
-					if (d == '(' || Character.isLetterOrDigit(d)) {
-					} else {
-						return false;
-					}
-				} catch (IndexOutOfBoundsException e) {
+				if (i + 1 >= exp.length()) {
+					return false;
+				}
+				char d = exp.charAt(i + 1);
+				if (d == '(' || Character.isLetterOrDigit(d)) {
+				} else {
 					return false;
 				}
 				bracketCount++;
 				break;
 			case ')':
-				try {
-					char d = exp.charAt(i - 1);
-					if (d == ')' || d == '*' || Character.isLetterOrDigit(d)) {
-					} else {
-						return false;
-					}
-				} catch (IndexOutOfBoundsException e) {
+				if (i - 1 < 0)
+					return false;
+				d = exp.charAt(i - 1);
+				if (d == ')' || d == '*' || Character.isLetterOrDigit(d)) {
+				} else {
 					return false;
 				}
 				bracketCount--;
 				break;
 			case '*':
-				try {
-					char d = exp.charAt(i - 1);
-					if (d == ')' || d == '*' || Character.isLetterOrDigit(d)) {
-					} else {
-						return false;
-					}
-				} catch (IndexOutOfBoundsException e) {
+				if (i - 1 < 0) {
 					return false;
 				}
+				d = exp.charAt(i - 1);
+				if (d == ')' || d == '*' || Character.isLetterOrDigit(d)) {
+				} else {
+					return false;
+				}
+
 				break;
 			case '|':
-				try {
-					char d1 = exp.charAt(i - 1);
-					char d2 = exp.charAt(i + 1);
-					if (d1 == ')' || d1 == '*' || Character.isLetterOrDigit(d1)) {
-					} else {
-						return false;
-					}
-					if ((d2 == '(') || Character.isLetterOrDigit(d2)) {
-					} else {
-						return false;
-					}
-				} catch (IndexOutOfBoundsException e) {
+				if (i - 1 < 0) {
 					return false;
 				}
+				if (i + 1 >= exp.length()) {
+					return false;
+				}
+				char d1 = exp.charAt(i - 1);
+				char d2 = exp.charAt(i + 1);
+				if (d1 == ')' || d1 == '*' || Character.isLetterOrDigit(d1)) {
+				} else {
+					return false;
+				}
+				if ((d2 == '(') || Character.isLetterOrDigit(d2)) {
+				} else {
+					return false;
+				}
+
 				break;
 			default:
 				if (!Character.isLetterOrDigit(c)) {
