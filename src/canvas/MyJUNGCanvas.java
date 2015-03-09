@@ -9,6 +9,7 @@ import canvas.transform.ColourTransformer;
 import canvas.transform.MyVertexShapeTransformer;
 import canvas.transform.OutlineColourTransformer;
 import canvas.transform.VertexStrokeWidthTransformer;
+import containers.ModeTabbedPane;
 import control.MyGraphMouse;
 import control.TooltipDisplay;
 import edu.uci.ics.jung.algorithms.layout.Layout;
@@ -36,7 +37,7 @@ public class MyJUNGCanvas {
 	public VisualizationViewer<Vertex, Edge> initialise(Mode mode) {
 		layout = new StaticLayout<Vertex, Edge>(this.model);
 		vv = new VisualizationViewer<Vertex, Edge>(layout);
-		vv.setPreferredSize(new Dimension(500, 350));
+		vv.setPreferredSize(new Dimension(ModeTabbedPane.PREFERRED_SIZE));
 
 		vv.getRenderContext().setVertexLabelTransformer(
 				new ToStringLabeller<Vertex>());

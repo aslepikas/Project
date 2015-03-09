@@ -15,12 +15,15 @@ import model.Edge;
 import model.Model;
 import model.Vertex;
 import canvas.MyJUNGCanvas;
+import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse.Mode;
 
 @SuppressWarnings("serial")
 public class ModeTabbedPane extends JTabbedPane {
 
+	public static final Dimension PREFERRED_SIZE = new Dimension(500, 325);
+	
 	private JPanel animationPanel;
 	private Component animationTab;
 	private JTabbedPane creationTab;
@@ -76,15 +79,20 @@ public class ModeTabbedPane extends JTabbedPane {
 						vv.getRenderContext().getPickedVertexState().clear();
 						vv.getRenderContext().getPickedEdgeState().clear();
 						
-						vv.setPreferredSize(new Dimension(500, 325));
+						vv.setPreferredSize(new Dimension(ModeTabbedPane.PREFERRED_SIZE));
 					}
 					animationPanel.add(new AnimationScreen(modelList));
 				}
 			} else if (getSelectedComponent().equals(creationTab)) {
 				if (lastSelected){
 					for (MyJUNGCanvas i: modelList){
-						i.getVisualizationViewer().getPickedVertexState().clear();
-						i.getVisualizationViewer().getPickedEdgeState().clear();
+						VisualizationViewer vv = i.getVisualizationViewer();
+						vv.getPickedVertexState().clear();
+						vv.getPickedEdgeState().clear();
+						vv.setPreferredSize(ModeTabbedPane.PREFERRED_SIZE);
+						vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.LAYOUT).setTranslate(0, 0);
+						vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.VIEW).setScale(1, 1, vv.getCenter());
+						vv.repaint(); //TODO
 					}
 				}
 				lastSelected = false;
@@ -93,6 +101,7 @@ public class ModeTabbedPane extends JTabbedPane {
 							.getVisualizationViewer();
 					creationTab.add(i.getTitle(), vv);
 					i.setMouse();
+					vv.repaint();
 				}
 				animationPanel.removeAll();
 			}

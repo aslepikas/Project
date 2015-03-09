@@ -21,6 +21,7 @@ public class Main {
 		frame.setJMenuBar(menuBar);
 		
 		frame.pack();
+		frame.setResizable(false);
 		frame.setVisible(true);
 	}
 }

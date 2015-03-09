@@ -2,6 +2,8 @@ package animation;
 
 import org.apache.commons.lang3.StringUtils;
 
+import containers.ModeTabbedPane;
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -18,6 +20,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.JFrame;
 
 import canvas.MyJUNGCanvas;
+import edu.uci.ics.jung.visualization.Layer;
+import edu.uci.ics.jung.visualization.VisualizationViewer;
 import model.Edge;
 import model.Vertex;
 
@@ -47,15 +51,33 @@ public class AnimationScreen extends JPanel {
 				this.modelList);
 		select.setVisible(true);
 
+		int size = modelList.size();
+		int dim = 1;
+		for (int i = 1; Math.pow(i, i) < Math.sqrt(size); dim = ++i)
+			;
+
 		tape = "";
 
 		LayoutManager layout = new BorderLayout();
 		setLayout(layout);
 
 		animationPanel = new JPanel();
+		animationPanel.setLayout(new GridLayout(dim, dim));
 
 		for (MyJUNGCanvas i : this.modelList) {
-			animationPanel.add(i.getVisualizationViewer());
+			VisualizationViewer<Vertex, Edge> vv = i.getVisualizationViewer();
+			vv.getRenderContext().getMultiLayerTransformer()
+					.getTransformer(Layer.VIEW)
+					.setScale(1.0 / dim, 1.0 / dim, vv.getCenter());
+			Dimension d = vv.getPreferredSize();
+			Dimension dNew = new Dimension(d.width / dim, d.height / dim);
+			vv.setPreferredSize(dNew);
+			vv.getRenderContext()
+					.getMultiLayerTransformer()
+					.getTransformer(Layer.LAYOUT)
+					.setTranslate(dNew.getWidth() - d.getWidth(),
+							dNew.getHeight() - d.getHeight());
+			animationPanel.add(vv);
 		}
 		this.add(animationPanel, BorderLayout.NORTH);
 
@@ -93,7 +115,7 @@ public class AnimationScreen extends JPanel {
 
 		this.add(textPanel, BorderLayout.SOUTH);
 
-		this.setMinimumSize(new Dimension(500, 350));
+		this.setMinimumSize(ModeTabbedPane.PREFERRED_SIZE);
 
 		this.setVisible(true);
 	}
@@ -279,7 +301,7 @@ public class AnimationScreen extends JPanel {
 											}
 											System.out.println(hasTransition);
 											if (hasTransition) {
-												
+
 												modelList
 														.get(i)
 														.getVisualizationViewer()

@@ -21,7 +21,7 @@ public class SelectionDialogue extends JDialog implements
 
 	private ArrayList<MyJUNGCanvas> modelList;
 	private ArrayList<MyJUNGCanvas> retList;
-	
+
 	private ArrayList<JCheckBox> checkBoxes;
 	private String buttonstr1 = "Done";
 
@@ -49,8 +49,12 @@ public class SelectionDialogue extends JDialog implements
 
 		labelPanelLayout = new GridLayout(checkBoxes.size(), 1);
 		labelPanel.setLayout(labelPanelLayout);
-		for (int i = 0; i < checkBoxes.size(); i++)
+		for (int i = 0; i < checkBoxes.size(); i++) {
 			labelPanel.add(checkBoxes.get(i));
+			if (!modelList.get(i).getModel().hasStart()) {
+				checkBoxes.get(i).setEnabled(false);
+			}
+		}
 
 		changePanel.setLayout(new BorderLayout());
 
@@ -84,7 +88,7 @@ public class SelectionDialogue extends JDialog implements
 				// ignore reset
 				return;
 			}
-			
+
 			optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
 			if (buttonstr1.equals(value)) {
 				for (int i = 0; i < checkBoxes.size(); i++) {
