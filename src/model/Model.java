@@ -71,6 +71,7 @@ public class Model implements DirectedGraph<Vertex, Edge> {
 	}
 
 	public void removeStartVertex() {
+		startVertex.unSetStart();
 		startVertex = null;
 	}
 

@@ -23,7 +23,7 @@ import edu.uci.ics.jung.visualization.control.ModalGraphMouse.Mode;
 @SuppressWarnings("serial")
 public class ModeTabbedPane extends JTabbedPane {
 
-	public static final Dimension PREFERRED_SIZE = new Dimension(500, 325);
+	public static final Dimension PREFERRED_SIZE = new Dimension(600, 400);
 
 	private JPanel animationPanel;
 	private JTabbedPane creationTab;

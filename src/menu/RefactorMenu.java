@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 
 import model.Edge;
@@ -29,7 +30,7 @@ public class RefactorMenu extends JMenu {
 			JTabbedPane tabbedPane, ModeMenu modeMenu) {
 
 		super(title);
-		
+
 		this.modeMenu = modeMenu;
 		add(new LayoutMenu("Layout", modelList, tabbedPane));
 
@@ -69,6 +70,12 @@ public class RefactorMenu extends JMenu {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource().equals(minimise)) {
+				if (!Algorithms.isDFA(modelList.get(
+						tabbedPane.getSelectedIndex()).getModel())) {
+					JOptionPane.showConfirmDialog(tabbedPane.getRootPane(),
+							"Your model is not an NFA");
+					return;
+				}
 				Algorithms.copyActive(modelList, tabbedPane, modeMenu);
 				VisualizationViewer<Vertex, Edge> vv = modelList.get(
 						tabbedPane.getSelectedIndex()).getVisualizationViewer();

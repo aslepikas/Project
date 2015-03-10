@@ -99,6 +99,9 @@ public class FileMenu extends JMenu {
 				}
 			} else if (e.getSource().equals(openFile)) {
 				File file = FileOpener.fileOpenChoose();
+				if (file == null) {
+					return;
+				}
 				int mode = FileOpener.isModelOrWorkspace(file);
 				if (mode == 1) {
 					Model myGraph = FileOpener.readModel(file);

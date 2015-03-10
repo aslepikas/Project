@@ -77,6 +77,7 @@ public class Algorithms {
 			return null;
 		}
 		String exp = expression;
+		System.out.println(exp);
 		exp = exp.replaceAll("\\s", "");
 		if (!isExpression(exp))
 			return null;
@@ -93,7 +94,7 @@ public class Algorithms {
 
 		for (int i = 0; i < exp.length(); i++) {
 			char c = exp.charAt(i);
-			if (Character.isLetterOrDigit(c)) {
+			if (Character.isLetterOrDigit(c) || c == '&') {
 				Vertex v1 = factory.create();
 				Vertex v2 = factory.create();
 				retModel.addVertex(v1);
@@ -178,6 +179,14 @@ public class Algorithms {
 				ArrayList<Character> label = new ArrayList<Character>();
 				label.add(c);
 				Edge e = new Edge(p.getFirst(), p.getSecond(), label);
+				p.getFirst().addEdgeOut(e);
+				p.getSecond().addEdgeIn(e);
+
+				exp = exp.substring(0, i) + "\\" + exp.substring(i + 1);
+			} else if (c == '&') {
+				Pair<Vertex> p = vertexList.get(i);
+
+				Edge e = new Edge(p.getFirst(), p.getSecond());
 				p.getFirst().addEdgeOut(e);
 				p.getSecond().addEdgeIn(e);
 
@@ -296,7 +305,7 @@ public class Algorithms {
 					return false;
 				}
 				char d = exp.charAt(i + 1);
-				if (d == '(' || Character.isLetterOrDigit(d)) {
+				if (d == '(' || Character.isLetterOrDigit(d) || d == '&') {
 				} else {
 					return false;
 				}
@@ -306,7 +315,8 @@ public class Algorithms {
 				if (i - 1 < 0)
 					return false;
 				d = exp.charAt(i - 1);
-				if (d == ')' || d == '*' || Character.isLetterOrDigit(d)) {
+				if (d == ')' || d == '*' || Character.isLetterOrDigit(d)
+						|| d == '&') {
 				} else {
 					return false;
 				}
@@ -332,18 +342,19 @@ public class Algorithms {
 				}
 				char d1 = exp.charAt(i - 1);
 				char d2 = exp.charAt(i + 1);
-				if (d1 == ')' || d1 == '*' || Character.isLetterOrDigit(d1)) {
+				if (d1 == ')' || d1 == '*' || Character.isLetterOrDigit(d1)
+						|| d1 == '&') {
 				} else {
 					return false;
 				}
-				if ((d2 == '(') || Character.isLetterOrDigit(d2)) {
+				if ((d2 == '(') || Character.isLetterOrDigit(d2) || d2 == '&') {
 				} else {
 					return false;
 				}
 
 				break;
 			default:
-				if (!Character.isLetterOrDigit(c)) {
+				if (!Character.isLetterOrDigit(c) && c != '&') {
 					return false;
 				}
 			}

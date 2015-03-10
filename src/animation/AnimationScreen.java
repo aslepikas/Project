@@ -43,7 +43,8 @@ public class AnimationScreen extends JPanel {
 
 	private ArrayList<MyJUNGCanvas> modelList;
 
-	public AnimationScreen(ArrayList<MyJUNGCanvas> modelList) throws NothingSelectedException {
+	public AnimationScreen(ArrayList<MyJUNGCanvas> modelList)
+			throws NothingSelectedException {
 
 		this.modelList = new ArrayList<MyJUNGCanvas>();
 
@@ -55,10 +56,10 @@ public class AnimationScreen extends JPanel {
 			throw new NothingSelectedException();
 		}
 
-		int size = this.modelList.size();
 		int dim = 1;
-		for (int i = 1; Math.pow(i, i) < Math.sqrt(size); dim = ++i)
-			;
+		for (int i = 1; i * i < this.modelList.size(); i++) {
+			dim++;
+		}
 
 		tape = "";
 
@@ -68,31 +69,36 @@ public class AnimationScreen extends JPanel {
 		animationPanel = new JPanel();
 		System.out.println(dim);
 		animationPanel.setLayout(new GridLayout(dim, dim));
-		animationPanel.applyComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+		animationPanel
+				.applyComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 
 		for (MyJUNGCanvas i : this.modelList) {
 			VisualizationViewer<Vertex, Edge> vv = i.getVisualizationViewer();
-			vv.getRenderContext().getMultiLayerTransformer()
-					.getTransformer(Layer.VIEW)
-					.setScale(1.0 / dim, 1.0 / dim, vv.getCenter());
 			Dimension d = vv.getPreferredSize();
-			Dimension dNew = new Dimension(d.width / dim, (d.height - 8) / dim);
-			// the -8 is so everything would fit in the other window
+			Dimension dNew = new Dimension(d.width / dim, (d.height - 15) / dim);
+			// the -15 is so everything would fit in the other window
+			// on windows machines -8 is enough, but on linux, -15 is required
+
+			vv.getRenderContext()
+					.getMultiLayerTransformer()
+					.getTransformer(Layer.VIEW)
+					.setScale(dNew.getWidth() / d.getWidth(),
+							dNew.getHeight() / d.getHeight(), vv.getCenter());
 			vv.setPreferredSize(dNew);
 			vv.getRenderContext()
 					.getMultiLayerTransformer()
 					.getTransformer(Layer.LAYOUT)
 					.setTranslate(dNew.getWidth() - d.getWidth(),
-							dNew.getHeight() - d.getHeight());
+							dNew.getHeight() - d.getHeight()); // TODO fix this
 			animationPanel.add(vv);
 		}
 		if (this.modelList.size() < dim * dim) {
-			int empty = dim*dim - this.modelList.size();
+			int empty = dim * dim - this.modelList.size();
 			for (int i = 0; i < empty; i++) {
 				animationPanel.add(new JPanel());
 			}
-		} //this is here simply to fix the orientation so components would be in
-		  //the same row
+		} 	// this is here simply to fix the orientation so components would be
+			// in the same row
 
 		this.add(animationPanel, BorderLayout.NORTH);
 
