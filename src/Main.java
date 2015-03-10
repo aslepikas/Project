@@ -19,6 +19,10 @@ public class Main {
 		JMenuBar menuBar = MyMenuBar.create(modeTabPane.getModelList(), modeTabPane.getCreationTab());
 		
 		frame.setJMenuBar(menuBar);
+		modeTabPane.addDisableComponent(menuBar);
+		for (int i = 0; i < menuBar.getMenuCount(); i++) {
+			modeTabPane.addDisableComponent(menuBar.getMenu(i));
+		}
 		
 		frame.pack();
 		frame.setResizable(false);

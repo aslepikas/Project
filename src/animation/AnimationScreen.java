@@ -42,7 +42,7 @@ public class AnimationScreen extends JPanel {
 
 	private ArrayList<MyJUNGCanvas> modelList;
 
-	public AnimationScreen(ArrayList<MyJUNGCanvas> modelList) {
+	public AnimationScreen(ArrayList<MyJUNGCanvas> modelList) throws NothingSelectedException {
 
 		this.modelList = new ArrayList<MyJUNGCanvas>();
 
@@ -50,8 +50,11 @@ public class AnimationScreen extends JPanel {
 				(JFrame) SwingUtilities.getWindowAncestor(this), modelList,
 				this.modelList);
 		select.setVisible(true);
+		if (this.modelList.size() == 0) {
+			throw new NothingSelectedException();
+		}
 
-		int size = modelList.size();
+		int size = this.modelList.size();
 		int dim = 1;
 		for (int i = 1; Math.pow(i, i) < Math.sqrt(size); dim = ++i)
 			;
@@ -70,7 +73,8 @@ public class AnimationScreen extends JPanel {
 					.getTransformer(Layer.VIEW)
 					.setScale(1.0 / dim, 1.0 / dim, vv.getCenter());
 			Dimension d = vv.getPreferredSize();
-			Dimension dNew = new Dimension(d.width / dim, d.height / dim);
+			Dimension dNew = new Dimension(d.width / dim, (d.height - 8) / dim);
+			// the -8 is so everything would fit in the other window
 			vv.setPreferredSize(dNew);
 			vv.getRenderContext()
 					.getMultiLayerTransformer()
