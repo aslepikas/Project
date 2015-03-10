@@ -1,8 +1,5 @@
 package control;
 
-
-import java.awt.event.InputEvent;
-
 import model.Edge;
 import model.Vertex;
 
@@ -15,10 +12,7 @@ import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.EditingModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.LabelEditingGraphMousePlugin;
 import edu.uci.ics.jung.visualization.control.PickingGraphMousePlugin;
-import edu.uci.ics.jung.visualization.control.RotatingGraphMousePlugin;
 import edu.uci.ics.jung.visualization.control.ScalingGraphMousePlugin;
-import edu.uci.ics.jung.visualization.control.ShearingGraphMousePlugin;
-import edu.uci.ics.jung.visualization.control.TranslatingGraphMousePlugin;
 
 public class MyGraphMouse extends EditingModalGraphMouse<Vertex, Edge> {
 	
@@ -34,12 +28,8 @@ public class MyGraphMouse extends EditingModalGraphMouse<Vertex, Edge> {
 		pickingPlugin = new PickingGraphMousePlugin<Vertex, Edge>();// needed
 		animatedPickingPlugin = new AnimatedPickingGraphMousePlugin<Vertex, Edge>();
 		// ^ works by pressing mouse button 1 + crtl
-		translatingPlugin = new TranslatingGraphMousePlugin(
-				InputEvent.BUTTON1_MASK); // needed
 		scalingPlugin = new ScalingGraphMousePlugin(
 				new CrossoverScalingControl(), 0, in, out);
-		rotatingPlugin = new RotatingGraphMousePlugin(); // needed
-		shearingPlugin = new ShearingGraphMousePlugin(); // removed
 		editingPlugin = new MyEditingGraphMousePlugin<Vertex, Edge>(
 				vertexFactory, edgeFactory); // needed
 		labelEditingPlugin = new LabelEditingGraphMousePlugin<Vertex, Edge>();
@@ -54,8 +44,6 @@ public class MyGraphMouse extends EditingModalGraphMouse<Vertex, Edge> {
 
 	@Override
 	protected void setTransformingMode() {
-		super.setTransformingMode();
-		remove(shearingPlugin);
 	}
 
 }

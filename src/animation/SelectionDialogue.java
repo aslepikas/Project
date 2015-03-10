@@ -77,7 +77,6 @@ public class SelectionDialogue extends JDialog implements
 	@Override
 	public void propertyChange(PropertyChangeEvent e) {
 
-		boolean finish = true;
 		String val = e.getPropertyName();
 		if ((e.getSource() == optionPane)
 				&& (JOptionPane.VALUE_PROPERTY.equals(val) || JOptionPane.INPUT_VALUE_PROPERTY
@@ -96,19 +95,11 @@ public class SelectionDialogue extends JDialog implements
 						retList.add(modelList.get(i));
 					}
 				}
-				if (retList.isEmpty()) {
-					JOptionPane.showMessageDialog(this,
-							"Check at least one box");
-					finish = false;
-				}
-			} else {
-				// nothing happens after pressing cancel button
-				// i.e. it literally cancels the action
 			}
-			if (finish) {
-				this.getRootPane().repaint();
-				this.dispose();
-			}
+
+			this.getRootPane().repaint();
+			this.dispose();
+
 		}
 	}
 

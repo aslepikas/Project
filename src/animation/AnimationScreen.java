@@ -5,6 +5,7 @@ import org.apache.commons.lang3.StringUtils;
 import containers.ModeTabbedPane;
 
 import java.awt.BorderLayout;
+import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.LayoutManager;
@@ -65,7 +66,9 @@ public class AnimationScreen extends JPanel {
 		setLayout(layout);
 
 		animationPanel = new JPanel();
+		System.out.println(dim);
 		animationPanel.setLayout(new GridLayout(dim, dim));
+		animationPanel.applyComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 
 		for (MyJUNGCanvas i : this.modelList) {
 			VisualizationViewer<Vertex, Edge> vv = i.getVisualizationViewer();
@@ -83,6 +86,14 @@ public class AnimationScreen extends JPanel {
 							dNew.getHeight() - d.getHeight());
 			animationPanel.add(vv);
 		}
+		if (this.modelList.size() < dim * dim) {
+			int empty = dim*dim - this.modelList.size();
+			for (int i = 0; i < empty; i++) {
+				animationPanel.add(new JPanel());
+			}
+		} //this is here simply to fix the orientation so components would be in
+		  //the same row
+
 		this.add(animationPanel, BorderLayout.NORTH);
 
 		textPanel = new JPanel();
@@ -253,9 +264,6 @@ public class AnimationScreen extends JPanel {
 					for (int i = 0; i < modelList.size(); i++) {
 						if (pathList.get(i) != null) {
 							notFinishedList.set(i, true);
-							for (Vertex j : pathList.get(i)) {
-								System.out.println(j.toString());
-							}
 							modelList.get(i).getVisualizationViewer()
 									.getPickedVertexState().clear();
 							modelList.get(i).getVisualizationViewer()
@@ -292,8 +300,6 @@ public class AnimationScreen extends JPanel {
 											.pick(pathList.get(i).get(index),
 													true);
 								} else {
-									System.out.printf("%d, %d\n",
-											tape.length(), index);
 									if (tape.length() >= index) {
 										boolean hasTransition = false;
 										for (Edge k : current.get(i)
@@ -303,7 +309,6 @@ public class AnimationScreen extends JPanel {
 														|| (j == tape
 																.charAt(index - 1));
 											}
-											System.out.println(hasTransition);
 											if (hasTransition) {
 
 												modelList
