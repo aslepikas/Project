@@ -18,6 +18,8 @@ import model.Vertex;
 
 public class Algorithms {
 
+	public static final char NO_TRANSITION = '$';
+	
 	public static void copyActive(ArrayList<MyJUNGCanvas> modelList,
 			JTabbedPane tabbedPane, ModeMenu modeMenu) {
 
@@ -77,7 +79,6 @@ public class Algorithms {
 			return null;
 		}
 		String exp = expression;
-		System.out.println(exp);
 		exp = exp.replaceAll("\\s", "");
 		if (!isExpression(exp))
 			return null;
@@ -94,7 +95,7 @@ public class Algorithms {
 
 		for (int i = 0; i < exp.length(); i++) {
 			char c = exp.charAt(i);
-			if (Character.isLetterOrDigit(c) || c == '&') {
+			if (Character.isLetterOrDigit(c) || c == NO_TRANSITION) {
 				Vertex v1 = factory.create();
 				Vertex v2 = factory.create();
 				retModel.addVertex(v1);
@@ -183,7 +184,7 @@ public class Algorithms {
 				p.getSecond().addEdgeIn(e);
 
 				exp = exp.substring(0, i) + "\\" + exp.substring(i + 1);
-			} else if (c == '&') {
+			} else if (c == NO_TRANSITION) {
 				Pair<Vertex> p = vertexList.get(i);
 
 				Edge e = new Edge(p.getFirst(), p.getSecond());
@@ -305,7 +306,7 @@ public class Algorithms {
 					return false;
 				}
 				char d = exp.charAt(i + 1);
-				if (d == '(' || Character.isLetterOrDigit(d) || d == '&') {
+				if (d == '(' || Character.isLetterOrDigit(d) || d == NO_TRANSITION) {
 				} else {
 					return false;
 				}
@@ -316,7 +317,7 @@ public class Algorithms {
 					return false;
 				d = exp.charAt(i - 1);
 				if (d == ')' || d == '*' || Character.isLetterOrDigit(d)
-						|| d == '&') {
+						|| d == NO_TRANSITION) {
 				} else {
 					return false;
 				}
@@ -343,18 +344,18 @@ public class Algorithms {
 				char d1 = exp.charAt(i - 1);
 				char d2 = exp.charAt(i + 1);
 				if (d1 == ')' || d1 == '*' || Character.isLetterOrDigit(d1)
-						|| d1 == '&') {
+						|| d1 == NO_TRANSITION) {
 				} else {
 					return false;
 				}
-				if ((d2 == '(') || Character.isLetterOrDigit(d2) || d2 == '&') {
+				if ((d2 == '(') || Character.isLetterOrDigit(d2) || d2 == NO_TRANSITION) {
 				} else {
 					return false;
 				}
 
 				break;
 			default:
-				if (!Character.isLetterOrDigit(c) && c != '&') {
+				if (!Character.isLetterOrDigit(c) && c != NO_TRANSITION) {
 					return false;
 				}
 			}

@@ -94,6 +94,9 @@ public class ModeTabbedPane extends JTabbedPane {
 					} catch (NothingSelectedException nse) {
 						lastSelected = false;
 						setSelectedComponent(creationTab);
+						for (MyJUNGCanvas i : modelList) {
+							i.setMouse();
+						}
 					}
 				}
 			} else if (getSelectedComponent().equals(creationTab)) {
@@ -111,7 +114,7 @@ public class ModeTabbedPane extends JTabbedPane {
 								.getTransformer(Layer.LAYOUT)
 								.setTranslate(0, 0);
 
-						//vv.repaint(); // TODO
+						// vv.repaint(); // TODO
 					}
 				}
 				lastSelected = false;

@@ -116,6 +116,9 @@ public class Vertex {
 	}
 
 	public boolean equals(Vertex n) {
+		if (n == null) {
+			return false;
+		}
 		return n.getNumber() == number;
 	}
 

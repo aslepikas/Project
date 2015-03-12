@@ -132,7 +132,6 @@ public class FileMenu extends JMenu {
 							if (myGraph != null) {
 								MyJUNGCanvas nCanvas = new MyJUNGCanvas(myGraph);
 								nCanvas.setTitle(titleList.get(i));
-								System.out.println(titleList.get(i));
 								nCanvas.initialise(modeMenu.getMode());
 
 								canvasList.add(nCanvas);

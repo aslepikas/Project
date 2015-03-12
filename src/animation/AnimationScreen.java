@@ -29,6 +29,8 @@ import model.Vertex;
 @SuppressWarnings("serial")
 public class AnimationScreen extends JPanel {
 
+	private static final String MARKER = "|";
+
 	private JPanel animationPanel;
 	private JPanel textPanel;
 	private JButton textEntry;
@@ -67,7 +69,6 @@ public class AnimationScreen extends JPanel {
 		setLayout(layout);
 
 		animationPanel = new JPanel();
-		System.out.println(dim);
 		animationPanel.setLayout(new GridLayout(dim, dim));
 		animationPanel
 				.applyComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
@@ -88,8 +89,9 @@ public class AnimationScreen extends JPanel {
 			vv.getRenderContext()
 					.getMultiLayerTransformer()
 					.getTransformer(Layer.LAYOUT)
-					.setTranslate(dNew.getWidth() - d.getWidth(),
-							dNew.getHeight() - d.getHeight()); // TODO fix this
+					.setTranslate((dNew.getWidth() - d.getWidth()),
+							(dNew.getHeight() - d.getHeight()));
+			// TODO fix this
 			animationPanel.add(vv);
 		}
 		if (this.modelList.size() < dim * dim) {
@@ -97,7 +99,7 @@ public class AnimationScreen extends JPanel {
 			for (int i = 0; i < empty; i++) {
 				animationPanel.add(new JPanel());
 			}
-		} 	// this is here simply to fix the orientation so components would be
+		} // this is here simply to fix the orientation so components would be
 			// in the same row
 
 		this.add(animationPanel, BorderLayout.NORTH);
@@ -122,7 +124,7 @@ public class AnimationScreen extends JPanel {
 		goButton = new JButton("go");
 		goButton.addMouseListener(buttonListener);
 		ButtonPanel.add(goButton, BorderLayout.EAST);
-		goButton.setEnabled(false);
+		// goButton.setEnabled(false);
 
 		textPanel.add(ButtonPanel, BorderLayout.WEST);
 
@@ -248,24 +250,28 @@ public class AnimationScreen extends JPanel {
 						textLabelPanel.add(characterPanel);
 					}
 					stepButton.setEnabled(true);
+					goButton.setEnabled(true);
 				} else {
 					textLabelPanel.add(placeHolder);
 					stepButton.setEnabled(false);
+					goButton.setEnabled(true);
 				}
 				SwingUtilities.getWindowAncestor(textLabelPanel).repaint();
 			} else if (e.getSource().equals(stepButton)
 					&& stepButton.isEnabled()) {
+				goButton.setEnabled(false);
 				if (!started) { // if it's only starting the thing
 					resetNotFinished();
 					countFinished = 0;
 					started = true;
 					index = 0;
+					pathList.clear();
 					for (int i = 0; i < modelList.size(); i++) {
 						pathList.add(findPath(modelList.get(i)));
 					}
 					stepButton.setText("step");
 					textEntry.setEnabled(false);
-					arrowPosition.get(index).setText("↓");
+					arrowPosition.get(index).setText(MARKER);
 
 					for (int i = 0; i < modelList.size(); i++) {
 						if (pathList.get(i) != null) {
@@ -291,7 +297,7 @@ public class AnimationScreen extends JPanel {
 															// of bounds
 						arrowPosition.get(index).setText("");
 						index++;
-						arrowPosition.get(index).setText("↓");
+						arrowPosition.get(index).setText(MARKER);
 						if (index == arrowPosition.size() - 1)
 							stepButton.setText("finish");
 						for (int i = 0; i < modelList.size(); i++) {
@@ -362,10 +368,27 @@ public class AnimationScreen extends JPanel {
 						index = 0;
 						stepButton.setText("start");
 						textEntry.setEnabled(true);
+						goButton.setEnabled(true);
 						started = false;
 					}
 				}
 			} else if (e.getSource().equals(goButton)) {
+				String retString = "";
+				if (tape.equals("")) {
+					retString = "Acceptance status for the empty string:\n";
+				} else {
+					retString = "Acceptance status for the string " + tape + ":\n";
+				}
+				for (int i = 0; i < modelList.size(); i++) {
+					if (findPath(modelList.get(i)) == null) {
+						retString = retString + modelList.get(i).getTitle() + " does not accept this string\n";
+					}
+					else {
+						retString = retString + modelList.get(i).getTitle()
+								+ " accepts this string\n";
+					}
+				}
+				JOptionPane.showMessageDialog(animationPanel.getRootPane(), retString);
 			}
 		}
 

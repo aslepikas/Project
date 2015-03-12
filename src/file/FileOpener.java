@@ -148,13 +148,11 @@ public class FileOpener {
 				if (lineScanner.hasNextLine()) {
 					String title = lineScanner.nextLine();
 					titleList.add(title);
-					System.out.printf("%s %d\n", title, titleList.size());
 				}
 
 				while (lineScanner.hasNextLine()) {
 					String line = lineScanner.nextLine();
 					if (!line.equals("---")) {
-						System.out.println(line); //TODO
 						Scanner vertexScanner = new Scanner(line);
 						if (vertexScanner.hasNextInt()) {
 							Vertex vertex = new Vertex(vertexScanner.nextInt());
