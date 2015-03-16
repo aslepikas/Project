@@ -8,7 +8,7 @@ public class Main {
 
 	public static void main(String args[]) {
 		
-		JFrame frame = new JFrame("Editing Graph Viewer");
+		JFrame frame = new JFrame("FSA animator");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		ModeTabbedPane modeTabPane = new ModeTabbedPane();
