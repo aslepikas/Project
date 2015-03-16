@@ -99,6 +99,9 @@ public class FileMenu extends JMenu {
 				}
 			} else if (e.getSource().equals(openFile)) {
 				File file = FileOpener.fileOpenChoose();
+				if (file == null) {
+					return;
+				}
 				int mode = FileOpener.isModelOrWorkspace(file);
 				if (mode == 1) {
 					Model myGraph = FileOpener.readModel(file);
@@ -129,7 +132,6 @@ public class FileMenu extends JMenu {
 							if (myGraph != null) {
 								MyJUNGCanvas nCanvas = new MyJUNGCanvas(myGraph);
 								nCanvas.setTitle(titleList.get(i));
-								System.out.println(titleList.get(i));
 								nCanvas.initialise(modeMenu.getMode());
 
 								canvasList.add(nCanvas);

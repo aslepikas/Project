@@ -16,7 +16,6 @@ public class ModeMenu extends JMenu {
 	private ArrayList<MyJUNGCanvas> canvasList;
 	private JRadioButtonMenuItem editing;
 	private JRadioButtonMenuItem picking;
-	private JRadioButtonMenuItem transforming;
 
 	public ModeMenu(String title, ArrayList<MyJUNGCanvas> canvasList) {
 		super(title);
@@ -25,27 +24,23 @@ public class ModeMenu extends JMenu {
 
 		editing = new JRadioButtonMenuItem("editing");
 		picking = new JRadioButtonMenuItem("picking");
-		transforming = new JRadioButtonMenuItem("transforming");
 
 		this.add(editing);
 		this.add(picking);
-		this.add(transforming);
 
 		ModeListener listener = new ModeListener();
-		
+
 		editing.addActionListener(listener);
-		transforming.addActionListener(listener);
 		picking.addActionListener(listener);
-		
+
 		editing.setSelected(true);
 	}
-	
-	public Mode getMode(){
+
+	public Mode getMode() {
 		if (editing.isSelected())
 			return Mode.EDITING;
-		else if (picking.isSelected())
+		else
 			return Mode.PICKING;
-		else return Mode.TRANSFORMING;
 	}
 
 	private class ModeListener implements ActionListener {
@@ -55,22 +50,13 @@ public class ModeMenu extends JMenu {
 			if (e.getSource().equals(editing)) {
 				editing.setSelected(true);
 				picking.setSelected(false);
-				transforming.setSelected(false);
-				for (MyJUNGCanvas i: canvasList){
+				for (MyJUNGCanvas i : canvasList) {
 					i.getGraphMouse().setMode(Mode.EDITING);
-				}
-			} else if (e.getSource().equals(transforming)) {
-				editing.setSelected(false);
-				picking.setSelected(false);
-				transforming.setSelected(true);
-				for (MyJUNGCanvas i: canvasList){
-					i.getGraphMouse().setMode(Mode.TRANSFORMING);
 				}
 			} else if (e.getSource().equals(picking)) {
 				editing.setSelected(false);
 				picking.setSelected(true);
-				transforming.setSelected(false);
-				for (MyJUNGCanvas i: canvasList){
+				for (MyJUNGCanvas i : canvasList) {
 					i.getGraphMouse().setMode(Mode.PICKING);
 				}
 			}

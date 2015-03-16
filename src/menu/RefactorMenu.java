@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 
 import model.Edge;
@@ -29,7 +30,7 @@ public class RefactorMenu extends JMenu {
 			JTabbedPane tabbedPane, ModeMenu modeMenu) {
 
 		super(title);
-		
+
 		this.modeMenu = modeMenu;
 		add(new LayoutMenu("Layout", modelList, tabbedPane));
 
@@ -69,6 +70,13 @@ public class RefactorMenu extends JMenu {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource().equals(minimise)) {
+				if (!Algorithms.isDFA(modelList.get(
+						tabbedPane.getSelectedIndex()).getModel())) {
+					JOptionPane.showMessageDialog(tabbedPane.getRootPane(),
+							"Your model is not an NFA");
+					return;
+				}
+				String title = modelList.get(tabbedPane.getSelectedIndex()).getTitle();
 				Algorithms.copyActive(modelList, tabbedPane, modeMenu);
 				VisualizationViewer<Vertex, Edge> vv = modelList.get(
 						tabbedPane.getSelectedIndex()).getVisualizationViewer();
@@ -79,6 +87,7 @@ public class RefactorMenu extends JMenu {
 						.get(tabbedPane.getSelectedIndex()).getModel());
 				modelList.get(tabbedPane.getSelectedIndex())
 						.getVisualizationViewer().repaint();
+				modelList.get(tabbedPane.getSelectedIndex()).setTitle("min " + title);
 			}
 
 			else if (e.getSource().equals(removeUnreachable)) {
@@ -103,7 +112,7 @@ public class RefactorMenu extends JMenu {
 						tabbedPane.getSelectedIndex()).getModel());
 				if (dfa != null) {
 					MyJUNGCanvas nCanvas = new MyJUNGCanvas(dfa);
-					nCanvas.setTitle(String.format("copy of %s",
+					nCanvas.setTitle(String.format("%s to DFA",
 							modelList.get(tabbedPane.getSelectedIndex())
 									.getTitle()));
 					nCanvas.initialise(modeMenu.getMode());

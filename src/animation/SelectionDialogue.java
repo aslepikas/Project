@@ -21,7 +21,7 @@ public class SelectionDialogue extends JDialog implements
 
 	private ArrayList<MyJUNGCanvas> modelList;
 	private ArrayList<MyJUNGCanvas> retList;
-	
+
 	private ArrayList<JCheckBox> checkBoxes;
 	private String buttonstr1 = "Done";
 
@@ -49,8 +49,12 @@ public class SelectionDialogue extends JDialog implements
 
 		labelPanelLayout = new GridLayout(checkBoxes.size(), 1);
 		labelPanel.setLayout(labelPanelLayout);
-		for (int i = 0; i < checkBoxes.size(); i++)
+		for (int i = 0; i < checkBoxes.size(); i++) {
 			labelPanel.add(checkBoxes.get(i));
+			if (!modelList.get(i).getModel().hasStart()) {
+				checkBoxes.get(i).setEnabled(false);
+			}
+		}
 
 		changePanel.setLayout(new BorderLayout());
 
@@ -73,7 +77,6 @@ public class SelectionDialogue extends JDialog implements
 	@Override
 	public void propertyChange(PropertyChangeEvent e) {
 
-		boolean finish = true;
 		String val = e.getPropertyName();
 		if ((e.getSource() == optionPane)
 				&& (JOptionPane.VALUE_PROPERTY.equals(val) || JOptionPane.INPUT_VALUE_PROPERTY
@@ -84,7 +87,7 @@ public class SelectionDialogue extends JDialog implements
 				// ignore reset
 				return;
 			}
-			
+
 			optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
 			if (buttonstr1.equals(value)) {
 				for (int i = 0; i < checkBoxes.size(); i++) {
@@ -92,19 +95,11 @@ public class SelectionDialogue extends JDialog implements
 						retList.add(modelList.get(i));
 					}
 				}
-				if (retList.isEmpty()) {
-					JOptionPane.showMessageDialog(this,
-							"Check at least one box");
-					finish = false;
-				}
-			} else {
-				// nothing happens after pressing cancel button
-				// i.e. it literally cancels the action
 			}
-			if (finish) {
-				this.getRootPane().repaint();
-				this.dispose();
-			}
+
+			this.getRootPane().repaint();
+			this.dispose();
+
 		}
 	}
 

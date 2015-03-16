@@ -71,6 +71,7 @@ public class Model implements DirectedGraph<Vertex, Edge> {
 	}
 
 	public void removeStartVertex() {
+		startVertex.unSetStart();
 		startVertex = null;
 	}
 
@@ -487,6 +488,9 @@ public class Model implements DirectedGraph<Vertex, Edge> {
 	@Override
 	public boolean removeVertex(Vertex v) {
 		if (vertexList.remove(v)) {
+			if (v.equals(startVertex)) {
+				removeStartVertex();
+			}
 			removeAllEdges(v);
 			int highest = 0;
 			for (Vertex u : vertexList) {

@@ -9,12 +9,14 @@ import canvas.transform.ColourTransformer;
 import canvas.transform.MyVertexShapeTransformer;
 import canvas.transform.OutlineColourTransformer;
 import canvas.transform.VertexStrokeWidthTransformer;
+import containers.ModeTabbedPane;
 import control.MyGraphMouse;
 import control.TooltipDisplay;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.algorithms.layout.StaticLayout;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse.Mode;
+import edu.uci.ics.jung.visualization.decorators.ConstantDirectionalEdgeValueTransformer;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import edu.uci.ics.jung.visualization.renderers.Renderer;
 import model.Edge;
@@ -36,7 +38,7 @@ public class MyJUNGCanvas {
 	public VisualizationViewer<Vertex, Edge> initialise(Mode mode) {
 		layout = new StaticLayout<Vertex, Edge>(this.model);
 		vv = new VisualizationViewer<Vertex, Edge>(layout);
-		vv.setPreferredSize(new Dimension(500, 350));
+		vv.setPreferredSize(new Dimension(ModeTabbedPane.PREFERRED_SIZE));
 
 		vv.getRenderContext().setVertexLabelTransformer(
 				new ToStringLabeller<Vertex>());
@@ -49,15 +51,22 @@ public class MyJUNGCanvas {
 				new OutlineColourTransformer(vv.getRenderContext()));
 		vv.getRenderContext().setVertexStrokeTransformer(
 				new VertexStrokeWidthTransformer(vv.getRenderContext()));
-		vv.getRenderContext().setVertexShapeTransformer(new MyVertexShapeTransformer());
+		vv.getRenderContext().setVertexShapeTransformer(
+				new MyVertexShapeTransformer());
 		gm = new MyGraphMouse(vv.getRenderContext(), model.vertexFactory,
 				model.edgeFactory);
 		gm.setMode(mode);
 		vv.setGraphMouse(gm);
 		vv.setBorder(new LineBorder(Color.BLACK, 1));
-		
+
 		vv.addMouseMotionListener(new TooltipDisplay());
-		vv.getRenderer().getVertexLabelRenderer().setPosition(Renderer.VertexLabel.Position.CNTR);
+		vv.getRenderer().getVertexLabelRenderer()
+				.setPosition(Renderer.VertexLabel.Position.CNTR);
+
+		vv.getRenderContext().setEdgeLabelClosenessTransformer(
+				new ConstantDirectionalEdgeValueTransformer<Vertex, Edge>(0.5,
+						0.5)); // TODO
+
 		return vv;
 	}
 
@@ -68,24 +77,24 @@ public class MyJUNGCanvas {
 	public MyGraphMouse getGraphMouse() {
 		return gm;
 	}
-	
-	public Model getModel(){
+
+	public Model getModel() {
 		return model;
 	}
 
-	public void setTitle(String title){
+	public void setTitle(String title) {
 		this.title = title;
 	}
 
-	public String getTitle(){
+	public String getTitle() {
 		return title;
 	}
-	
-	public void setNoMouse(){
+
+	public void setNoMouse() {
 		vv.setGraphMouse(null);
 	}
-	
-	public void setMouse(){
+
+	public void setMouse() {
 		vv.setGraphMouse(gm);
 	}
 }
