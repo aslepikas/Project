@@ -222,7 +222,6 @@ public class AnimationScreen extends JPanel {
 			if (e.getSource().equals(textEntry) && textEntry.isEnabled()) {
 				String message = JOptionPane.showInputDialog(controlPanel, "",
 						"Enter a string");
-				System.out.println(message == null);
 				JLabel firstArrow = new JLabel(" ");
 				JPanel firstPanel = new JPanel();
 				firstPanel.setLayout(new GridLayout(2, 1));
