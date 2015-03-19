@@ -22,6 +22,7 @@ import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.graph.DirectedGraph;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.UndirectedGraph;
+import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.EditingPopupGraphMousePlugin;
 import edu.uci.ics.jung.visualization.picking.PickedState;
@@ -110,7 +111,9 @@ public class MyPopupPlugin extends EditingPopupGraphMousePlugin<Vertex, Edge> {
 		}
 		copiedHandlePopup(e);
 	}
-	//this method is the public void handlePopup from the superclass. It was modified slightly.
+
+	// this method is the public void handlePopup from the superclass. It was
+	// modified slightly.
 	@SuppressWarnings("serial")
 	private void copiedHandlePopup(MouseEvent e) {
 		@SuppressWarnings("unchecked")
@@ -141,11 +144,21 @@ public class MyPopupPlugin extends EditingPopupGraphMousePlugin<Vertex, Edge> {
 							directedMenu.add(new AbstractAction("[" + other
 									+ "," + vertex + "]") {
 								public void actionPerformed(ActionEvent arg0) {
+
 									JFrame topFrame = (JFrame) SwingUtilities
 											.getWindowAncestor(vv);
-									EdgeEditMenu labelchange = new EdgeEditMenu(topFrame,
-											edge);
+									Edge nedge = vv.getGraphLayout().getGraph()
+											.findEdge(other, vertex);
+									if (nedge == null) {
+										nedge = new Edge(other, vertex);
+									}
+
+									EdgeEditMenu labelchange = new EdgeEditMenu(
+											topFrame, nedge);
 									labelchange.setVisible(true);
+									if (!nedge.getLabels().isEmpty())
+										graph.addEdge(nedge, other, vertex,
+												EdgeType.DIRECTED);
 									vv.repaint();
 								}
 							});
@@ -159,7 +172,7 @@ public class MyPopupPlugin extends EditingPopupGraphMousePlugin<Vertex, Edge> {
 							undirectedMenu.add(new AbstractAction("[" + other
 									+ "," + vertex + "]") {
 								public void actionPerformed(ActionEvent e) {
-									
+
 									graph.addEdge(edgeFactory.create(), other,
 											vertex);
 									vv.repaint();
@@ -199,5 +212,4 @@ public class MyPopupPlugin extends EditingPopupGraphMousePlugin<Vertex, Edge> {
 			}
 		}
 	}
-
 }
