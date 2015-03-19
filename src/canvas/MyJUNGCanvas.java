@@ -65,7 +65,7 @@ public class MyJUNGCanvas {
 
 		vv.getRenderContext().setEdgeLabelClosenessTransformer(
 				new ConstantDirectionalEdgeValueTransformer<Vertex, Edge>(0.5,
-						0.5)); // TODO
+						0.5));
 
 		return vv;
 	}

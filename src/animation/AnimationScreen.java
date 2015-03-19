@@ -32,7 +32,7 @@ public class AnimationScreen extends JPanel {
 	private static final String MARKER = "|";
 
 	private JPanel animationPanel;
-	private JPanel textPanel;
+	private JPanel controlPanel;
 	private JButton textEntry;
 	private JButton stepButton;
 	private JButton goButton;
@@ -104,8 +104,8 @@ public class AnimationScreen extends JPanel {
 
 		this.add(animationPanel, BorderLayout.NORTH);
 
-		textPanel = new JPanel();
-		textPanel.setLayout(new BorderLayout());
+		controlPanel = new JPanel();
+		controlPanel.setLayout(new BorderLayout());
 
 		JPanel ButtonPanel = new JPanel();
 		ButtonPanel.setLayout(new BorderLayout());
@@ -126,7 +126,7 @@ public class AnimationScreen extends JPanel {
 		ButtonPanel.add(goButton, BorderLayout.EAST);
 		// goButton.setEnabled(false);
 
-		textPanel.add(ButtonPanel, BorderLayout.WEST);
+		controlPanel.add(ButtonPanel, BorderLayout.WEST);
 
 		textLabelPanel = new JPanel();
 		placeHolder = new JPanel(new GridLayout(2, 1));
@@ -134,9 +134,9 @@ public class AnimationScreen extends JPanel {
 		placeHolder.add(new JLabel("	"));
 		textLabelPanel.add(placeHolder);
 
-		textPanel.add(textLabelPanel, BorderLayout.EAST);
+		controlPanel.add(textLabelPanel, BorderLayout.EAST);
 
-		this.add(textPanel, BorderLayout.SOUTH);
+		this.add(controlPanel, BorderLayout.SOUTH);
 
 		this.setMinimumSize(ModeTabbedPane.PREFERRED_SIZE);
 
@@ -220,20 +220,19 @@ public class AnimationScreen extends JPanel {
 		@Override
 		public void mouseClicked(MouseEvent e) {
 			if (e.getSource().equals(textEntry) && textEntry.isEnabled()) {
-				String message = JOptionPane.showInputDialog(textPanel, "",
+				String message = JOptionPane.showInputDialog(controlPanel, "",
 						"Enter a string");
-				textLabelPanel.removeAll();
-				arrowPosition.clear();
-
 				JLabel firstArrow = new JLabel(" ");
 				JPanel firstPanel = new JPanel();
 				firstPanel.setLayout(new GridLayout(2, 1));
 				firstPanel.add(firstArrow);
 				firstPanel.add(new JLabel());
-				textLabelPanel.add(firstPanel);
-				arrowPosition.add(firstArrow);
 
 				if (StringUtils.isAlphanumeric(message)) {
+					textLabelPanel.removeAll();
+					arrowPosition.clear();
+					textLabelPanel.add(firstPanel);
+					arrowPosition.add(firstArrow);
 					tape = message;
 					JLabel character;
 					JPanel characterPanel;
@@ -251,7 +250,11 @@ public class AnimationScreen extends JPanel {
 					}
 					stepButton.setEnabled(true);
 					goButton.setEnabled(true);
+				} else if (message == null){
+					System.out.println(tape);
+					goButton.setEnabled(true);
 				} else {
+					tape = "";
 					textLabelPanel.add(placeHolder);
 					stepButton.setEnabled(false);
 					goButton.setEnabled(true);
