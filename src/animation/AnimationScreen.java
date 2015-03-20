@@ -251,6 +251,7 @@ public class AnimationScreen extends JPanel {
 					goButton.setEnabled(true);
 				} else {
 					tape = "";
+					textLabelPanel.removeAll();
 					textLabelPanel.add(placeHolder);
 					stepButton.setEnabled(false);
 					goButton.setEnabled(true);

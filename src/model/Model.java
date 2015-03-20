@@ -35,17 +35,12 @@ public class Model implements DirectedGraph<Vertex, Edge> {
 		tag = TagSetter.getTag();
 	}
 
-	public ArrayList<Vertex> getNodeList() {
-		return vertexList;
-	}
-
 	public Vertex getNumber(int number) {
 		for (Vertex i : vertexList) {
 			if (i.getNumber() == number) {
 				return i;
 			}
 		}
-
 		return null;
 	}
 
