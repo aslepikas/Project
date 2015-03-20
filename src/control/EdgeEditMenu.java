@@ -40,21 +40,33 @@ public class EdgeEditMenu extends JDialog implements ActionListener,
 
 	private JOptionPane optionPane;
 
+	final private int LIMIT = 1;
+
 	public EdgeEditMenu(JFrame root, Edge edge) {
 		super(root, true);
 		this.edge = edge;
 		ArrayList<Character> labels = edge.getLabels();
 		textFields = new ArrayList<JTextField>();
 		for (Character i : labels) {
-			textFields.add(new JTextField(String.valueOf(i)));
+			JTextField field = new JTextField();
+			field.setDocument(new PlainDocument() {
+				@Override
+				public void insertString(int offs, String str, AttributeSet a)
+						throws BadLocationException {
+					if (getLength() + str.length() <= LIMIT) {
+						super.insertString(offs, str, a);
+					}
+				}
+			});
+			field.setText(String.valueOf(i));
+			textFields.add(field);
 		}
 		JTextField textField = new JTextField();
-		final int limit = 1;
 		textField.setDocument(new PlainDocument() {
 			@Override
 			public void insertString(int offs, String str, AttributeSet a)
 					throws BadLocationException {
-				if (getLength() + str.length() <= limit) {
+				if (getLength() + str.length() <= LIMIT) {
 					super.insertString(offs, str, a);
 				}
 			}
@@ -82,7 +94,7 @@ public class EdgeEditMenu extends JDialog implements ActionListener,
 				JOptionPane.OK_CANCEL_OPTION, null, options, options[0]);
 		setContentPane(optionPane);
 
-		this.setMinimumSize(new Dimension(200, textFields.size() * 20 + 120));
+		this.setMinimumSize(new Dimension(50, textFields.size() * 20 + 120));
 		// 19*#labels + 2*button height + c
 
 		optionPane.addPropertyChangeListener(this);
@@ -161,12 +173,11 @@ public class EdgeEditMenu extends JDialog implements ActionListener,
 		if (e.getSource().equals(moreButton)) {
 			labelPanelLayout.setRows(labelPanelLayout.getRows() + 1);
 			JTextField textField = new JTextField("");
-			final int limit = 1;
 			textField.setDocument(new PlainDocument() {
 				@Override
 				public void insertString(int offs, String str, AttributeSet a)
 						throws BadLocationException {
-					if (getLength() + str.length() <= limit) {
+					if (getLength() + str.length() <= LIMIT) {
 						super.insertString(offs, str, a);
 					}
 				}

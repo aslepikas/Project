@@ -73,7 +73,7 @@ public class RefactorMenu extends JMenu {
 				if (!Algorithms.isDFA(modelList.get(
 						tabbedPane.getSelectedIndex()).getModel())) {
 					JOptionPane.showMessageDialog(tabbedPane.getRootPane(),
-							"Your model is not an NFA");
+							"Your model is not a DFA");
 					return;
 				}
 				String title = modelList.get(tabbedPane.getSelectedIndex()).getTitle();
