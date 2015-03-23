@@ -78,6 +78,14 @@ public class Algorithms {
 		if (expression == null) {
 			return null;
 		}
+		if (expression.length() == 0) {
+			Model retModel = new Model();
+			Vertex v = retModel.vertexFactory.create();
+			retModel.addVertex(v);
+			retModel.setStartVertex(v);
+			v.setFinal();
+			return retModel;
+		}
 		String exp = expression;
 		exp = exp.replaceAll("\\s", "");
 		if (!isExpression(exp))
