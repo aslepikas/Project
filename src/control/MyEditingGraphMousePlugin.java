@@ -48,11 +48,11 @@ public class MyEditingGraphMousePlugin<V, E> extends
 					Edge newEdge = (Edge) edgeFactory.create();
 					if (layout.getGraph().isNeighbor(vertex, startVertex)) {
 						ArrayList<Edge> set = (ArrayList<Edge>) (layout
-								.getGraph().findEdgeSet(vertex, startVertex));
+								.getGraph().findEdgeSet(startVertex, vertex));
 						if (set.size() == 2) {
 							JOptionPane
 									.showMessageDialog(vv,
-											"An edge between these vertices already exists");
+											"An edge between these states already exists");
 							vv.removePostRenderPaintable(edgePaintable);
 							vv.removePostRenderPaintable(arrowPaintable);
 							vv.repaint();
@@ -61,7 +61,7 @@ public class MyEditingGraphMousePlugin<V, E> extends
 							if (set.get(0).getStartV().equals(startVertex)) {
 								JOptionPane
 										.showMessageDialog(vv,
-												"An edge between these vertices already exists");
+												"An edge between these states already exists");
 								vv.removePostRenderPaintable(edgePaintable);
 								vv.removePostRenderPaintable(arrowPaintable);
 								vv.repaint();

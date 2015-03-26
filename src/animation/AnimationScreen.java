@@ -24,12 +24,13 @@ import canvas.MyJUNGCanvas;
 import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import model.Edge;
+import model.Model;
 import model.Vertex;
 
 @SuppressWarnings("serial")
 public class AnimationScreen extends JPanel {
 
-	private static final String MARKER = "|";
+	private static final String MARKER = "↓";
 
 	private JPanel animationPanel;
 	private JPanel controlPanel;
@@ -143,10 +144,9 @@ public class AnimationScreen extends JPanel {
 		this.setVisible(true);
 	}
 
-	private ArrayList<Vertex> findPath(MyJUNGCanvas canvas) {
-		Vertex startVertex = canvas.getModel().getStartVertex();
+	private ArrayList<Vertex> findPath(Model model) {
+		Vertex startVertex = model.getStartVertex();
 		if (startVertex == null) {
-			JOptionPane.showConfirmDialog(this, "No starting vertex");
 			return null;
 		}
 		ArrayList<Vertex> path = new ArrayList<Vertex>();
@@ -159,9 +159,6 @@ public class AnimationScreen extends JPanel {
 	}
 
 	private boolean findPath(int step, ArrayList<Vertex> path) {
-		/*
-		 * for (Vertex i : path) { System.out.println(i.toString()); }
-		 */
 		Vertex v = path.get(path.size() - 1);
 		if (tape.length() >= path.size()) {
 			ArrayList<Edge> edges = v.getEdgesOut();
@@ -220,8 +217,7 @@ public class AnimationScreen extends JPanel {
 		@Override
 		public void mouseClicked(MouseEvent e) {
 			if (e.getSource().equals(textEntry) && textEntry.isEnabled()) {
-				String message = JOptionPane.showInputDialog(controlPanel, "",
-						"Enter a string");
+				String message = JOptionPane.showInputDialog(controlPanel, "",	"Enter a string");
 				JLabel firstArrow = new JLabel(" ");
 				JPanel firstPanel = new JPanel();
 				firstPanel.setLayout(new GridLayout(2, 1));
@@ -255,6 +251,7 @@ public class AnimationScreen extends JPanel {
 					goButton.setEnabled(true);
 				} else {
 					tape = "";
+					textLabelPanel.removeAll();
 					textLabelPanel.add(placeHolder);
 					stepButton.setEnabled(false);
 					goButton.setEnabled(true);
@@ -270,7 +267,7 @@ public class AnimationScreen extends JPanel {
 					index = 0;
 					pathList.clear();
 					for (int i = 0; i < modelList.size(); i++) {
-						pathList.add(findPath(modelList.get(i)));
+						pathList.add(findPath(modelList.get(i).getModel()));
 					}
 					stepButton.setText("step");
 					textEntry.setEnabled(false);
@@ -383,12 +380,12 @@ public class AnimationScreen extends JPanel {
 					retString = "Acceptance status for the string " + tape + ":\n";
 				}
 				for (int i = 0; i < modelList.size(); i++) {
-					if (findPath(modelList.get(i)) == null) {
-						retString = retString + modelList.get(i).getTitle() + " does not accept this string\n";
+					if (findPath(modelList.get(i).getModel()) == null) {
+						retString = retString + "\"" + modelList.get(i).getTitle() + "\" does not accept this string\n";
 					}
 					else {
-						retString = retString + modelList.get(i).getTitle()
-								+ " accepts this string\n";
+						retString = retString + "\""+modelList.get(i).getTitle()
+								+ "\" accepts this string\n";
 					}
 				}
 				JOptionPane.showMessageDialog(animationPanel.getRootPane(), retString);

@@ -14,6 +14,7 @@ import model.Model;
 import model.Vertex;
 import algorithms.Algorithms;
 import canvas.MyJUNGCanvas;
+import edu.uci.ics.jung.algorithms.layout.CircleLayout;
 import edu.uci.ics.jung.algorithms.layout.KKLayout;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 
@@ -51,12 +52,18 @@ public class RegexMenu extends JMenu {
 					MyJUNGCanvas nCanvas = new MyJUNGCanvas(model);
 					nCanvas.initialise(modeMenu.getMode());
 					nCanvas.setTitle("Regex tab");
-					VisualizationViewer<Vertex, Edge> vv =nCanvas.getVisualizationViewer();
+					VisualizationViewer<Vertex, Edge> vv = nCanvas
+							.getVisualizationViewer();
 					tabbedPane.add(nCanvas.getTitle(), vv);
 					tabbedPane.setSelectedComponent(vv);
 					canvasList.add(nCanvas);
-					vv.setGraphLayout(new KKLayout<Vertex, Edge>(vv
-							.getGraphLayout().getGraph()));
+					if (model.getVertexCount() == 1) {
+						vv.setGraphLayout(new CircleLayout<Vertex, Edge>(vv
+								.getGraphLayout().getGraph()));
+					} else {
+						vv.setGraphLayout(new KKLayout<Vertex, Edge>(vv
+								.getGraphLayout().getGraph()));
+					}
 					vv.repaint();
 				}
 			}
